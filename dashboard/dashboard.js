@@ -7,6 +7,10 @@
     let eventLog = [];
     let thrustBaseHistory = [];
     let pressureBaseHistory = [];
+    let accelMagHistory = [];
+    let accelXHistory = [];
+    let accelYHistory = [];
+    let accelZHistory = [];
     let chartTimeHistory = [];
     let sampleHistory = [];
     const SAMPLE_HISTORY_MAX = 10000;
@@ -160,11 +164,13 @@
     const CHART_WINDOW_MS_DEFAULT = 25000;
     const CHART_WINDOW_MS_MIN = 5000;
     const CHART_WINDOW_MS_MAX = 120000;
+    const RAD_TO_DEG = 57.2957795;
+    const DEG_TO_RAD = 0.0174532925;
 
     // ✅ 너무 빡센 폴링(30ms)은 ESP 쪽 응답 흔들림(간헐 타임아웃/큐 적체)을 만들 수 있어서 완화
     const POLL_INTERVAL      = 80;
 
-    const UI_SAMPLE_SKIP     = 2;
+    const UI_SAMPLE_SKIP     = 3;
     const CHART_MIN_INTERVAL = 50;
 
     let lastChartRedraw = 0;
@@ -179,7 +185,431 @@
     let rxWindowStartMs = 0;
     let rxWindowCount = 0;
     let rxHzWindow = 0;
+    let gyroLastUiMs = 0;
+    let gyroYawDeg = 0;
+    let gyroPitchDeg = 0;
+    let gyroRollDeg = 0;
+    let gyroGl = null;
+
+    function mat4Identity(){
+      return [1,0,0,0,
+              0,1,0,0,
+              0,0,1,0,
+              0,0,0,1];
+    }
+    function mat4Mul(a,b){
+      const o = new Array(16);
+      for(let i=0;i<4;i++){
+        const ai0=a[i], ai1=a[i+4], ai2=a[i+8], ai3=a[i+12];
+        o[i]   = ai0*b[0] + ai1*b[1] + ai2*b[2] + ai3*b[3];
+        o[i+4] = ai0*b[4] + ai1*b[5] + ai2*b[6] + ai3*b[7];
+        o[i+8] = ai0*b[8] + ai1*b[9] + ai2*b[10]+ ai3*b[11];
+        o[i+12]= ai0*b[12]+ ai1*b[13]+ ai2*b[14]+ ai3*b[15];
+      }
+      return o;
+    }
+    function mat4Perspective(fov, aspect, near, far){
+      const f = 1 / Math.tan(fov/2);
+      const nf = 1 / (near - far);
+      return [
+        f/aspect,0,0,0,
+        0,f,0,0,
+        0,0,(far+near)*nf,-1,
+        0,0,(2*far*near)*nf,0
+      ];
+    }
+    function mat4LookAt(eye, center, up){
+      const zx = eye[0]-center[0];
+      const zy = eye[1]-center[1];
+      const zz = eye[2]-center[2];
+      let zlen = Math.hypot(zx, zy, zz) || 1;
+      const z0 = zx/zlen, z1 = zy/zlen, z2 = zz/zlen;
+      const xx = up[1]*z2 - up[2]*z1;
+      const xy = up[2]*z0 - up[0]*z2;
+      const xz = up[0]*z1 - up[1]*z0;
+      let xlen = Math.hypot(xx, xy, xz) || 1;
+      const x0 = xx/xlen, x1 = xy/xlen, x2 = xz/xlen;
+      const y0 = z1*x2 - z2*x1;
+      const y1 = z2*x0 - z0*x2;
+      const y2 = z0*x1 - z1*x0;
+      return [
+        x0,y0,z0,0,
+        x1,y1,z1,0,
+        x2,y2,z2,0,
+        -(x0*eye[0]+x1*eye[1]+x2*eye[2]),
+        -(y0*eye[0]+y1*eye[1]+y2*eye[2]),
+        -(z0*eye[0]+z1*eye[1]+z2*eye[2]),
+        1
+      ];
+    }
+    function mat4RotateX(a){
+      const c = Math.cos(a), s = Math.sin(a);
+      return [1,0,0,0, 0,c,s,0, 0,-s,c,0, 0,0,0,1];
+    }
+    function mat4RotateY(a){
+      const c = Math.cos(a), s = Math.sin(a);
+      return [c,0,-s,0, 0,1,0,0, s,0,c,0, 0,0,0,1];
+    }
+    function mat4RotateZ(a){
+      const c = Math.cos(a), s = Math.sin(a);
+      return [c,s,0,0, -s,c,0,0, 0,0,1,0, 0,0,0,1];
+    }
+
+    function buildGyroGeometry(){
+      const pos = [];
+      const col = [];
+      const addLine = (x1,y1,z1,x2,y2,z2,r,g,b)=>{
+        pos.push(x1,y1,z1,x2,y2,z2);
+        for(let i=0;i<2;i++){ col.push(r,g,b,1); }
+      };
+
+      const gridColor = null;
+      const axisColor = [0.1,0.1,0.1];
+      const dashColor = [0.6,0.6,0.6];
+
+      const gridSteps = 0;
+
+      addLine(0,0,0, 0.9,0,0, ...dashColor);
+      addLine(0,0,0, 0,0.9,0, ...dashColor);
+      addLine(0,0,0, 0,0,0.9, ...dashColor);
+
+      const gridCount = pos.length / 3;
+
+      const radius = 0.2;
+      const height = 1.0;
+      const seg = 14;
+      for(let i=0;i<seg;i++){
+        const a0 = (i/seg) * Math.PI * 2;
+        const a1 = ((i+1)/seg) * Math.PI * 2;
+        const x0 = Math.cos(a0) * radius;
+        const z0 = Math.sin(a0) * radius;
+        const x1 = Math.cos(a1) * radius;
+        const z1 = Math.sin(a1) * radius;
+        addLine(x0,-height/2,z0, x0,height/2,z0, 0.3,0.3,0.35);
+        addLine(x0,height/2,z0, x1,height/2,z1, 0.4,0.4,0.45);
+        addLine(x0,-height/2,z0, x1,-height/2,z1, 0.4,0.4,0.45);
+      }
+
+      const noseTop = [0, height/2 + 0.25, 0];
+      for(let i=0;i<seg;i++){
+        const a0 = (i/seg) * Math.PI * 2;
+        const x0 = Math.cos(a0) * radius * 0.9;
+        const z0 = Math.sin(a0) * radius * 0.9;
+        addLine(x0,height/2,z0, noseTop[0], noseTop[1], noseTop[2], 0.6,0.6,0.65);
+      }
+
+      const finY = -height/2 + 0.05;
+      const finLen = 0.28;
+      addLine(radius, finY, 0, radius + finLen, finY + 0.12, 0, 0.12,0.35,0.85);
+      addLine(-radius, finY, 0, -radius - finLen, finY + 0.12, 0, 0.12,0.35,0.85);
+      addLine(0, finY, radius, 0, finY + 0.12, radius + finLen, 0.12,0.35,0.85);
+      addLine(0, finY, -radius, 0, finY + 0.12, -radius - finLen, 0.12,0.35,0.85);
+
+      addLine(0,0,0, 0.6,0,0, 0.93,0.27,0.27);
+      addLine(0,0,0, 0,0.6,0, 0.13,0.77,0.35);
+      addLine(0,0,0, 0,0,0.6, 0.23,0.51,0.96);
+
+      const bodyCount = pos.length / 3 - gridCount;
+      return {pos, col, gridCount, bodyCount};
+    }
+
+    function initGyroGl(){
+      if(!el.gyroGl) return;
+      const gl = el.gyroGl.getContext("webgl");
+      if(!gl) return;
+
+      const vs = `
+        attribute vec3 aPos;
+        attribute vec4 aCol;
+        uniform mat4 uMvp;
+        varying vec4 vCol;
+        void main(){
+          gl_Position = uMvp * vec4(aPos,1.0);
+          vCol = aCol;
+        }`;
+      const fs = `
+        precision mediump float;
+        varying vec4 vCol;
+        void main(){
+          gl_FragColor = vCol;
+        }`;
+      const compile = (type, src)=>{
+        const sh = gl.createShader(type);
+        gl.shaderSource(sh, src);
+        gl.compileShader(sh);
+        return sh;
+      };
+      const prog = gl.createProgram();
+      gl.attachShader(prog, compile(gl.VERTEX_SHADER, vs));
+      gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, fs));
+      gl.linkProgram(prog);
+      gl.useProgram(prog);
+
+      const geom = buildGyroGeometry();
+      const posBuf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(geom.pos), gl.STATIC_DRAW);
+      const aPos = gl.getAttribLocation(prog, "aPos");
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 0, 0);
+
+      const colBuf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, colBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(geom.col), gl.STATIC_DRAW);
+      const aCol = gl.getAttribLocation(prog, "aCol");
+      gl.enableVertexAttribArray(aCol);
+      gl.vertexAttribPointer(aCol, 4, gl.FLOAT, false, 0, 0);
+
+      gyroGl = {
+        gl,
+        prog,
+        uMvp: gl.getUniformLocation(prog, "uMvp"),
+        gridCount: geom.gridCount,
+        bodyCount: geom.bodyCount,
+        view: mat4LookAt([1.6,1.3,2.2],[0,0,0],[0,1,0]),
+        proj: null,
+        width: 0,
+        height: 0
+      };
+      resizeGyroGl();
+      renderGyroGl(0,0,0);
+    }
+
+    function resizeGyroGl(){
+      if(!gyroGl || !el.gyroGl) return;
+      const dpr = window.devicePixelRatio || 1;
+      let w = Math.round(el.gyroGl.clientWidth * dpr);
+      let h = Math.round(el.gyroGl.clientHeight * dpr);
+      if((w <= 0 || h <= 0) && el.gyroGlPreview){
+        const pw = Math.round(el.gyroGlPreview.clientWidth * dpr);
+        const ph = Math.round(el.gyroGlPreview.clientHeight * dpr);
+        if(pw > 0 && ph > 0){
+          w = pw;
+          h = ph;
+        }
+      }
+      w = Math.max(1, w);
+      h = Math.max(1, h);
+      if(gyroGl.width === w && gyroGl.height === h) return;
+      gyroGl.width = w;
+      gyroGl.height = h;
+      el.gyroGl.width = w;
+      el.gyroGl.height = h;
+      gyroGl.proj = mat4Perspective(45 * DEG_TO_RAD, w / h, 0.1, 10);
+      gyroGl.gl.viewport(0,0,w,h);
+    }
+
+    function renderGyroGl(pitchDeg, yawDeg, rollDeg){
+      if(!gyroGl) return;
+      const gl = gyroGl.gl;
+      resizeGyroGl();
+      gl.clearColor(0.97,0.98,0.99,1);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      gl.enable(gl.DEPTH_TEST);
+      gl.lineWidth(2);
+
+      const identity = mat4Identity();
+      let mvp = mat4Mul(gyroGl.proj, mat4Mul(gyroGl.view, identity));
+      gl.uniformMatrix4fv(gyroGl.uMvp, false, new Float32Array(mvp));
+      gl.drawArrays(gl.LINES, 0, gyroGl.gridCount);
+
+      const rx = mat4RotateX(pitchDeg * DEG_TO_RAD);
+      const ry = mat4RotateY(yawDeg * DEG_TO_RAD);
+      const rz = mat4RotateZ(rollDeg * DEG_TO_RAD);
+      const model = mat4Mul(rz, mat4Mul(ry, rx));
+      mvp = mat4Mul(gyroGl.proj, mat4Mul(gyroGl.view, model));
+      gl.uniformMatrix4fv(gyroGl.uMvp, false, new Float32Array(mvp));
+      gl.drawArrays(gl.LINES, gyroGl.gridCount, gyroGl.bodyCount);
+    }
+
+    function renderGyroPreview(){
+      if(!el.gyroGlPreview || !el.gyroGl) return;
+      if(el.gyroGlPreview === el.gyroGl) return;
+      if(!document.documentElement.classList.contains("mode-flight")) return;
+      if(!document.documentElement.classList.contains("preview-3d")) return;
+      const ctx = el.gyroGlPreview.getContext("2d");
+      if(!ctx) return;
+      const dpr = window.devicePixelRatio || 1;
+      const w = Math.max(1, Math.round(el.gyroGlPreview.clientWidth * dpr));
+      const h = Math.max(1, Math.round(el.gyroGlPreview.clientHeight * dpr));
+      if(el.gyroGlPreview.width !== w || el.gyroGlPreview.height !== h){
+        el.gyroGlPreview.width = w;
+        el.gyroGlPreview.height = h;
+      }
+      ctx.clearRect(0,0,w,h);
+      ctx.drawImage(el.gyroGl, 0, 0, w, h);
+    }
+
+    function renderNavBallPreview(pitchDeg, yawDeg, rollDeg){
+      if(!el.navBallPreview) return;
+      if(el.navBallPreview === el.navBall) return;
+      if(!document.documentElement.classList.contains("mode-flight")) return;
+      if(!document.documentElement.classList.contains("preview-navball")) return;
+      renderNavBallToCanvas(el.navBallPreview, pitchDeg, yawDeg, rollDeg);
+    }
+
+    function renderNavBall(pitchDeg, yawDeg, rollDeg){
+      if(!el.navBall) return;
+      renderNavBallToCanvas(el.navBall, pitchDeg, yawDeg, rollDeg);
+    }
+
+    function renderNavBallToCanvas(canvas, pitchDeg, yawDeg, rollDeg){
+      const size = ensureCanvasSize(canvas);
+      if(!size) return;
+      const { w: width, h: height, ctx } = size;
+      ctx.clearRect(0,0,width,height);
+      const cx = width / 2;
+      const cy = height / 2;
+      const half = Math.max(40, Math.min(width, height) / 2 - 6);
+      const radius = half;
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      const r = 10;
+      const sizeW = half * 2;
+      ctx.beginPath();
+      ctx.moveTo(-half + r, -half);
+      ctx.lineTo(half - r, -half);
+      ctx.quadraticCurveTo(half, -half, half, -half + r);
+      ctx.lineTo(half, half - r);
+      ctx.quadraticCurveTo(half, half, half - r, half);
+      ctx.lineTo(-half + r, half);
+      ctx.quadraticCurveTo(-half, half, -half, half - r);
+      ctx.lineTo(-half, -half + r);
+      ctx.quadraticCurveTo(-half, -half, -half + r, -half);
+      ctx.closePath();
+      ctx.clip();
+
+      const pitchClamped = Math.max(-45, Math.min(45, pitchDeg || 0));
+      const pitchOffset = (pitchClamped / 45) * (radius * 0.65);
+      const rollRad = -(rollDeg || 0) * DEG_TO_RAD;
+
+      ctx.save();
+      ctx.rotate(rollRad);
+      ctx.translate(0, pitchOffset);
+
+      const skyGrad = ctx.createLinearGradient(0, -radius, 0, 0);
+      skyGrad.addColorStop(0, "#5ee7ff");
+      skyGrad.addColorStop(1, "#1e40ff");
+      const groundGrad = ctx.createLinearGradient(0, 0, 0, radius);
+      groundGrad.addColorStop(0, "#fb923c");
+      groundGrad.addColorStop(1, "#c2410c");
+      ctx.fillStyle = skyGrad;
+      ctx.fillRect(-radius * 2, -radius * 2, radius * 4, radius * 2);
+      ctx.fillStyle = groundGrad;
+      ctx.fillRect(-radius * 2, 0, radius * 4, radius * 2);
+
+      ctx.strokeStyle = "rgba(255,255,255,0.95)";
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(-radius * 1.2, 0);
+      ctx.lineTo(radius * 1.2, 0);
+      ctx.stroke();
+
+      ctx.strokeStyle = "rgba(255,255,255,0.75)";
+      ctx.lineWidth = 1;
+      for(let p = -30; p <= 30; p += 10){
+        if(p === 0) continue;
+        const y = -(p / 45) * (radius * 0.65);
+        const w = (p % 20 === 0) ? radius * 0.7 : radius * 0.45;
+        ctx.beginPath();
+        ctx.moveTo(-w, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      ctx.restore();
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      const ringGrad = ctx.createLinearGradient(0, -radius, 0, radius);
+      ringGrad.addColorStop(0, "rgba(14,116,144,0.75)");
+      ringGrad.addColorStop(1, "rgba(14,116,144,0.35)");
+      ctx.strokeStyle = ringGrad;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(-half + r, -half);
+      ctx.lineTo(half - r, -half);
+      ctx.quadraticCurveTo(half, -half, half, -half + r);
+      ctx.lineTo(half, half - r);
+      ctx.quadraticCurveTo(half, half, half - r, half);
+      ctx.lineTo(-half + r, half);
+      ctx.quadraticCurveTo(-half, half, -half, half - r);
+      ctx.lineTo(-half, -half + r);
+      ctx.quadraticCurveTo(-half, -half, -half + r, -half);
+      ctx.closePath();
+      ctx.stroke();
+
+      ctx.strokeStyle = "rgba(255,255,255,0.6)";
+      ctx.lineWidth = 1;
+      const heading = ((yawDeg || 0) % 360 + 360) % 360;
+      for(let deg = 0; deg < 360; deg += 30){
+        const rad = (deg - heading) * DEG_TO_RAD;
+        const inner = radius + 2;
+        const outer = radius + (deg % 90 === 0 ? 10 : 6);
+        ctx.beginPath();
+        ctx.moveTo(Math.sin(rad) * inner, -Math.cos(rad) * inner);
+        ctx.lineTo(Math.sin(rad) * outer, -Math.cos(rad) * outer);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = "#fef08a";
+      ctx.beginPath();
+      ctx.moveTo(0, -radius - 2);
+      ctx.lineTo(-6, -radius - 16);
+      ctx.lineTo(6, -radius - 16);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.strokeStyle = "rgba(15,23,42,0.8)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(-18, 0);
+      ctx.lineTo(-6, 0);
+      ctx.moveTo(6, 0);
+      ctx.lineTo(18, 0);
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(15,23,42,0.85)";
+      ctx.font = "12px \"Space Grotesk\",\"Sora\",\"Manrope\",ui-sans-serif,system-ui,sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(Math.round(heading) + "°", 0, radius + 12);
+      ctx.restore();
+    }
+
+    function updateLauncherPitchAngle(pitchDeg, gyroPitchRate, nowMs){
+      if(!el.launcherPitchAngle) return;
+      let value = isFinite(pitchDeg) ? -pitchDeg : null;
+      if(launcherAutoActive && value != null && isFinite(gyroPitchRate)){
+        if(launcherPitchEst == null){
+          launcherPitchEst = value;
+          launcherPitchEstMs = nowMs || Date.now();
+        }else{
+          const now = nowMs || Date.now();
+          let dt = (now - launcherPitchEstMs) / 1000;
+          if(dt < 0) dt = 0;
+          if(dt > 0.25) dt = 0.25;
+          launcherPitchEstMs = now;
+          launcherPitchEst += (gyroPitchRate) * dt;
+        }
+        value = launcherPitchEst;
+      }
+      el.launcherPitchAngle.textContent = (value == null) ? "--°" : (value.toFixed(1) + "°");
+      if(launcherAutoActive && value != null && Math.abs(value) >= 115){
+        launcherAutoActive = false;
+        stopLauncherHold("up");
+        stopLauncherHold("down");
+        if(launcherOverlayEl) launcherOverlayEl.classList.remove("auto-active");
+        showToast(t("launcherAutoStopToast"), "info");
+        launcherPitchEst = null;
+        launcherPitchEstMs = 0;
+      }
+    }
     let lastCountdownSec = null;
+    let wifiInfo = null;
+    let wifiInfoLastMs = 0;
 
     let prevSwState = null;
     let prevIcState = null;
@@ -202,6 +632,8 @@
     let devRelay1Locked = false;
     let devRelay2Locked = false;
     let devWsOff = false;
+    let devLoadcellError = false;
+    let loadcellErrorActive = false;
 
     // ✅ LOCKOUT modal
     let lockoutModalShown = false;
@@ -240,6 +672,7 @@
       {key:"link",    check:()=>connOk},
       {key:"serial",  check:()=>(!serialEnabled) || serialConnected},
       {key:"igniter", check:()=> isIgniterCheckEnabled() ? (latestTelemetry.ic===1) : true},
+      {key:"loadcell", check:()=> (lastThrustKgf != null && isFinite(lastThrustKgf) && !loadcellErrorActive)},
       {key:"switch",  check:()=>latestTelemetry.sw===0},
       {key:"relay",   check:()=>!lockoutLatched},
     ];
@@ -387,6 +820,7 @@
 
       const ASSETS = [
         "img/Flash_logo.svg ",
+        "img/Flash_logo_plain.svg",
         "img/Danger.svg",
         "img/Tick.svg",
         "img/Graph.svg",
@@ -423,6 +857,11 @@
     // UI 설정 저장
     // =====================
     const SETTINGS_KEY = "hanwool_tms_settings_v2";
+    const OVERLAY_CHANNEL = "hanwool_overlay_sync";
+    const OVERLAY_SYNC_KEY = "hanwool_overlay_latest";
+    const OVERLAY_SYNC_MIN_MS = 150;
+    let overlayChannel = null;
+    let lastOverlaySyncMs = 0;
     let uiSettings = null;
 
     function defaultSettings(){
@@ -430,6 +869,8 @@
         thrustUnit:"kgf",
         ignDurationSec:5,
         countdownSec:10,
+        opMode:"daq",
+        gyroPreview:"3d",
         relaySafe: true,
         safetyMode: false,
         igs: 0,
@@ -469,6 +910,22 @@
       applyTheme(uiSettings.theme || "light");
     }
     function saveSettings(){ try{ localStorage.setItem(SETTINGS_KEY, JSON.stringify(uiSettings)); }catch(e){} }
+
+    try{
+      if("BroadcastChannel" in window){
+        overlayChannel = new BroadcastChannel(OVERLAY_CHANNEL);
+      }
+    }catch(e){}
+
+    function publishOverlaySample(sample){
+      if(!sample) return;
+      if(overlayChannel) overlayChannel.postMessage(sample);
+      const now = Date.now();
+      if(now - lastOverlaySyncMs >= OVERLAY_SYNC_MIN_MS){
+        lastOverlaySyncMs = now;
+        try{ localStorage.setItem(OVERLAY_SYNC_KEY, JSON.stringify(sample)); }catch(e){}
+      }
+    }
 
     // =====================
     // 언어 (i18n)
@@ -510,7 +967,9 @@
         devRelay1Btn:"1번 릴레이",
         devRelay2Btn:"2번 릴레이",
         devWsOffBtn:"WS OFF (SIM)",
+        devLoadcellErrBtn:"로드셀 오류 (SIM)",
         settingsNavTitle:"섹션",
+        settingsNavConnect:"연결",
         settingsNavHardware:"하드웨어",
         settingsNavInterface:"인터페이스",
         settingsNavSequence:"시퀀스",
@@ -521,12 +980,27 @@
         settingsBoardNameLabel:"보드 이름",
         settingsFirmwareNameLabel:"펌웨어 정보",
         settingsProtocolLabel:"프로토콜",
+        settingsGroupSerial:"시리얼",
+        settingsGroupOperation:"운용 모드",
+        settingsWifiInfoTitle:"Wi-Fi",
+        settingsWifiModeLabel:"모드",
+        settingsWifiSsidLabel:"SSID",
+        settingsWifiChannelLabel:"채널",
+        settingsWifiBandwidthLabel:"대역폭",
+        settingsWifiTxPowerLabel:"TX 전력",
+        settingsWifiIpLabel:"IP",
+        settingsWifiStaCountLabel:"접속 장치",
+        settingsWifiRssiLabel:"신호(RSSI)",
+        settingsOpModeLabel:"모드",
+        settingsOpModeHint:"플라이트/DAQ 모드를 전환합니다.",
+        opModeDaq:"DAQ",
+        opModeFlight:"Flight",
         settingsSerialStatusLabel:"시리얼 연결 상태",
         settingsSerialRxLabel:"시리얼 수신 로그 반영",
         settingsSerialRxHint:"보드가 JSON 라인을 출력하면 그대로 파싱해 UI/차트에 반영합니다.",
         settingsSerialTxLabel:"시리얼 명령 전송",
         settingsSerialTxHint:"ON이면 /set?… 같은 HTTP 명령을 시리얼 “SET …” 라인으로도 전송합니다.",
-        settingsSimLabel:"가상 기기 (시뮬레이션)",
+        settingsSimLabel:"가상 기기 (개발자 모드)",
         settingsSimHint:"가상 센서 값을 생성해 모든 기능을 테스트합니다.",
         settingsWsKeepLabel:"WebSocket 유지",
         settingsWsKeepHint:"연결이 끊겨도 자동 재연결을 시도합니다.",
@@ -535,6 +1009,10 @@
         settingsThrustUnitHint:"표시 단위만 변환됩니다. 저장 데이터(RAW)는 <strong>kgf 기준</strong>입니다.",
         settingsPressureUnitLabel:"압력 단위",
         settingsPressureUnitHint:"현재는 Voltage(V) 기준. 센서 보정이 들어가면 kPa/psi로 확장 가능합니다.",
+        settingsGyroPreviewLabel:"자이로 프리뷰",
+        settingsGyroPreviewHint:"플라이트 모드 프리뷰 형태를 선택합니다.",
+        settingsGyroPreview3d:"3D Attitude",
+        settingsGyroPreviewNav:"Navball",
         langOptionKo:"한국어",
         langOptionEn:"영어",
         settingsGroupSequence:"점화 시퀀스",
@@ -551,6 +1029,7 @@
         settingsSafetyToastLabel:"안전 알림",
         settingsSafetyToastHint:"각종 상태 변화 시 토스트 알림이 표시됩니다. 클릭하면 닫힙니다.",
         settingsSaveBtn:"저장",
+        opModeChangedToast:"모드 변경: {mode}",
         confirmSequenceTitle:"점화 시퀀스를 진행할까요?",
         confirmSequenceText:"점화 조건이 충족되지 않으면 보드가 점화를 실행하지 않습니다.<br>버튼을 3초 동안 계속 누르고 있어야 카운트다운이 진행됩니다.",
         confirmSequenceNote:"• 주변 안전거리 확보 · 이그나이터 결선/단락 여부 반드시 확인!",
@@ -571,6 +1050,8 @@
         simDisabledToast:"시뮬레이션 모드가 꺼졌습니다.",
         forceConfirmTitle:"강제 점화를 진행할까요?",
         forceConfirmText:"강제 점화는 고위험 동작입니다.<br>주변 인원 접근 금지 · 보호구 착용 권장 · 결선/단락 재확인.",
+        forceLoadcellTitle:"로드셀을 점검하세요",
+        forceLoadcellText:"로드셀 상태가 확인되지 않았습니다.<br>강제 점화는 진행할 수 있지만 위험을 충분히 이해한 뒤 선택하세요.",
         forceConfirmYes:"강제 점화",
         forceSlideLabel:"밀어서 강제 점화",
         forceConfirmCancel:"취소",
@@ -578,6 +1059,14 @@
         launcherTitle:"발사대 제어",
         launcherNote:"발사대 모터/액추에이터 제어가 적용됩니다.<br>버튼을 누르는 동안 모터가 구동됩니다.",
         launcherHint:"안전 주의: 발사대 주변 접근 금지. 이상 징후 시 즉시 중지하세요.",
+        launcherAutoBtn:"자동 기립",
+        launcherAutoStartToast:"자동 기립 시작",
+        launcherAutoStopToast:"자동 기립 종료",
+        launcherAutoLog:"발사대 자동 기립 실행.",
+        launcherAutoDesc:"발사대를 자동으로 세우는 1회 동작입니다.",
+        launcherAutoConfirmTitle:"자동 기립을 실행할까요?",
+        launcherAutoConfirmText:"발사대가 자동으로 상승합니다.<br>주변 안전을 확인한 후 진행하세요.",
+        launcherAutoConfirmBtn:"실행",
         inspectionTitle:"설비 점검",
         inspectionSub:"자동 점검을 완료하면 제어 권한이 부여됩니다.",
         inspectionLabelLink:"데이터 링크",
@@ -585,6 +1074,8 @@
         inspectionDescSerial:"USB 시리얼 연결/권한",
         inspectionLabelIgniter:"이그나이터",
         inspectionDescIgniter:"연속성/오픈 여부",
+        inspectionLabelLoadcell:"로드셀",
+        inspectionDescLoadcell:"추력 데이터 정상 수신",
         inspectionLabelSwitch:"스위치",
         inspectionDescSwitch:"저전위(LOW) 안전 상태",
         inspectionDescRelay:"비정상 릴레이 HIGH 여부",
@@ -652,6 +1143,13 @@
         hdrThrust:"추력_kgf",
         hdrThrustN:"추력_N",
         hdrPressure:"압력_v",
+        hdrAccelX:"가속도_x_g",
+        hdrAccelY:"가속도_y_g",
+        hdrAccelZ:"가속도_z_g",
+        hdrTerminalVel:"종단속도_mps",
+        hdrGyroX:"자이로_x_dps",
+        hdrGyroY:"자이로_y_dps",
+        hdrGyroZ:"자이로_z_dps",
         hdrLoopMs:"루프_ms",
         hdrElapsedMs:"경과_ms",
         hdrHxHz:"hx_hz",
@@ -661,7 +1159,7 @@
         hdrRelay:"릴레이",
         hdrIgs:"igs_모드",
         hdrState:"상태",
-        hdrCdMs:"카운트다운_ms",
+        hdrTdMs:"td_ms",
         hdrRelTime:"상대시간_s",
         hdrIgnWindowFlag:"유효추력_구간",
         chartTitleIgnition:"유효추력 구간 추력/압력 (elapsed_ms 기준)",
@@ -674,6 +1172,7 @@
         statusCountdown:"COUNTDOWN",
         statusNotArmed:"NOT ARMED",
         statusReady:"READY",
+        statusLoadcellCheck:"LOADCELL CHECK",
         statusSequence:"SEQUENCE",
         statusLockoutText:"비정상적인 릴레이 HIGH 감지 ({name}). 모든 제어 권한이 해제되었습니다. 보드를 재시작하세요.",
         statusAbortText:"시퀀스가 중단되었습니다.",
@@ -684,6 +1183,7 @@
         statusNotArmedTextReady:"이그나이터 미연결 / 점화 시퀀스 가능",
         statusNotArmedTextBlocked:"이그나이터 미연결 / 점화 시퀀스 제한",
         statusReadyText:"시스템 준비 완료",
+        sequenceReadyBtn:"READY",
         sequenceStartBtn:"SEQUENCE START",
         sequenceEndBtn:"SEQUENCE END",
         sequenceEndLog:"시퀀스 종료 요청.",
@@ -870,7 +1370,9 @@
         devRelay1Btn:"Relay 1",
         devRelay2Btn:"Relay 2",
         devWsOffBtn:"WS OFF (SIM)",
+        devLoadcellErrBtn:"LOADCELL ERROR (SIM)",
         settingsNavTitle:"Sections",
+        settingsNavConnect:"Connect",
         settingsNavHardware:"Hardware",
         settingsNavInterface:"Interface",
         settingsNavSequence:"Sequence",
@@ -881,6 +1383,21 @@
         settingsBoardNameLabel:"Board Name",
         settingsFirmwareNameLabel:"Firmware",
         settingsProtocolLabel:"Protocol",
+        settingsGroupSerial:"Serial",
+        settingsGroupOperation:"Operation Mode",
+        settingsWifiInfoTitle:"Wi-Fi",
+        settingsWifiModeLabel:"Mode",
+        settingsWifiSsidLabel:"SSID",
+        settingsWifiChannelLabel:"Channel",
+        settingsWifiBandwidthLabel:"Bandwidth",
+        settingsWifiTxPowerLabel:"TX power",
+        settingsWifiIpLabel:"IP",
+        settingsWifiStaCountLabel:"Connected devices",
+        settingsWifiRssiLabel:"Signal (RSSI)",
+        settingsOpModeLabel:"Mode",
+        settingsOpModeHint:"Switch between Flight/DAQ.",
+        opModeDaq:"DAQ",
+        opModeFlight:"Flight",
         settingsSerialStatusLabel:"Serial connection status",
         settingsSerialRxLabel:"Apply serial RX logs",
         settingsSerialRxHint:"Parse JSON lines from the board and reflect them in the UI/charts.",
@@ -895,6 +1412,10 @@
         settingsThrustUnitHint:"Only the display unit is converted. Saved RAW data uses <strong>kgf</strong>.",
         settingsPressureUnitLabel:"Pressure unit",
         settingsPressureUnitHint:"Currently based on Voltage (V). kPa/psi will be available after sensor calibration.",
+        settingsGyroPreviewLabel:"Gyro preview",
+        settingsGyroPreviewHint:"Choose the preview for Flight mode.",
+        settingsGyroPreview3d:"3D Attitude",
+        settingsGyroPreviewNav:"Navball",
         langOptionKo:"Korean",
         langOptionEn:"English",
         settingsGroupSequence:"Ignition Sequence",
@@ -911,6 +1432,7 @@
         settingsSafetyToastLabel:"Safety alerts",
         settingsSafetyToastHint:"Toast notifications appear on state changes. Click to dismiss.",
         settingsSaveBtn:"Save",
+        opModeChangedToast:"Mode changed: {mode}",
         confirmSequenceTitle:"Proceed with ignition sequence?",
         confirmSequenceText:"If conditions aren't met, the board won't ignite.<br>Hold the button for 3 seconds to start the countdown.",
         confirmSequenceNote:"• Keep safe distance · Verify igniter wiring/shorts!",
@@ -931,6 +1453,8 @@
         simDisabledToast:"Simulation mode disabled.",
         forceConfirmTitle:"Proceed with force ignition?",
         forceConfirmText:"Force ignition is high risk.<br>No personnel nearby · PPE recommended · Recheck wiring/shorts.",
+        forceLoadcellTitle:"Check the loadcell",
+        forceLoadcellText:"Loadcell status is not verified.<br>You can still force ignite, but proceed only if you understand the risk.",
         forceConfirmYes:"Force Ignition",
         forceSlideLabel:"Slide to Force Ignition",
         forceConfirmCancel:"Cancel",
@@ -938,6 +1462,14 @@
         launcherTitle:"Launcher Control",
         launcherNote:"Launcher motor/actuator control is enabled.<br>The motor runs while you hold the button.",
         launcherHint:"Safety: Keep clear of the launcher. Stop immediately if anything seems abnormal.",
+        launcherAutoBtn:"Auto Stand",
+        launcherAutoStartToast:"Auto stand started.",
+        launcherAutoStopToast:"Auto stand complete.",
+        launcherAutoLog:"Launcher auto stand triggered.",
+        launcherAutoDesc:"Runs a single automatic stand-up sequence.",
+        launcherAutoConfirmTitle:"Run auto stand?",
+        launcherAutoConfirmText:"The launcher will raise automatically.<br>Proceed only after checking safety.",
+        launcherAutoConfirmBtn:"Run",
         inspectionTitle:"Inspection",
         inspectionSub:"Complete the automatic check to gain control authority.",
         inspectionLabelLink:"Data link",
@@ -945,6 +1477,8 @@
         inspectionDescSerial:"USB serial connection/permissions",
         inspectionLabelIgniter:"Igniter",
         inspectionDescIgniter:"Continuity/open status",
+        inspectionLabelLoadcell:"Loadcell",
+        inspectionDescLoadcell:"Thrust data reception",
         inspectionLabelSwitch:"Switch",
         inspectionDescSwitch:"LOW safety state",
         inspectionDescRelay:"Abnormal relay HIGH status",
@@ -1026,6 +1560,13 @@
         hdrThrust:"thrust_kgf",
         hdrThrustN:"thrust_n",
         hdrPressure:"pressure_v",
+        hdrAccelX:"accel_x_g",
+        hdrAccelY:"accel_y_g",
+        hdrAccelZ:"accel_z_g",
+        hdrTerminalVel:"terminal_velocity_mps",
+        hdrGyroX:"gyro_x_dps",
+        hdrGyroY:"gyro_y_dps",
+        hdrGyroZ:"gyro_z_dps",
         hdrLoopMs:"loop_ms",
         hdrElapsedMs:"elapsed_ms",
         hdrHxHz:"hx_hz",
@@ -1035,7 +1576,7 @@
         hdrRelay:"relay",
         hdrIgs:"igs_mode",
         hdrState:"state",
-        hdrCdMs:"cd_ms",
+        hdrTdMs:"td_ms",
         hdrRelTime:"rel_time_s",
         hdrIgnWindowFlag:"is_ignition_window",
         chartTitleIgnition:"Thrust/Pressure in ignition window (elapsed_ms)",
@@ -1048,6 +1589,7 @@
         statusCountdown:"COUNTDOWN",
         statusNotArmed:"NOT ARMED",
         statusReady:"READY",
+        statusLoadcellCheck:"LOADCELL CHECK",
         statusSequence:"SEQUENCE",
         statusLockoutText:"Abnormal relay HIGH detected ({name}). Control revoked. Restart the board.",
         statusAbortText:"Sequence aborted.",
@@ -1058,6 +1600,7 @@
         statusNotArmedTextReady:"Igniter open / ignition sequence allowed",
         statusNotArmedTextBlocked:"Igniter open / ignition sequence blocked",
         statusReadyText:"System ready",
+        sequenceReadyBtn:"READY",
         sequenceStartBtn:"SEQUENCE START",
         sequenceEndBtn:"SEQUENCE END",
         sequenceEndLog:"Sequence end requested.",
@@ -1244,6 +1787,7 @@
         const key = htmlKey || textKey;
         if(!key) return;
         const value = t(key);
+        if(value === key) return;
         if(htmlKey) node.innerHTML = value;
         else node.textContent = value;
       });
@@ -1277,6 +1821,10 @@
       if(el.devWsOffBtn){
         el.devWsOffBtn.classList.toggle("is-on", devWsOff);
         el.devWsOffBtn.classList.toggle("is-warning", devWsOff);
+      }
+      if(el.devLoadcellErrBtn){
+        el.devLoadcellErrBtn.classList.toggle("is-on", devLoadcellError);
+        el.devLoadcellErrBtn.classList.toggle("is-warning", devLoadcellError);
       }
       if(simEnabled){
         lockoutLatched = devRelay1Locked || devRelay2Locked;
@@ -1315,6 +1863,8 @@
       if(el.unitThrust) el.unitThrust.value = uiSettings.thrustUnit;
       if(el.ignTimeInput) el.ignTimeInput.value = uiSettings.ignDurationSec;
       if(el.countdownSecInput) el.countdownSecInput.value = uiSettings.countdownSec;
+      if(el.opModeSelect) el.opModeSelect.value = uiSettings.opMode || "daq";
+      if(el.gyroPreviewSelect) el.gyroPreviewSelect.value = uiSettings.gyroPreview || "3d";
 
       if(el.relaySafeToggle) el.relaySafeToggle.checked = !!uiSettings.relaySafe;
       if(el.safeModeToggle){
@@ -1332,6 +1882,10 @@
       if(el.simToggle) el.simToggle.checked = !!uiSettings.simEnabled;
       if(el.langSelect) el.langSelect.value = (uiSettings.lang === "en") ? "en" : "ko";
       if(el.themeToggle) el.themeToggle.checked = (uiSettings.theme === "dark");
+      document.documentElement.classList.toggle("mode-flight", uiSettings.opMode === "flight");
+      document.documentElement.classList.toggle("mode-daq", uiSettings.opMode !== "flight");
+      document.documentElement.classList.toggle("preview-3d", (uiSettings.gyroPreview || "3d") === "3d");
+      document.documentElement.classList.toggle("preview-navball", (uiSettings.gyroPreview || "3d") === "navball");
 
       updateRelaySafePill();
       updateSerialPill();
@@ -1440,15 +1994,6 @@
     function resetSimState(){
       simState = {st:0, cdMs:0, countdownStartMs:null, ignStartMs:null, countdownTotalMs:null};
     }
-    function setInspectionPassed(){
-      inspectionRunning = false;
-      inspectionState = "passed";
-      controlAuthority = true;
-      INSPECTION_STEPS.forEach(s=>setInspectionItemState(s.key, "ok", t("inspectionOk")));
-      setInspectionResult(t("inspectionPassText"), "ok");
-      updateInspectionPill();
-      updateControlAccessUI(currentSt);
-    }
     function setSimEnabled(enabled, opts){
       const silent = !!(opts && opts.silent);
       simEnabled = !!enabled;
@@ -1460,9 +2005,10 @@
         resetSimState();
         lockoutLatched = false;
         lockoutRelayMask = 0;
+        devLoadcellError = false;
         hideLockoutModal();
         setLockoutVisual(false);
-        setInspectionPassed();
+        resetInspectionUI();
         onIncomingSample(buildSimSample(), "SIMULATION");
       }else{
         resetSimState();
@@ -1473,6 +2019,7 @@
         devRelay1Locked = false;
         devRelay2Locked = false;
         devWsOff = false;
+        devLoadcellError = false;
         lockoutLatched = false;
         lockoutRelayMask = 0;
         setLockoutVisual(false);
@@ -1518,9 +2065,25 @@
         pressure = 1.2 + 0.6 * Math.sin(now / 140);
       }
 
+      const ax = 0.02 * Math.sin(now / 260);
+      const ay = 0.02 * Math.cos(now / 300);
+      const az = 1.0 + 0.04 * Math.sin(now / 210);
+      const gx = 0.8 * Math.sin(now / 180);
+      const gy = 0.6 * Math.cos(now / 210);
+      const gz = 0.4 * Math.sin(now / 160);
+
+      const simTd = (simState.st === 1)
+        ? -Math.max(0, simState.cdMs)
+        : (simState.st === 2 && simState.ignStartMs ? (now - simState.ignStartMs) : 0);
       return {
         t: thrust,
         p: pressure,
+        ax,
+        ay,
+        az,
+        gx,
+        gy,
+        gz,
         lt: 10,
         hz: Math.round(1000 / POLL_INTERVAL),
         ct: 2000,
@@ -1528,7 +2091,7 @@
         ic: 1,
         r: simState.st === 2 ? 1 : 0,
         st: simState.st,
-        cd: simState.st === 1 ? simState.cdMs : 0,
+        td: simTd,
         gs: (uiSettings && uiSettings.igs) ? 1 : 0,
         m: 2
       };
@@ -1907,14 +2470,46 @@
     }
 
     function updateConnectionUI(connected){
-      if(!el.connDot || !el.connText) return;
-      if(connected){ el.connDot.classList.add("ok"); el.connText.textContent = t("connConnected"); }
-      else { el.connDot.classList.remove("ok"); el.connText.textContent = t("connDisconnected"); }
+      if(el.connDot){
+        if(connected) el.connDot.classList.add("ok");
+        else el.connDot.classList.remove("ok");
+      }
+      if(el.connText){
+        el.connText.textContent = connected ? t("connConnected") : t("connDisconnected");
+      }
       if(connected || sampleCounter === 0) hideDisconnectOverlay();
       else showDisconnectOverlay();
       updateInspectionAccess();
       updateMotorInfoPanel();
       updateHomeUI();
+      updateGyroConnectionUI(connected);
+      if(!connected){
+        if(el.gyroStatusPill && el.gyroStatusText){
+          el.gyroStatusPill.className = "gyro-status-pill status-disc";
+          el.gyroStatusPill.textContent = t("statusDisconnected");
+          el.gyroStatusText.textContent = t("statusNoResponse");
+        }
+      }else{
+        syncGyroStatusFromMain();
+      }
+    }
+
+    function updateGyroConnectionUI(connected){
+      if(!el.gyroConnPill || !el.gyroConnText) return;
+      el.gyroConnPill.classList.toggle("ok", !!connected);
+      el.gyroConnText.textContent = connected ? t("connConnected") : t("connDisconnected");
+    }
+
+    function syncGyroStatusFromMain(){
+      if(!el.gyroStatusPill || !el.gyroStatusText) return;
+      if(el.statusPill){
+        const pillClass = el.statusPill.className || "";
+        el.gyroStatusPill.className = ("gyro-status-pill " + pillClass).trim();
+        el.gyroStatusPill.textContent = el.statusPill.textContent || "";
+      }
+      if(el.statusText){
+        el.gyroStatusText.textContent = el.statusText.textContent || "";
+      }
     }
 
     function updateWsUI(){
@@ -1928,6 +2523,43 @@
       }
       updateWsAlert();
       updateHomeUI();
+    }
+
+    function updateWifiInfoUI(info){
+      if(!el.wifiMode && !el.wifiSsid) return;
+      if(!info){
+        if(el.wifiMode) el.wifiMode.textContent = "-";
+        if(el.wifiSsid) el.wifiSsid.textContent = "-";
+        if(el.wifiChannel) el.wifiChannel.textContent = "-";
+        if(el.wifiBandwidth) el.wifiBandwidth.textContent = "-";
+        if(el.wifiTxPower) el.wifiTxPower.textContent = "-";
+        if(el.wifiIp) el.wifiIp.textContent = "-";
+        if(el.wifiStaCount) el.wifiStaCount.textContent = "-";
+        if(el.wifiRssi) el.wifiRssi.textContent = "-";
+        return;
+      }
+      const mode = info.mode || "-";
+      const apSsid = info.ap_ssid || "";
+      const staSsid = info.sta_ssid || "";
+      const ssidLabel = (staSsid && staSsid.length) ? staSsid : apSsid;
+      const channel = (info.channel != null) ? String(info.channel) : "-";
+      const bandwidth = info.bandwidth || "-";
+      const txDbm = (info.tx_dbm != null && isFinite(Number(info.tx_dbm))) ? Number(info.tx_dbm).toFixed(1) + " dBm" : "-";
+      const apIp = info.ap_ip || "";
+      const staIp = info.sta_ip || "";
+      const ipLabel = (staIp && staIp !== "0.0.0.0") ? staIp : apIp;
+      const staCount = (info.sta_count != null) ? String(info.sta_count) : "-";
+      const rssiVal = Number(info.rssi);
+      const rssiLabel = (isFinite(rssiVal) && rssiVal > -100) ? (rssiVal + " dBm") : "-";
+
+      if(el.wifiMode) el.wifiMode.textContent = mode;
+      if(el.wifiSsid) el.wifiSsid.textContent = ssidLabel || "-";
+      if(el.wifiChannel) el.wifiChannel.textContent = channel;
+      if(el.wifiBandwidth) el.wifiBandwidth.textContent = bandwidth;
+      if(el.wifiTxPower) el.wifiTxPower.textContent = txDbm;
+      if(el.wifiIp) el.wifiIp.textContent = ipLabel || "-";
+      if(el.wifiStaCount) el.wifiStaCount.textContent = staCount;
+      if(el.wifiRssi) el.wifiRssi.textContent = rssiLabel;
     }
     function updateHomeLog(){
       if(!el.homeLog) return;
@@ -2043,6 +2675,7 @@
       if(el.homeMissionName) el.homeMissionName.textContent = missionName;
       if(el.homeMissionMotor) el.homeMissionMotor.textContent = missionMotor;
       if(el.homeMissionDelay) el.homeMissionDelay.textContent = missionDelay;
+      updateGyroMetaFromMain();
 
       const battValue = (lastBatteryV != null && isFinite(lastBatteryV)) ? lastBatteryV.toFixed(2) : null;
       const battPct = (lastBatteryPct != null && isFinite(lastBatteryPct)) ? Math.round(lastBatteryPct) : null;
@@ -2075,6 +2708,21 @@
         el.homeActionHint.textContent = armed ? "제어 권한 활성" : "점검 후 ARM 가능";
       }
       updateHomeLog();
+    }
+
+    function updateGyroMetaFromMain(){
+      if(el.gyroBattery){
+        const battText = (el.batteryStatus && el.batteryStatus.textContent) ? el.batteryStatus.textContent.trim() : "--";
+        el.gyroBattery.textContent = battText || "--";
+      }
+      if(el.gyroMode){
+        const modeText = (el.modePill && el.modePill.textContent) ? el.modePill.textContent.trim() : "--";
+        el.gyroMode.textContent = modeText || "--";
+      }
+      if(el.gyroRelay){
+        const relayText = (el.relay && el.relay.textContent) ? el.relay.textContent.trim() : "--";
+        el.gyroRelay.textContent = relayText || "--";
+      }
     }
 
     function addLogLine(message, tag){
@@ -2271,6 +2919,35 @@
       }
       return audioCtx;
     }
+
+    const COUNTDOWN_AUDIO_SOURCES = {
+      10: "/mp3/t-10.mp3",
+      9: "/mp3/9.mp3",
+      8: "/mp3/8.mp3",
+      7: "/mp3/7.mp3",
+      6: "/mp3/6.mp3",
+      5: "/mp3/5.mp3",
+      4: "/mp3/4.mp3",
+      3: "/mp3/3.mp3",
+      2: "/mp3/2.mp3",
+      1: "/mp3/1.mp3",
+      0: "/mp3/ignition.mp3"
+    };
+    const countdownAudioCache = {};
+    function playCountdownMp3(secRemain){
+      const key = Number(secRemain);
+      if(!isFinite(key) || !(key in COUNTDOWN_AUDIO_SOURCES)) return;
+      let audio = countdownAudioCache[key];
+      if(!audio){
+        audio = new Audio(COUNTDOWN_AUDIO_SOURCES[key]);
+        audio.preload = "auto";
+        countdownAudioCache[key] = audio;
+      }
+      try{
+        audio.currentTime = 0;
+        audio.play().catch(()=>{});
+      }catch(e){}
+    }
     function playTone(freq, durationMs, delayMs){
       const ctx = getAudioCtx();
       if(!ctx) return;
@@ -2391,7 +3068,7 @@
       const unlocked=isControlUnlocked();
       if(el.forceBtn){
         const igniterBlocked = (uiSettings && uiSettings.igs) && latestTelemetry.ic !== 1;
-        const blocked = (!unlocked || lockoutLatched || state!==0 || sequenceActive || igniterBlocked || safetyModeEnabled);
+        const blocked = ((!unlocked && !loadcellErrorActive) || lockoutLatched || state!==0 || sequenceActive || igniterBlocked || safetyModeEnabled);
         el.forceBtn.disabled = blocked;
         el.forceBtn.classList.toggle("disabled", blocked);
       }
@@ -2495,6 +3172,14 @@
       updateInspectionPill();
     }
 
+    function openInspectionFromUI(){
+      if(!connOk){
+        showToast(t("inspectionOpenToast"), "warn");
+        return;
+      }
+      showInspection();
+    }
+
     function showInspection(){
       if(el.inspectionOverlay){
         el.inspectionOverlay.classList.remove("hidden");
@@ -2567,8 +3252,10 @@
         return null;
       }
       if(!canvas._cssInit){
-        canvas.style.width = "100%";
-        canvas.style.height = "";
+        const fixedW = canvas.dataset.fixedWidth ? Number(canvas.dataset.fixedWidth) : null;
+        canvas.style.width = (fixedW && fixedW > 0) ? (fixedW + "px") : "100%";
+        const fixedH = canvas.dataset.fixedHeight ? Number(canvas.dataset.fixedHeight) : null;
+        canvas.style.height = (fixedH && fixedH > 0) ? (fixedH + "px") : "";
         canvas._cssInit = true;
       }
 
@@ -2580,8 +3267,10 @@
         const padRight = parseFloat(parentStyle.paddingRight) || 0;
         parentContentWidth = Math.max(0, parentRect.width - padLeft - padRight);
       }
-      const cssW = Math.max(160, Math.floor(parentContentWidth || rect.width || 200));
-      const cssH = Math.max(180, rect.height || 220);
+      const fixedW = canvas.dataset.fixedWidth ? Number(canvas.dataset.fixedWidth) : null;
+      const cssW = Math.max(160, (fixedW && fixedW > 0) ? fixedW : Math.floor(parentContentWidth || rect.width || 200));
+      const fixedH = canvas.dataset.fixedHeight ? Number(canvas.dataset.fixedHeight) : null;
+      const cssH = Math.max(180, (fixedH && fixedH > 0) ? fixedH : (rect.height || 220));
       const dpr  = window.devicePixelRatio || 1;
 
       if(canvas._cssW!==cssW || canvas._cssH!==cssH || canvas._dpr!==dpr){
@@ -2701,16 +3390,146 @@
       ctx.restore();
     }
 
+    function drawChartMulti(canvasId, series, colors, view){
+      const canvas=document.getElementById(canvasId);
+      if(!canvas) return;
+
+      const size = ensureCanvasSize(canvas);
+      if(!size) return;
+      const { w:width, h:height, ctx } = size;
+      ctx.clearRect(0,0,width,height);
+      const padding=6;
+      ctx.save();
+      ctx.strokeStyle="rgba(148,163,184,0.3)";
+      ctx.lineWidth=0.8;
+      ctx.setLineDash([3,4]);
+      for(let i=0;i<=4;i++){
+        let y=padding+(height-2*padding)*(i/4);
+        y=height-y;
+        ctx.beginPath(); ctx.moveTo(padding,y); ctx.lineTo(width-padding,y); ctx.stroke();
+      }
+      ctx.setLineDash([2,6]);
+      for(let i=0;i<=4;i++){
+        let x=padding+(width-2*padding)*(i/4);
+        ctx.beginPath(); ctx.moveTo(x,padding); ctx.lineTo(x,height-padding); ctx.stroke();
+      }
+      ctx.restore();
+
+      const base = (series && series.length) ? series[0] : null;
+      if(!base || base.length < 2){
+        ctx.save();
+        ctx.fillStyle="rgba(71,85,105,0.65)";
+        ctx.font="12px -apple-system,BlinkMacSystemFont,system-ui,sans-serif";
+        ctx.textAlign="center";
+        ctx.textBaseline="middle";
+        ctx.fillText(t("chartNoData"), width/2, height/2);
+        ctx.restore();
+        return;
+      }
+
+      const indices=getViewIndices(base,view);
+      if(indices.end<indices.start) return;
+
+      const slices = series.map((s)=>s.slice(indices.start, indices.end+1));
+      const count = slices[0].length;
+      if(count < 2) return;
+
+      let min = Infinity;
+      let max = -Infinity;
+      for(const arr of slices){
+        for(const v of arr){
+          if(!isFinite(v)) continue;
+          if(v < min) min = v;
+          if(v > max) max = v;
+        }
+      }
+      if(!isFinite(min) || !isFinite(max)) return;
+      let range = max - min; if(range === 0) range = 1;
+      const stepX=(width-2*padding)/(count-1);
+
+      function yPos(value){
+        return (height-padding) - ((value-min)/range)*(height-2*padding);
+      }
+
+      slices.forEach((arr, idx)=>{
+        const color = colors && colors[idx] ? colors[idx] : "#0f172a";
+        ctx.beginPath();
+        for(let i=0;i<arr.length;i++){
+          const v = arr[i];
+          const x=padding+i*stepX;
+          const y=yPos(isFinite(v) ? v : min);
+          if(i===0) ctx.moveTo(x,y);
+          else ctx.lineTo(x,y);
+        }
+        ctx.strokeStyle=color;
+        ctx.lineWidth=1.2;
+        ctx.stroke();
+      });
+    }
+
     function redrawCharts(){
       const thrustDisplay=thrustBaseHistory.map(convertThrustForDisplay);
       const pressureDisplay=pressureBaseHistory.slice();
+      const accelDisplay=accelMagHistory.slice();
       drawChart("thrustChart", thrustDisplay, "#ef4444", chartView);
       drawChart("pressureChart", pressureDisplay, "#3b82f6", chartView);
+      drawChart("accelChart", accelDisplay, "#f59e0b", chartView);
+      drawChart("accelChartFlight", accelDisplay, "#f59e0b", chartView);
+      drawChartMulti("accelXYZChart",
+        [accelXHistory, accelYHistory, accelZHistory],
+        ["#ef4444", "#22c55e", "#3b82f6"],
+        chartView);
+      drawChartMulti("accelXYZChartFlight",
+        [accelXHistory, accelYHistory, accelZHistory],
+        ["#ef4444", "#22c55e", "#3b82f6"],
+        chartView);
+    }
+    let chartLayoutRaf = null;
+    function scheduleChartLayoutRefresh(){
+      if(chartLayoutRaf) cancelAnimationFrame(chartLayoutRaf);
+      chartLayoutRaf = requestAnimationFrame(()=>{
+        chartLayoutRaf = null;
+        refreshChartLayout();
+      });
+    }
+    let chartSyncTimer = null;
+    function syncChartHeightToControls(attempt=0){
+      if(chartSyncTimer) clearTimeout(chartSyncTimer);
+      refreshChartLayout();
+      if(!window.matchMedia("(min-width: 1100px)").matches) return;
+      const chartsCard = document.querySelector(".charts-card");
+      const controlsCard = document.getElementById("controlsCard");
+      if(!chartsCard || !controlsCard) return;
+      const targetH = Math.round(controlsCard.getBoundingClientRect().height);
+      if(targetH < 2){
+        if(attempt < 8){
+          chartSyncTimer = setTimeout(()=>syncChartHeightToControls(attempt + 1), 120);
+        }
+        return;
+      }
+      const currentH = Math.round(chartsCard.getBoundingClientRect().height);
+      if(Math.abs(currentH - targetH) > 2 && attempt < 8){
+        chartSyncTimer = setTimeout(()=>syncChartHeightToControls(attempt + 1), 120);
+      }
     }
     function refreshChartLayout(){
       const row = document.querySelector(".chart-row");
       if(row) row.style.height = "";
-      const ids=["thrustChart","pressureChart"];
+      const chartsCard = document.querySelector(".charts-card");
+      const controlsCard = document.getElementById("controlsCard");
+      if(chartsCard){
+        chartsCard.style.height = "";
+        chartsCard.style.minHeight = "";
+      }
+      if(chartsCard && controlsCard && window.matchMedia("(min-width: 1100px)").matches){
+        const controlsRect = controlsCard.getBoundingClientRect();
+        if(controlsRect.height > 0){
+          const targetHeight = Math.round(controlsRect.height);
+          chartsCard.style.height = targetHeight + "px";
+          chartsCard.style.minHeight = targetHeight + "px";
+        }
+      }
+      const ids=["thrustChart","pressureChart","accelChart","accelXYZChart","accelChartFlight","accelXYZChartFlight"];
       ids.forEach((id)=>{
         const canvas=document.getElementById(id);
         if(!canvas) return;
@@ -2735,6 +3554,7 @@
         if(el.statusPillMeta) el.statusPillMeta.textContent = t("statusLockout");
         const name = relayMaskName(lockoutRelayMask);
         el.statusText.textContent = t("statusLockoutText", {name});
+        syncGyroStatusFromMain();
         return 9;
       }
       if(aborted){
@@ -2743,6 +3563,7 @@
         el.statusPill.textContent = t("statusAbort");
         if(el.statusPillMeta) el.statusPillMeta.textContent = t("statusAbort");
         el.statusText.textContent = t("statusAbortTextReason", {reason:getAbortReasonLabel()});
+        syncGyroStatusFromMain();
         return 4;
       }
       if(st===2){
@@ -2751,6 +3572,7 @@
         el.statusPill.textContent = t("statusIgnition");
         if(el.statusPillMeta) el.statusPillMeta.textContent = t("statusIgnition");
         el.statusText.textContent = t("statusIgnitionText");
+        syncGyroStatusFromMain();
         return 2;
       }
       if(st===1){
@@ -2759,6 +3581,7 @@
         el.statusPill.textContent = t("statusCountdown");
         if(el.statusPillMeta) el.statusPillMeta.textContent = t("statusCountdown");
         el.statusText.textContent = t("statusCountdownText");
+        syncGyroStatusFromMain();
         return 1;
       }
       if(seqActive){
@@ -2767,7 +3590,17 @@
         el.statusPill.textContent = t("statusSequence");
         if(el.statusPillMeta) el.statusPillMeta.textContent = t("statusSequence");
         el.statusText.textContent = t("statusSequenceText");
+        syncGyroStatusFromMain();
         return 5;
+      }
+      if(loadcellErrorActive && st===0){
+        el.statusPill.className="status-loadcell";
+        if(el.statusPillMeta) el.statusPillMeta.className="status-loadcell";
+        el.statusPill.textContent = t("statusLoadcellCheck");
+        if(el.statusPillMeta) el.statusPillMeta.textContent = t("statusLoadcellCheck");
+        el.statusText.textContent = t("statusLoadcellCheck");
+        syncGyroStatusFromMain();
+        return 6;
       }
       if(!ignOK){
         el.statusPill.className="status-disc";
@@ -2776,6 +3609,7 @@
         if(el.statusPillMeta) el.statusPillMeta.textContent = t("statusNotArmed");
         const allowSeq = !(uiSettings && uiSettings.igs);
         el.statusText.textContent = allowSeq ? t("statusNotArmedTextReady") : t("statusNotArmedTextBlocked");
+        syncGyroStatusFromMain();
         return 3;
       }
       el.statusPill.className="status-ready";
@@ -2783,11 +3617,13 @@
       el.statusPill.textContent = t("statusReady");
       if(el.statusPillMeta) el.statusPillMeta.textContent = t("statusReady");
       el.statusText.textContent = t("statusReadyText");
+      syncGyroStatusFromMain();
       return 0;
     }
 
     function setButtonsFromState(st, lockout, seqActive){
       if(!el.igniteBtn||!el.abortBtn){ updateControlAccessUI(st); return; }
+      const wantSequenceEnd = !!(seqActive || st===1 || st===2);
       if(lockout){
         el.igniteBtn.disabled=true;
         el.abortBtn.disabled=true;
@@ -2796,8 +3632,15 @@
         return;
       }
       if(!isControlUnlocked()){
-        el.igniteBtn.disabled=true;
+        el.igniteBtn.disabled = false;
         el.abortBtn.disabled = (st===0);
+        if(el.igniteBtn) el.igniteBtn.textContent = wantSequenceEnd ? t("sequenceEndBtn") : t("sequenceReadyBtn");
+        updateControlAccessUI(st);
+        return;
+      }
+      if(loadcellErrorActive && st===0){
+        el.igniteBtn.disabled=true;
+        el.abortBtn.disabled=true;
         if(el.igniteBtn) el.igniteBtn.textContent = t("sequenceStartBtn");
         updateControlAccessUI(st);
         return;
@@ -3094,8 +3937,17 @@
       if(firstSampleMs === null) firstSampleMs = timeMs;
 
       const thrustVal = Number(data.t  != null ? data.t  : (data.thrust   ?? 0));
+      const thrustHasData = (data.t != null || data.thrust != null);
+      loadcellErrorActive = (simEnabled && devLoadcellError) || !thrustHasData || !isFinite(thrustVal);
+      const thrustMissing = loadcellErrorActive;
       updateLoadcellLiveValue(thrustVal);
       const p   = Number(data.p  != null ? data.p  : (data.pressure ?? 0));
+      const ax  = Number(data.ax != null ? data.ax : (data.accel_x ?? data.ax_g ?? 0));
+      const ay  = Number(data.ay != null ? data.ay : (data.accel_y ?? data.ay_g ?? 0));
+      const az  = Number(data.az != null ? data.az : (data.accel_z ?? data.az_g ?? 0));
+      const gx  = Number(data.gx != null ? data.gx : (data.gyro_x ?? data.gx_dps ?? 0));
+      const gy  = Number(data.gy != null ? data.gy : (data.gyro_y ?? data.gy_dps ?? 0));
+      const gz  = Number(data.gz != null ? data.gz : (data.gyro_z ?? data.gz_dps ?? 0));
       const lt  = Number(data.lt != null ? data.lt : (data.loop ?? data.loopTime ?? 0));
       const elapsedMs = Math.max(0, timeMs - firstSampleMs);
 
@@ -3106,7 +3958,6 @@
       const ic  = (data.ic != null ? data.ic : data.ign ?? 0);
       const rly = (data.r  != null ? data.r  : data.rly ?? 0);
       const st  = Number(data.st != null ? data.st : (data.state ?? 0));
-      const cd  = (data.cd != null ? Number(data.cd) : null);
       const td  = (data.td != null ? Number(data.td) : null);
       const uw  = Number(data.uw ?? 0);
       const ab  = Number(data.ab != null ? data.ab : 0);
@@ -3115,6 +3966,8 @@
       const smRaw = (data.sm != null ? data.sm : (data.safe != null ? data.safe : null));
       const sm = (smRaw != null) ? Number(smRaw) : null;
       const mode = Number(data.m != null ? data.m : data.mode ?? -1);
+
+      publishOverlaySample({ t: thrustVal, p, st, td, ab, ts: Date.now() });
 
       // ✅ LOCKOUT 필드 매칭(펌웨어: rf/rm 우선)
       const lko = Number(data.lko ?? data.lockout ?? data.rf ?? 0);
@@ -3178,6 +4031,11 @@
 
       thrustBaseHistory.push(thrustVal);
       pressureBaseHistory.push(p);
+      const accelMagVal = Math.sqrt((ax * ax) + (ay * ay) + (az * az));
+      accelMagHistory.push(accelMagVal);
+      accelXHistory.push(ax);
+      accelYHistory.push(ay);
+      accelZHistory.push(az);
       chartTimeHistory.push(timeMs);
 
       const maxKeep=MAX_POINTS*4;
@@ -3185,16 +4043,20 @@
         const remove=thrustBaseHistory.length-maxKeep;
         thrustBaseHistory.splice(0,remove);
         pressureBaseHistory.splice(0,remove);
+        accelMagHistory.splice(0,remove);
+        accelXHistory.splice(0,remove);
+        accelYHistory.splice(0,remove);
+        accelZHistory.splice(0,remove);
         chartTimeHistory.splice(0,remove);
       }
 
-      sampleHistory.push({timeMs,timeIso,t:thrustVal,p,lt,elapsed:elapsedMs,hz:hxHz,ct:ctUs,sw:sw?1:0,ic:ic?1:0,r:rly?1:0,st,cd:cd??0});
+      sampleHistory.push({timeMs,timeIso,t:thrustVal,p,lt,elapsed:elapsedMs,hz:hxHz,ct:ctUs,sw:sw?1:0,ic:ic?1:0,r:rly?1:0,st,td});
       if(sampleHistory.length>SAMPLE_HISTORY_MAX){
         const remove=sampleHistory.length-SAMPLE_HISTORY_MAX;
         sampleHistory.splice(0,remove);
       }
 
-      logData.push({time:timeIso,t:thrustVal,p,lt,elapsed:elapsedMs,hz:hxHz,ct:ctUs,s:sw?1:0,ic:ic?1:0,r:rly?1:0,gs,st,cd:cd??0});
+      logData.push({time:timeIso,t:thrustVal,p,ax,ay,az,gx,gy,gz,lt,elapsed:elapsedMs,hz:hxHz,ct:ctUs,s:sw?1:0,ic:ic?1:0,r:rly?1:0,gs,st,td});
       if(logData.length > RAW_LOG_MAX) logData.splice(0, logData.length - RAW_LOG_MAX);
 
       // ✅ LOCKOUT 반영(보드가 내보내면)
@@ -3318,12 +4180,64 @@
         const thrustDisp=convertThrustForDisplay(thrustVal);
         const thrustUnit = (uiSettings && uiSettings.thrustUnit) ? uiSettings.thrustUnit : "kgf";
 
-        if(el.thrust)   el.thrust.innerHTML   = `<span class="num">${thrustDisp.toFixed(3)}</span><span class="unit">${thrustUnit}</span>`;
+      if(el.thrust){
+          const metric = el.thrust.closest(".status-metric");
+          if(thrustMissing){
+            el.thrust.innerHTML = "로드셀 시스템을<br>점검하세요";
+            if(metric) metric.classList.add("is-alert");
+            if(metric) metric.classList.toggle("is-alert-blink", loadcellErrorActive);
+          }else{
+            if(metric) metric.classList.remove("is-alert");
+            if(metric) metric.classList.remove("is-alert-blink");
+            el.thrust.innerHTML = `<span class="num">${thrustDisp.toFixed(3)}</span><span class="unit">${thrustUnit}</span>`;
+          }
+        }
         if(el.pressure) el.pressure.innerHTML = `<span class="num">${p.toFixed(3)}</span><span class="unit">V</span>`;
+      if(el.accelX) el.accelX.innerHTML = `<span class="num">${ax.toFixed(3)}</span><span class="unit">g</span>`;
+      if(el.accelY) el.accelY.innerHTML = `<span class="num">${ay.toFixed(3)}</span><span class="unit">g</span>`;
+      if(el.accelZ) el.accelZ.innerHTML = `<span class="num">${az.toFixed(3)}</span><span class="unit">g</span>`;
+      if(el.accelMag){
+        const mag = Math.sqrt((ax * ax) + (ay * ay) + (az * az));
+        el.accelMag.innerHTML = `<span class="num">${mag.toFixed(3)}</span><span class="unit">g</span>`;
+      }
+        if(el.gyroX) el.gyroX.innerHTML = `<span class="num">${gx.toFixed(3)}</span><span class="unit">dps</span>`;
+        if(el.gyroY) el.gyroY.innerHTML = `<span class="num">${gy.toFixed(3)}</span><span class="unit">dps</span>`;
+        if(el.gyroZ) el.gyroZ.innerHTML = `<span class="num">${gz.toFixed(3)}</span><span class="unit">dps</span>`;
+        if(el.gyroMag){
+          const mag = Math.sqrt((gx * gx) + (gy * gy) + (gz * gz));
+          el.gyroMag.innerHTML = `<span class="num">${mag.toFixed(3)}</span><span class="unit">dps</span>`;
+        }
+        if(gyroGl){
+          const nowUi = Date.now();
+          if(gyroLastUiMs === 0 || (nowUi - gyroLastUiMs) >= 120){
+            const axV = isFinite(ax) ? ax : 0;
+            const ayV = isFinite(ay) ? ay : 0;
+            const azV = isFinite(az) ? az : 0;
+            const rollDeg = Math.atan2(ayV, azV) * RAD_TO_DEG;
+            const pitchDeg = Math.atan2(-axV, Math.sqrt((ayV * ayV) + (azV * azV))) * RAD_TO_DEG;
+            const dtSec = (gyroLastUiMs > 0) ? ((nowUi - gyroLastUiMs) / 1000) : 0;
+            if(isFinite(gz) && dtSec > 0){
+              gyroYawDeg += gz * dtSec;
+              gyroYawDeg = ((gyroYawDeg + 180) % 360) - 180;
+            }
+            const alpha = 0.22;
+            gyroRollDeg += alpha * (rollDeg - gyroRollDeg);
+            gyroPitchDeg += alpha * (pitchDeg - gyroPitchDeg);
+            renderGyroGl(gyroPitchDeg, gyroYawDeg, gyroRollDeg);
+            renderNavBall(gyroPitchDeg, gyroYawDeg, gyroRollDeg);
+            renderGyroPreview();
+            renderNavBallPreview(gyroPitchDeg, gyroYawDeg, gyroRollDeg);
+            updateLauncherPitchAngle(gyroPitchDeg, gy, nowUi);
+            if(el.gyroRollDeg) el.gyroRollDeg.innerHTML = `<span class="num">${gyroRollDeg.toFixed(1)}</span><span class="unit">deg</span>`;
+            if(el.gyroPitchDeg) el.gyroPitchDeg.innerHTML = `<span class="num">${gyroPitchDeg.toFixed(1)}</span><span class="unit">deg</span>`;
+            if(el.gyroYawDeg) el.gyroYawDeg.innerHTML = `<span class="num">${gyroYawDeg.toFixed(1)}</span><span class="unit">deg</span>`;
+            gyroLastUiMs = nowUi;
+          }
+        }
         if(el.thrustGauge){
           const maxThrust = (String(thrustUnit).toLowerCase() === "lbf") ? THRUST_GAUGE_MAX_LBF : THRUST_GAUGE_MAX_KGF;
-          const thrustVal = Math.max(0, thrustDisp);
-          const thrustPct = Math.min(100, (maxThrust > 0 ? (thrustVal / maxThrust) * 100 : 0));
+          const thrustVal = thrustMissing ? 0 : Math.max(0, thrustDisp);
+          const thrustPct = Math.min(100, (maxThrust > 0 && isFinite(thrustVal) ? (thrustVal / maxThrust) * 100 : 0));
           el.thrustGauge.style.setProperty("--gauge-pct", thrustPct.toFixed(1) + "%");
         }
         if(el.pressureGauge){
@@ -3339,7 +4253,13 @@
           `;
         }
 
-        if(el.loopPill) el.loopPill.innerHTML = `<span class="num">${lt.toFixed(0)}</span><span class="unit">ms</span>`;
+        if(el.loopPill){
+          el.loopPill.innerHTML = `<span class="num">${lt.toFixed(0)}</span><span class="unit">ms</span>`;
+          if(isFinite(lt)){
+            const loopStatus = (lt <= 20) ? "ok" : (lt <= 50 ? "warn" : "bad");
+            setQuickItemStatus(el.loopPill, loopStatus);
+          }
+        }
         if(el.snapHz){
           const nowUi = Date.now();
           if((nowUi - lastSnapHzUiMs) >= 1000 || lastSnapHzUiMs === 0){
@@ -3375,6 +4295,7 @@
         if(el.quickSw){
           const swLabel = (sw == null) ? "--" : (sw ? t("swHigh") : t("swLow"));
           el.quickSw.innerHTML = `<span class="num">${swLabel}</span>`;
+          setQuickItemStatus(el.quickSw, (sw == null) ? null : (sw ? "ok" : "warn"));
         }
 
         if(el.ic){
@@ -3384,6 +4305,7 @@
         if(el.quickIgniter){
           const icLabel = (ic == null) ? "--" : (ic ? t("icOk") : t("icNo"));
           el.quickIgniter.innerHTML = `<span class="num">${icLabel}</span>`;
+          setQuickItemStatus(el.quickIgniter, (ic == null) ? null : (ic ? "ok" : "bad"));
         }
 
         if(el.relay){
@@ -3393,18 +4315,34 @@
         if(el.quickRelay){
           const rlyLabel = (rly == null) ? "--" : (rly ? t("relayOn") : t("relayOff"));
           el.quickRelay.innerHTML = `<span class="num">${rlyLabel}</span>`;
+          setQuickItemStatus(el.quickRelay, (rly == null) ? null : (rly ? "ok" : "warn"));
         }
+        updateGyroMetaFromMain();
         if(el.quickState){
           let stateLabel="--";
+          let stateStatus=null;
+          let isNotArmed=false;
           if(lockoutLatched) stateLabel = t("statusLockout");
           else if(ab) stateLabel = t("statusAbort");
           else if(st===2) stateLabel = t("statusIgnition");
           else if(st===1) stateLabel = t("statusCountdown");
           else if(sequenceActive) stateLabel = t("statusSequence");
           else if(st===0){
-            stateLabel = (ic===0) ? t("statusNotArmed") : t("statusReady");
+            if(loadcellErrorActive){
+              stateLabel = t("statusLoadcellCheck");
+            }else{
+              isNotArmed = (ic===0);
+              stateLabel = isNotArmed ? t("statusNotArmed") : t("statusReady");
+            }
           }
-          el.quickState.innerHTML = `<span class="num">${stateLabel}</span>`;
+          if(lockoutLatched || ab || st===2) stateStatus = "bad";
+          else if(st===1 || sequenceActive || (st===0 && (ic===0 || loadcellErrorActive))) stateStatus = "warn";
+          else if(st===0) stateStatus = "ok";
+          const loadcellLabel = t("statusLoadcellCheck");
+          const stateHtml = (stateLabel === loadcellLabel) ? loadcellLabel.replace(" ", "<br>") : stateLabel;
+          el.quickState.innerHTML = `<span class="num">${stateHtml}</span>`;
+          el.quickState.classList.toggle("is-not-armed", isNotArmed);
+          setQuickItemStatus(el.quickState, stateStatus);
         }
 
         if(el.igswitch) el.igswitch.checked=!!gs;
@@ -3430,9 +4368,9 @@
               cdText = pad2(minPart) + ":" + pad2(secPart) + "." + pad3(msPart);
               if(secRemain !== lastCountdownSec){
                 if(secRemain > 0){
-                  playTone(880, 90, 0);
+                  playCountdownMp3(secRemain);
                 }else{
-                  playTone(1200, 200, 0);
+                  playCountdownMp3(0);
                 }
                 lastCountdownSec = secRemain;
               }
@@ -3444,21 +4382,6 @@
               const msPart = elapsedMs % 1000;
               cdText = pad2(minPart) + ":" + pad2(secPart) + "." + pad3(msPart);
               lastCountdownSec = null;
-            }
-          }else if(st===1 && cd!==null){
-            const msRemain = Math.max(0, Math.round(cd));
-            const secRemain = Math.ceil(msRemain/1000);
-            const minPart = Math.floor(msRemain / 60000);
-            const secPart = Math.floor((msRemain % 60000) / 1000);
-            const msPart = msRemain % 1000;
-            cdText = pad2(minPart) + ":" + pad2(secPart) + "." + pad3(msPart);
-            if(secRemain !== lastCountdownSec){
-              if(secRemain > 0){
-                playTone(880, 90, 0);
-              }else{
-                playTone(1200, 200, 0);
-              }
-              lastCountdownSec = secRemain;
             }
           }else if(localTplusActive && localTplusStartMs!=null){
             prefix = "T+ ";
@@ -3474,9 +4397,13 @@
           const cdLabel = prefix + cdText;
           el.countdown.textContent = cdLabel;
           if(el.countdownMobile) el.countdownMobile.textContent = cdLabel;
+          if(el.countdownBig) el.countdownBig.textContent = cdLabel;
         }
 
         const statusCode=setStatusFromState(st,!!ic,!!ab,lockoutLatched, sequenceActive);
+        if(el.countdownStatus && el.statusText){
+          el.countdownStatus.textContent = el.statusText.textContent || "";
+        }
         setButtonsFromState(st, lockoutLatched, sequenceActive);
         updateHomeUI();
 
@@ -3553,6 +4480,20 @@
         onIncomingSample(data, "WIFI");
       }finally{
         isUpdating=false;
+      }
+    }
+
+    async function fetchWifiInfo(){
+      if(simEnabled) return;
+      try{
+        const info = await fetchJsonTimeout("/wifi_info", 700);
+        wifiInfo = info;
+        wifiInfoLastMs = Date.now();
+        updateWifiInfoUI(info);
+      }catch(e){
+        if(!wifiInfo || (Date.now() - wifiInfoLastMs) > 5000){
+          updateWifiInfoUI(null);
+        }
       }
     }
 
@@ -3659,6 +4600,12 @@
     let launcherOverlayEl=null;
     let launcherUpHold=null;
     let launcherDownHold=null;
+    let launcherAutoActive=false;
+    let launcherPitchEst=null;
+    let launcherPitchEstMs=0;
+    let launcherAutoOverlayEl=null;
+    let launcherAutoConfirmBtn=null;
+    let launcherAutoCancelBtn=null;
     let easterOverlayEl=null;
     let easterEggOkEl=null;
     let easterEggPending=false;
@@ -3876,6 +4823,27 @@
       el.exportCsvBtn.disabled = !ok;
       el.exportCsvBtn.classList.toggle("disabled", !ok);
     }
+    function setQuickItemStatus(targetEl, status){
+      if(!targetEl) return;
+      const item = targetEl.closest(".item, .status-battery");
+      if(!item) return;
+      item.classList.remove("status-ok","status-warn","status-bad");
+      if(status) item.classList.add("status-" + status);
+    }
+    function updateStatusMotor(){
+      if(!el.statusMotor) return;
+      const motorName = (selectedMotorName || (el.missionName && el.missionName.value) || "").trim();
+      el.statusMotor.textContent = motorName || "--";
+      const testCount = (el.missionTestCount && el.missionTestCount.value && el.missionTestCount.value.trim())
+        ? el.missionTestCount.value.trim()
+        : "--";
+      const grain = (el.missionGrainMass && el.missionGrainMass.value && el.missionGrainMass.value.trim())
+        ? (el.missionGrainMass.value.trim() + " g")
+        : "--";
+
+      if(el.statusMotorGrain) el.statusMotorGrain.textContent = grain;
+      if(el.statusMotorTest) el.statusMotorTest.textContent = testCount;
+    }
     function updateMotorInfoPanel(){
       if(!el.batteryStatus || !el.commStatus || !el.motorDelay || !el.motorBurn) return;
       const delay = (ignitionAnalysis && ignitionAnalysis.delaySec != null)
@@ -3889,11 +4857,35 @@
       const pctText = batteryBlocked
         ? "N"
         : ((lastBatteryPct != null && isFinite(lastBatteryPct)) ? (Math.round(lastBatteryPct) + "%") : "--%");
+      const pctValue = (!batteryBlocked && lastBatteryPct != null && isFinite(lastBatteryPct))
+        ? Math.max(0, Math.min(100, Math.round(lastBatteryPct)))
+        : null;
 
-      el.batteryStatus.innerHTML = '<span class="num">' + pctText + "</span>";
+      el.batteryStatus.textContent = pctText;
       el.commStatus.innerHTML = '<span class="num">' + commText + "</span>";
       el.motorDelay.innerHTML = '<span class="num">' + delay + '</span><span class="unit">S</span>';
       el.motorBurn.innerHTML = '<span class="num">' + burn + '</span><span class="unit">S</span>';
+      if(el.statusBar){
+        el.statusBar.classList.toggle("is-online", !!connOk);
+        el.statusBar.classList.toggle("is-offline", !connOk);
+      }
+      if(el.connStatusText) el.connStatusText.textContent = commText;
+      if(el.batteryFill){
+        const fill = (pctValue == null) ? 35 : Math.max(8, Math.min(88, pctValue));
+        el.batteryFill.style.width = fill + "%";
+      }
+
+      let batteryState = null;
+      if(batteryBlocked) batteryState = "warn";
+      else if(lastBatteryPct != null && isFinite(lastBatteryPct)){
+        if(lastBatteryPct >= 70) batteryState = "ok";
+        else if(lastBatteryPct >= 40) batteryState = "warn";
+        else batteryState = "bad";
+      }
+      setQuickItemStatus(el.batteryStatus, batteryState);
+      setQuickItemStatus(el.commStatus, connOk ? "ok" : "bad");
+      updateStatusMotor();
+      updateGyroMetaFromMain();
     }
     function showMissionRequired(){
       if(el.missionRequiredOverlay){
@@ -4077,9 +5069,15 @@
         showToast(t("forceIgniterRequired"), "warn");
         return;
       }
-      if(!isControlUnlocked()){
+      if(!isControlUnlocked() && !loadcellErrorActive){
         showToast(t("inspectionRequiredShort"), "warn");
         return;
+      }
+      if(el.forceConfirmTitle){
+        el.forceConfirmTitle.textContent = loadcellErrorActive ? t("forceLoadcellTitle") : t("forceConfirmTitle");
+      }
+      if(el.forceConfirmText){
+        el.forceConfirmText.innerHTML = loadcellErrorActive ? t("forceLoadcellText") : t("forceConfirmText");
       }
       if(forceOverlayEl){ forceOverlayEl.classList.remove("hidden"); forceOverlayEl.style.display="flex"; }
       resetForceSlide();
@@ -4104,7 +5102,12 @@
       if(launcherOverlayEl){
         launcherOverlayEl.classList.add("hidden");
         launcherOverlayEl.style.display="none";
+        launcherOverlayEl.classList.remove("auto-active");
       }
+      launcherAutoActive = false;
+      launcherPitchEst = null;
+      launcherPitchEstMs = 0;
+      hideLauncherAutoConfirm();
       stopLauncherHold("up");
       stopLauncherHold("down");
     }
@@ -4147,6 +5150,30 @@
         const dirLabel = t("dirStop");
         addLogLine(t("launcherUpDownLog", {dir:dirLabel}),"LAUNCHER");
         sendCommand({http:"/launcher?dir=stop", ser:"LAUNCHER STOP"}, false);
+      }
+    }
+
+    function startLauncherAuto(){
+      if(launcherAutoActive) return;
+      launcherAutoActive = true;
+      launcherPitchEst = null;
+      launcherPitchEstMs = Date.now();
+      if(launcherOverlayEl) launcherOverlayEl.classList.add("auto-active");
+      addLogLine(t("launcherAutoLog"), "LAUNCHER");
+      showToast(t("launcherAutoStartToast"), "info");
+      startLauncherHold("up");
+    }
+
+    function showLauncherAutoConfirm(){
+      if(launcherAutoOverlayEl){
+        launcherAutoOverlayEl.classList.remove("hidden");
+        launcherAutoOverlayEl.style.display="flex";
+      }
+    }
+    function hideLauncherAutoConfirm(){
+      if(launcherAutoOverlayEl){
+        launcherAutoOverlayEl.classList.add("hidden");
+        launcherAutoOverlayEl.style.display="none";
       }
     }
 
@@ -4744,6 +5771,8 @@
           serLine = "/countdown_start";
         }else if(head === "ABORT"){
           serLine = "/abort";
+        }else if(head === "SEQUENCE_END"){
+          serLine = "/sequence_end";
         }else if(head === "IGNITE"){
           serLine = "/ignite";
         }else if(head === "PRECOUNT"){
@@ -4781,6 +5810,81 @@
       }
     }
 
+    function showTerminalHelp(){
+      addLogLine("Terminal commands:", "HELP");
+      addLogLine("  HTTP paths: /set?... /launcher?dir=up|down|stop /countdown_start /ignite /force_ignite /abort /sequence_end /precount?uw=0|1&cd=ms", "HELP");
+      addLogLine("  Shortcuts: FORCE, COUNTDOWN, ABORT, IGNITE, SEQUENCE_END", "HELP");
+      addLogLine("  Params: PRECOUNT <uw> <ms>, RS <0|1>, IGS <0|1>, SAFE <0|1>", "HELP");
+      addLogLine("  Timing: IGNMS <ms>, CDMS <ms>, LAUNCHER <UP|DOWN|STOP>", "HELP");
+    }
+
+    function buildTerminalCommand(rawInput){
+      const raw = String(rawInput || "").trim();
+      if(!raw) return null;
+
+      let http = null;
+      let ser = raw;
+
+      if(raw[0] === "/"){
+        http = raw;
+        ser = raw;
+        return {http, ser};
+      }
+
+      const parts = raw.split(/\s+/);
+      const head = (parts[0] || "").toUpperCase();
+
+      if(head === "FORCE"){
+        http = "/force_ignite";
+        ser = "FORCE";
+      }else if(head === "COUNTDOWN"){
+        http = "/countdown_start";
+        ser = "COUNTDOWN";
+      }else if(head === "ABORT"){
+        http = "/abort";
+        ser = "ABORT";
+      }else if(head === "SEQUENCE_END"){
+        http = "/sequence_end";
+        ser = "SEQUENCE_END";
+      }else if(head === "IGNITE"){
+        http = "/ignite";
+        ser = "IGNITE";
+      }else if(head === "PRECOUNT"){
+        const uw = (parts[1] != null) ? Number(parts[1]) : 0;
+        const cd = (parts[2] != null) ? Number(parts[2]) : 0;
+        const cdMs = Math.max(0, Math.min(30000, cd|0));
+        http = "/precount?uw=" + (uw ? 1 : 0) + "&cd=" + cdMs;
+        ser = "PRECOUNT " + (uw ? 1 : 0) + " " + cdMs;
+      }else if(head === "RS"){
+        const v = (parts[1] != null) ? (Number(parts[1]) ? 1 : 0) : 0;
+        http = "/set?rs=" + v;
+        ser = "RS " + v;
+      }else if(head === "IGS"){
+        const v = (parts[1] != null) ? (Number(parts[1]) ? 1 : 0) : 0;
+        http = "/set?igs=" + v;
+        ser = "IGS " + v;
+      }else if(head === "SAFE"){
+        const v = (parts[1] != null) ? (Number(parts[1]) ? 1 : 0) : 0;
+        http = "/set?safe=" + v;
+        ser = "SAFE " + v;
+      }else if(head === "IGNMS"){
+        const ms = (parts[1] != null) ? (Number(parts[1])|0) : 5000;
+        http = "/set?ign_ms=" + ms;
+        ser = "IGNMS " + ms;
+      }else if(head === "CDMS"){
+        const ms = (parts[1] != null) ? (Number(parts[1])|0) : 10000;
+        http = "/set?cd_ms=" + ms;
+        ser = "CDMS " + ms;
+      }else if(head === "LAUNCHER"){
+        const dir = (parts[1] || "STOP").toUpperCase();
+        const dirValue = (dir === "UP" || dir === "DOWN") ? dir.toLowerCase() : "stop";
+        http = "/launcher?dir=" + dirValue;
+        ser = "LAUNCHER " + dirValue.toUpperCase();
+      }
+
+      return {http, ser};
+    }
+
     // =====================
     // DOM Ready
     // =====================
@@ -4790,6 +5894,8 @@
 
       el.toastContainer = document.getElementById("toastContainer");
       el.logView = document.getElementById("logView");
+      el.termInput = document.getElementById("termInput");
+      el.termSendBtn = document.getElementById("termSendBtn");
       el.termTitle = document.getElementById("termTitle");
       el.tetrisOverlay = document.getElementById("tetrisOverlay");
       el.tetrisScreen = document.getElementById("tetrisScreen");
@@ -4801,8 +5907,22 @@
       el.wsText = document.getElementById("ws-text");
       el.statusPill = document.getElementById("statusPill");
       el.statusText = document.getElementById("statusText");
+      el.gyroStatusPill = document.getElementById("gyroStatusPill");
+      el.gyroStatusText = document.getElementById("gyroStatusText");
+      el.gyroConnPill = document.getElementById("gyroConnPill");
+      el.gyroConnText = document.getElementById("gyroConnText");
+      el.gyroBattery = document.getElementById("gyroBattery");
+      el.gyroMode = document.getElementById("gyroMode");
+      el.gyroRelay = document.getElementById("gyroRelay");
+      el.navBall = document.getElementById("navBall");
+      el.statusMotor = document.getElementById("statusMotor");
+      el.statusMotorGrain = document.getElementById("statusMotorGrain");
+      el.statusMotorTest = document.getElementById("statusMotorTest");
       el.countdown = document.getElementById("countdown");
       el.countdownMobile = document.getElementById("countdownMobile");
+      el.countdownBig = document.getElementById("countdownBig");
+      el.countdownHeader = document.querySelector(".countdown-header");
+      el.countdownStatus = document.getElementById("countdownStatus");
       el.lockoutBg = document.getElementById("lockoutBg");
       el.kstTime = document.getElementById("kst-time");
       el.pageTitle = document.getElementById("pageTitle");
@@ -4811,6 +5931,8 @@
       el.dashboardView = document.getElementById("dashboardView");
       el.terminalView = document.getElementById("terminalView");
       el.hardwareView = document.getElementById("hardwareView");
+      el.gyroView = document.getElementById("gyroView");
+      el.countdownView = document.getElementById("countdownView");
       el.controlPanelView = document.getElementById("controlPanelView");
       el.homeHeroPill = document.getElementById("homeHeroPill");
       el.homeHeroBoard = document.getElementById("homeHeroBoard");
@@ -4854,11 +5976,27 @@
 
       el.thrust = document.getElementById("thrust");
       el.pressure = document.getElementById("pressure");
+      el.accelX = document.getElementById("accelX");
+      el.accelY = document.getElementById("accelY");
+      el.accelZ = document.getElementById("accelZ");
+      el.accelMag = document.getElementById("accelMag");
+      el.gyroX = document.getElementById("gyroX");
+      el.gyroY = document.getElementById("gyroY");
+      el.gyroZ = document.getElementById("gyroZ");
+      el.gyroMag = document.getElementById("gyroMag");
+      el.gyroRollDeg = document.getElementById("gyroRollDeg");
+      el.gyroPitchDeg = document.getElementById("gyroPitchDeg");
+      el.gyroYawDeg = document.getElementById("gyroYawDeg");
+      el.gyroGl = document.getElementById("gyroGl");
       el.thrustGauge = document.querySelector(".status-gauge.thrust");
       el.pressureGauge = document.querySelector(".status-gauge.pressure");
       el.lt = document.getElementById("lt");
       el.batteryStatus = document.getElementById("batteryStatus");
       el.commStatus = document.getElementById("commStatus");
+      el.statusBar = document.getElementById("statusBar");
+      el.batteryFill = document.getElementById("batteryFill");
+      el.connStatusLabel = document.getElementById("connStatusLabel");
+      el.connStatusText = document.getElementById("connStatusText");
       el.motorDelay = document.getElementById("motorDelay");
       el.motorBurn = document.getElementById("motorBurn");
 
@@ -4890,6 +6028,9 @@
       el.settingsOverlay = document.getElementById("settingsOverlay");
       el.settingsClose = el.settingsOverlay ? el.settingsOverlay.querySelector("#settingsClose") : null;
       el.settingsSave = el.settingsOverlay ? el.settingsOverlay.querySelector("#settingsSave") : null;
+      el.launcherAutoOverlay = document.getElementById("launcherAutoOverlay");
+      el.launcherAutoConfirm = document.getElementById("launcherAutoConfirm");
+      el.launcherAutoCancel = document.getElementById("launcherAutoCancel");
       el.missionOverlay = document.getElementById("missionOverlay");
       el.missionDialog = document.getElementById("missionDialog");
       el.missionClose = document.getElementById("missionClose");
@@ -4930,8 +6071,19 @@
       el.unitThrust = document.getElementById("unitThrust");
       el.ignTimeInput = document.getElementById("ignTimeInput");
       el.countdownSecInput = document.getElementById("countdownSecInput");
+      el.opModeSelect = document.getElementById("opModeSelect");
+      el.gyroGlPreview = document.getElementById("gyroGlPreview");
+      el.navBallPreview = document.getElementById("navBallPreview");
+      el.gyroPreviewSelect = document.getElementById("gyroPreviewSelect");
+      if(el.gyroGlPreview){
+        el.gyroGl = el.gyroGlPreview;
+        gyroGl = null;
+        initGyroGl();
+      }
+      if(el.navBallPreview) el.navBall = el.navBallPreview;
 
       buildMotorPresetInfo();
+      initGyroGl();
 
       el.relaySafeToggle = document.getElementById("relaySafeToggle");
       el.igswitch = document.getElementById("igswitch");
@@ -4940,6 +6092,7 @@
       el.safeModePill = document.getElementById("safeModePill");
       el.serialTogglePill = document.getElementById("serialTogglePill");
       el.serialControlTile = document.getElementById("serialControlTile");
+      el.safetyModeTile = document.getElementById("safetyModeTile");
       el.serialControlTitle = document.getElementById("serialControlTitle");
       el.serialControlSub = document.getElementById("serialControlSub");
       el.controlsCard = document.getElementById("controlsCard");
@@ -4950,6 +6103,7 @@
       el.devRelay1Btn = document.getElementById("devRelay1Btn");
       el.devRelay2Btn = document.getElementById("devRelay2Btn");
       el.devWsOffBtn = document.getElementById("devWsOffBtn");
+      el.devLoadcellErrBtn = document.getElementById("devLoadcellErrBtn");
       el.serialRxToggle = document.getElementById("serialRxToggle");
       el.serialTxToggle = document.getElementById("serialTxToggle");
       el.simToggle = document.getElementById("simToggle");
@@ -4958,6 +6112,15 @@
       el.hwBoardName = document.getElementById("hwBoardName");
       el.hwFirmwareName = document.getElementById("hwFirmwareName");
       el.hwProtocolName = document.getElementById("hwProtocolName");
+      el.wifiMode = document.getElementById("wifiMode");
+      el.wifiSsid = document.getElementById("wifiSsid");
+      el.wifiChannel = document.getElementById("wifiChannel");
+      el.wifiBandwidth = document.getElementById("wifiBandwidth");
+      el.wifiTxPower = document.getElementById("wifiTxPower");
+      el.wifiIp = document.getElementById("wifiIp");
+      el.wifiStaCount = document.getElementById("wifiStaCount");
+      el.wifiRssi = document.getElementById("wifiRssi");
+      el.launcherPitchAngle = document.getElementById("launcherPitchAngle");
       el.langSelect = document.getElementById("langSelect");
       el.themeToggle = document.getElementById("themeToggle");
       el.loadcellCalOpen = document.getElementById("loadcellCalOpen");
@@ -4977,6 +6140,8 @@
       el.missionRequiredOk = document.getElementById("missionRequiredOk");
       el.noMotorOverlay = document.getElementById("noMotorOverlay");
       el.noMotorOk = document.getElementById("noMotorOk");
+      el.forceConfirmTitle = document.querySelector("#forceOverlay .confirm-title");
+      el.forceConfirmText = document.querySelector("#forceOverlay .confirm-text");
 
       el.launcherOpenBtns = document.querySelectorAll(".js-launcher-open");
       el.inspectionOpenBtn = document.getElementById("inspectionOpenBtn");
@@ -5030,6 +6195,33 @@
       if(el.devToolsClose){
         el.devToolsClose.addEventListener("click",()=>setDevToolsVisible(false));
       }
+      if(el.termInput){
+        el.termInput.addEventListener("keydown",(ev)=>{
+          if(ev.key === "Enter"){
+            ev.preventDefault();
+            if(el.termSendBtn) el.termSendBtn.click();
+          }else if(ev.key === "Escape"){
+            el.termInput.value = "";
+          }
+        });
+      }
+      if(el.termSendBtn){
+        el.termSendBtn.addEventListener("click",async ()=>{
+          if(!el.termInput) return;
+          const rawInput = el.termInput.value;
+          const trimmed = String(rawInput || "").trim();
+          if(!trimmed) return;
+          if(/^(\?|help)$/i.test(trimmed)){
+            el.termInput.value = "";
+            showTerminalHelp();
+            return;
+          }
+          const cmd = buildTerminalCommand(trimmed);
+          if(!cmd) return;
+          el.termInput.value = "";
+          await sendCommand(cmd, true);
+        });
+      }
       if(el.devRelay1Btn){
         el.devRelay1Btn.addEventListener("click",()=>{
           devRelay1Locked = !devRelay1Locked;
@@ -5045,6 +6237,25 @@
       if(el.devWsOffBtn){
         el.devWsOffBtn.addEventListener("click",()=>{
           devWsOff = !devWsOff;
+          updateDevToolsUI();
+        });
+      }
+      const bindTap = (node, handler)=>{
+        if(!node) return;
+        let touchTs = 0;
+        node.addEventListener("touchstart",(ev)=>{
+          touchTs = Date.now();
+          ev.preventDefault();
+          handler();
+        }, {passive:false});
+        node.addEventListener("click",(ev)=>{
+          if(Date.now() - touchTs < 600) return;
+          handler(ev);
+        });
+      };
+      if(el.devLoadcellErrBtn){
+        bindTap(el.devLoadcellErrBtn, ()=>{
+          devLoadcellError = !devLoadcellError;
           updateDevToolsUI();
         });
       }
@@ -5079,6 +6290,12 @@
       const launcherCloseBtn=document.getElementById("launcherClose");
       const launcherUpBtn=document.getElementById("launcherUpModalBtn");
       const launcherDownBtn=document.getElementById("launcherDownModalBtn");
+      const launcherAutoBtn=document.getElementById("launcherAutoBtn");
+      launcherAutoOverlayEl = el.launcherAutoOverlay || document.getElementById("launcherAutoOverlay");
+      launcherAutoConfirmBtn = el.launcherAutoConfirm || document.getElementById("launcherAutoConfirm");
+      launcherAutoCancelBtn = el.launcherAutoCancel || document.getElementById("launcherAutoCancel");
+      const launcherManualBtn=document.getElementById("launcherManualBtn");
+      const launcherManualControls=document.getElementById("launcherManualControls");
 
       if(el.relaySafeToggle){
         el.relaySafeToggle.addEventListener("change",()=>{
@@ -5196,6 +6413,20 @@
           el.safeModeToggle.dispatchEvent(new Event("change", {bubbles:true}));
         });
       }
+      if(el.safetyModeTile && el.safeModeToggle){
+        el.safetyModeTile.addEventListener("click",(ev)=>{
+          if(ev.target && ev.target.closest(".pill-toggle")) return;
+          el.safeModeToggle.checked = !el.safeModeToggle.checked;
+          el.safeModeToggle.dispatchEvent(new Event("change", {bubbles:true}));
+        });
+        el.safetyModeTile.addEventListener("keydown",(ev)=>{
+          if(ev.key !== "Enter" && ev.key !== " ") return;
+          if(ev.target && ev.target.closest(".pill-toggle")) return;
+          ev.preventDefault();
+          el.safeModeToggle.checked = !el.safeModeToggle.checked;
+          el.safeModeToggle.dispatchEvent(new Event("change", {bubbles:true}));
+        });
+      }
       if(el.simToggle){
         el.simToggle.addEventListener("change",()=>{
           setSimEnabled(!!el.simToggle.checked);
@@ -5229,6 +6460,7 @@
             localTplusStartMs = null;
             if(el.countdown) el.countdown.textContent = "T- --";
             if(el.countdownMobile) el.countdownMobile.textContent = "T- --";
+            if(el.countdownBig) el.countdownBig.textContent = "T- --";
             return;
           }
           if(currentSt===0 && localTplusActive){
@@ -5236,8 +6468,21 @@
             localTplusStartMs = null;
             if(el.countdown) el.countdown.textContent = "T- --";
             if(el.countdownMobile) el.countdownMobile.textContent = "T- --";
+            if(el.countdownBig) el.countdownBig.textContent = "T- --";
             addLogLine(t("sequenceEndLog"),"SEQ");
             showToast(t("sequenceEndToast"), "info");
+            return;
+          }
+          if(currentSt===0 && !isControlUnlocked()){
+            if(lockoutLatched){
+              showToast(t("lockoutNoControl"), "error");
+              return;
+            }
+            if(!hasMissionSelected()){
+              showMissionRequired();
+              return;
+            }
+            openInspectionFromUI();
             return;
           }
           if(currentSt===0) showConfirm();
@@ -5290,15 +6535,8 @@
       }
 
       if(el.inspectionOpenBtn){
-        const openInspection=()=>{
-          if(!connOk){
-            showToast(t("inspectionOpenToast"), "warn");
-            return;
-          }
-          showInspection();
-        };
-        el.inspectionOpenBtn.addEventListener("click", openInspection);
-        el.inspectionOpenBtn.addEventListener("keydown",(e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openInspection(); }});
+        el.inspectionOpenBtn.addEventListener("click", openInspectionFromUI);
+        el.inspectionOpenBtn.addEventListener("keydown",(e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openInspectionFromUI(); }});
       }
       if(el.inspectionRetry){
         el.inspectionRetry.addEventListener("click",()=>runInspectionSequence());
@@ -5401,7 +6639,7 @@
       }
       if(tetrisWinOkEl){
         tetrisWinOkEl.addEventListener("click", ()=>{
-          hideTetrisWin();
+          hideTetrisWin();32
           showTetrisPrize();
         });
       }
@@ -5550,8 +6788,11 @@
           }
 
           const rawRows = [[
-            t("hdrTimeIso"), t("hdrThrust"), t("hdrThrustN"), t("hdrPressure"), t("hdrLoopMs"), t("hdrElapsedMs"), t("hdrHxHz"), t("hdrCpuUs"), t("hdrSwitch"), t("hdrIgnOk"), t("hdrRelay"),
-            t("hdrIgs"), t("hdrState"), t("hdrCdMs"), t("hdrRelTime"), t("hdrIgnWindowFlag")
+            t("hdrTimeIso"), t("hdrThrust"), t("hdrThrustN"), t("hdrPressure"),
+            t("hdrAccelX"), t("hdrAccelY"), t("hdrAccelZ"),
+            t("hdrGyroX"), t("hdrGyroY"), t("hdrGyroZ"),
+            t("hdrLoopMs"), t("hdrElapsedMs"), t("hdrHxHz"), t("hdrCpuUs"), t("hdrSwitch"), t("hdrIgnOk"), t("hdrRelay"),
+            t("hdrIgs"), t("hdrState"), t("hdrTdMs"), t("hdrRelTime"), t("hdrIgnWindowFlag")
           ]];
 
           for(const row of logData){
@@ -5614,6 +6855,12 @@
               isFinite(tVal) ? Number(tVal.toFixed(3)) : "",
               isFinite(tNVal) ? Number(tNVal.toFixed(3)) : "",
               isFinite(pVal) ? Number(pVal.toFixed(3)) : "",
+              (row.ax != null && isFinite(Number(row.ax))) ? Number(Number(row.ax).toFixed(3)) : "",
+              (row.ay != null && isFinite(Number(row.ay))) ? Number(Number(row.ay).toFixed(3)) : "",
+              (row.az != null && isFinite(Number(row.az))) ? Number(Number(row.az).toFixed(3)) : "",
+              (row.gx != null && isFinite(Number(row.gx))) ? Number(Number(row.gx).toFixed(3)) : "",
+              (row.gy != null && isFinite(Number(row.gy))) ? Number(Number(row.gy).toFixed(3)) : "",
+              (row.gz != null && isFinite(Number(row.gz))) ? Number(Number(row.gz).toFixed(3)) : "",
               (row.lt ?? ""),
               (row.elapsed != null && isFinite(Number(row.elapsed)) ? Number(Number(row.elapsed).toFixed(0)) : ""),
               (row.hz ?? ""),
@@ -5623,7 +6870,7 @@
               (row.r  ?? 0),
               (row.gs ?? 0),
               (row.st ?? 0),
-              (row.cd ?? 0),
+              (row.td ?? 0),
               (rel !== "" ? Number(rel.toFixed(3)) : ""),
               inWin
             ]);
@@ -5790,17 +7037,54 @@
           btn.addEventListener("click",()=>showSettings());
         });
       }
+      const sideNavDesktop = document.querySelector(".side-nav-desktop");
+      if(sideNavDesktop){
+        let navResizeTimer = null;
+        let navExpandTimer = null;
+        let navClickExpandTimer = null;
+        const expandTemporarily = ()=>{
+          sideNavDesktop.classList.add("is-expanded");
+          clearTimeout(navExpandTimer);
+          navExpandTimer = setTimeout(()=>{
+            sideNavDesktop.classList.remove("is-expanded");
+          }, 1000);
+        };
+        const expandOnClick = ()=>{
+          sideNavDesktop.classList.add("is-expanded");
+          clearTimeout(navClickExpandTimer);
+          navClickExpandTimer = setTimeout(()=>{
+            sideNavDesktop.classList.remove("is-expanded");
+          }, 900);
+        };
+        const scheduleNavRefresh = ()=>{
+          requestAnimationFrame(refreshChartLayout);
+          clearTimeout(navResizeTimer);
+          navResizeTimer = setTimeout(refreshChartLayout, 220);
+        };
+        sideNavDesktop.addEventListener("mouseenter", scheduleNavRefresh);
+        sideNavDesktop.addEventListener("mouseleave", scheduleNavRefresh);
+        sideNavDesktop.addEventListener("touchstart", expandTemporarily, {passive:true});
+        sideNavDesktop.addEventListener("click", expandOnClick);
+        sideNavDesktop.addEventListener("transitionend",(ev)=>{
+          if(ev.propertyName === "width" || ev.propertyName === "padding-left" || ev.propertyName === "padding-right"){
+            scheduleNavRefresh();
+          }
+        });
+      }
       const sideNavItems = document.querySelectorAll(".side-nav-item");
       const setActiveView = (title)=>{
         const label = title || "Dashboard";
         const lower = label.toLowerCase();
-        const displayLabel = (lower === "home") ? "Welcome to FLASH6" : (lower === "control" ? "Control Panel" : label);
+        const displayLabel = (lower === "home") ? "Welcome to FLASH6"
+          : (lower === "control" ? "Control Panel" : label);
         if(el.pageTitle) el.pageTitle.textContent = displayLabel;
         const isHome = lower === "home";
         const isTerminal = lower === "terminal";
         const isHardware = lower === "hardware";
+        const isGyro = lower === "gyro";
+        const isCountdown = lower === "countdown";
         const isControl = lower === "control";
-        const isDashboard = !isHome && !isTerminal && !isHardware && !isControl;
+        const isDashboard = !isHome && !isTerminal && !isHardware && !isGyro && !isCountdown && !isControl;
         if(el.pageKicker){
           const name = el.hwBoardName?.textContent?.trim();
           setBoardNameDisplay(el.pageKicker, name, "FLASH6");
@@ -5810,11 +7094,15 @@
         if(el.dashboardView) el.dashboardView.classList.toggle("hidden", !isDashboard);
         if(el.terminalView) el.terminalView.classList.toggle("hidden", !isTerminal);
         if(el.hardwareView) el.hardwareView.classList.toggle("hidden", !isHardware);
+        if(el.gyroView) el.gyroView.classList.toggle("hidden", !isGyro);
+        if(el.countdownView) el.countdownView.classList.toggle("hidden", !isCountdown);
         if(el.controlPanelView) el.controlPanelView.classList.toggle("hidden", !isControl);
+        if(el.countdownHeader) el.countdownHeader.classList.toggle("hidden", isCountdown || isDashboard);
+        document.body.classList.toggle("countdown-view-active", isCountdown);
+        document.body.classList.toggle("dashboard-view-active", isDashboard);
         if(isHome) updateHomeUI();
         if(isDashboard){
-          requestAnimationFrame(refreshChartLayout);
-          setTimeout(refreshChartLayout, 160);
+          syncChartHeightToControls(0);
         }
       };
       const activateNavItem = (title)=>{
@@ -5853,7 +7141,18 @@
             item.classList.add("active");
             const title = item.dataset.pageTitle || item.textContent.trim();
             setActiveView(title);
+            const nav = document.querySelector(".side-nav-desktop");
+            if(nav){
+              nav.classList.add("is-expanded");
+              clearTimeout(nav._collapseTimer);
+              nav._collapseTimer = setTimeout(()=>{
+                nav.classList.remove("is-expanded");
+              }, 900);
+            }
           });
+        });
+        window.addEventListener("resize", ()=>{
+          resizeGyroGl();
         });
         const active = Array.from(sideNavItems).find(item=>item.classList.contains("active"));
         setActiveView(active ? (active.dataset.pageTitle || active.textContent.trim()) : "Dashboard");
@@ -6155,6 +7454,17 @@
           el.countdownSecInput.value=cdSec;
           uiSettings.countdownSec=cdSec;
 
+          if(el.opModeSelect){
+            uiSettings.opMode = el.opModeSelect.value || "daq";
+          }else if(!uiSettings.opMode){
+            uiSettings.opMode = "daq";
+          }
+          if(el.gyroPreviewSelect){
+            uiSettings.gyroPreview = el.gyroPreviewSelect.value || "3d";
+          }else if(!uiSettings.gyroPreview){
+            uiSettings.gyroPreview = "3d";
+          }
+
           uiSettings.relaySafe = relaySafeEnabled;
           uiSettings.igs = el.igswitch ? (el.igswitch.checked?1:0) : (uiSettings.igs||0);
           uiSettings.safetyMode = safetyModeEnabled;
@@ -6178,6 +7488,10 @@
           }
           if(before.countdownSec!==uiSettings.countdownSec){
             showToast(t("countdownChangedToast", {from:before.countdownSec, to:uiSettings.countdownSec, safety:safetyLineSuffix()}),"warn");
+          }
+          if(before.opMode !== uiSettings.opMode){
+            const modeLabel = (uiSettings.opMode === "flight") ? t("opModeFlight") : t("opModeDaq");
+            showToast(t("opModeChangedToast", {mode:modeLabel}), "info");
           }
 
           addLogLine(t("settingsUpdatedLog", {unit:uiSettings.thrustUnit, ign:ignSec, cd:cdSec}), "CFG");
@@ -6223,6 +7537,28 @@
             launcherDownBtn.addEventListener(evName,(ev)=>{ ev.preventDefault(); launcherDownBtn.classList.remove("pressed"); stopLauncherHold("down"); },{passive:false});
           });
         }
+      }
+      if(launcherAutoBtn){
+        launcherAutoBtn.addEventListener("click",()=>{
+          showLauncherAutoConfirm();
+        });
+      }
+      if(launcherAutoConfirmBtn){
+        launcherAutoConfirmBtn.addEventListener("click",()=>{
+          hideLauncherAutoConfirm();
+          startLauncherAuto();
+        });
+      }
+      if(launcherAutoCancelBtn){
+        launcherAutoCancelBtn.addEventListener("click",()=>hideLauncherAutoConfirm());
+      }
+      if(launcherAutoOverlayEl){
+        launcherAutoOverlayEl.addEventListener("click",(ev)=>{ if(ev.target===launcherAutoOverlayEl) hideLauncherAutoConfirm(); });
+      }
+      if(launcherManualBtn && launcherManualControls){
+        launcherManualBtn.addEventListener("click",()=>{
+          launcherManualControls.classList.toggle("is-hidden");
+        });
       }
 
       const zoomOutBtn=document.getElementById("chartZoomOut");
@@ -6270,11 +7606,27 @@
 
       attachTouch("thrustChart");
       attachTouch("pressureChart");
+      attachTouch("accelChart");
+      attachTouch("accelXYZChart");
+      attachTouch("accelChartFlight");
+      attachTouch("accelXYZChartFlight");
+      const controlsCard = document.getElementById("controlsCard");
+      if(controlsCard && window.ResizeObserver){
+        const ro = new ResizeObserver(()=>{ scheduleChartLayoutRefresh(); });
+        ro.observe(controlsCard);
+      }
       window.addEventListener("resize",()=>{ refreshChartLayout(); });
+      syncChartHeightToControls(0);
+      setTimeout(()=>syncChartHeightToControls(1), 180);
+      if(document.fonts && document.fonts.ready){
+        document.fonts.ready.then(()=>{ setTimeout(()=>syncChartHeightToControls(2), 120); });
+      }
 
       openWebSocket();
       updateWsUI();
       setInterval(ensureWsAlive, 500);
+      setInterval(fetchWifiInfo, 2000);
+      fetchWifiInfo();
       updateData().finally(()=>{ pollLoop(); });
       updateSerialPill();
 
