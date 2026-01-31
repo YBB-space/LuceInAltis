@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ALTIS // Partners</title>
+  <style>
+    :root {
+      --ink: #0b0d0f;
+      --coal: #15181c;
+      --steel: #2a2f36;
+      --haze: #8d949e;
+      --cloud: #e9eef5;
+      --ember: #ff3b1f;
+      --glow: #ff784e;
+      --panel: rgba(17, 20, 24, 0.85);
+      --font-sans: "Pretendard", "SUIT", "Noto Sans KR", "Apple SD Gothic Neo",
+        "Malgun Gothic", "NanumSquare", "Nanum Gothic", sans-serif;
+      --font-display: "Space Grotesk", "DIN Condensed", "Oswald",
+        var(--font-sans);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      color: var(--cloud);
+      background: #07080a;
+      letter-spacing: 0.02em;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -10% 0 0 0;
+      background:
+        radial-gradient(1200px 600px at 15% 10%, #1d2228 0%, #0b0d0f 55%, #07080a 100%),
+        radial-gradient(1000px 520px at 85% 0%, rgba(255, 255, 255, 0.04), transparent 70%),
+        linear-gradient(180deg, rgba(8, 10, 14, 0.4) 0%, rgba(8, 10, 14, 0) 45%, rgba(8, 10, 14, 0.5) 100%);
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      margin: 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(18px);
+      background: rgba(6, 7, 9, 0.7);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+    }
+
+    .brand-logo {
+      height: 28px;
+      width: auto;
+      display: block;
+      filter: brightness(0) invert(1);
+    }
+
+    .brand-name {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 13px;
+      color: var(--cloud);
+      letter-spacing: 0.22em;
+    }
+
+    .brand-name small {
+      font-size: 10px;
+      color: var(--haze);
+      letter-spacing: 0.28em;
+    }
+
+    nav {
+      display: flex;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--cloud);
+      margin-right: 18px;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+    }
+
+    nav a:last-child { margin-right: 0; }
+
+    .nav-cta {
+      padding: 10px 18px;
+      border: 1px solid var(--ember);
+      color: var(--ember);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-decoration: none;
+    }
+
+    .hero {
+      padding: 90px 0 50px;
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 5vw, 64px);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .hero p {
+      margin: 12px 0 0;
+      color: var(--haze);
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: 70ch;
+    }
+
+    .panel {
+      margin: 26px 0 0;
+      padding: 28px 30px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: linear-gradient(140deg, rgba(14, 18, 24, 0.92), rgba(8, 10, 14, 0.7));
+      box-shadow: 0 22px 50px rgba(4, 6, 10, 0.55);
+      display: grid;
+      gap: 16px;
+    }
+
+    .panel h2 {
+      font-size: clamp(20px, 2.6vw, 32px);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .panel p {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--cloud);
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tags span {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(14, 17, 22, 0.7);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cloud);
+    }
+
+    .contact {
+      display: grid;
+      gap: 6px;
+      font-size: 14px;
+      color: var(--haze);
+    }
+
+    .contact strong {
+      color: var(--cloud);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 12px 22px;
+      border: 1px solid var(--cloud);
+      color: var(--cloud);
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+    }
+
+    footer {
+      padding: 36px 24px 60px;
+      text-align: center;
+      color: var(--haze);
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 900px) {
+      nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <img class="brand-logo" src="img/altis_logo2.svg" alt="ALTIS logo" />
+        <span class="brand-name"><small>Luche In</small>ALTIS</span>
+      </div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="index.html#about">About</a>
+        <a href="teams.html">Teams</a>
+        <a href="index.html#tech">Tech</a>
+        <a href="partners.html">Partners</a>
+      </nav>
+      <a class="nav-cta" href="dashboard.html">Go to FLASH</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Partners</h1>
+      <div class="panel">
+        <h2>We Welcome Your Support</h2>
+        <p>
+          ALTIS는 발사대부터 모터(엔진), 동체까지 전 과정을 직접 설계·제작합니다.
+          연구와 테스트를 이어갈 수 있도록 스폰서 및 협업 파트너를 찾고 있습니다.
+        </p>
+        <div class="contact">
+          <strong>Contact</strong>
+          <span>ybb1833@naver.com</span>
+        </div>
+        <div class="tags">
+          <span>Sponsorship</span>
+          <span>Collaboration</span>
+          <span>Research</span>
+          <span>Education</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    LUCE IN ALTIS — © ALTIS with YBB
+  </footer>
+</body>
+</html>
