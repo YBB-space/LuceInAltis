@@ -911,6 +911,15 @@
       letter-spacing: 0.18em;
     }
 
+    .gallery-hint {
+      display: none;
+      margin-top: 6px;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--glow);
+    }
+
     .about-gallery {
       margin-top: 20px;
       display: grid;
@@ -1326,6 +1335,12 @@
       .hero-inner {
         padding: 90px 24px 70px;
       }
+      .about-intro {
+        padding: 0 24px;
+      }
+      .gallery-hint {
+        display: inline-block;
+      }
       .nav-actions {
         flex-wrap: wrap;
         justify-content: flex-end;
@@ -1705,6 +1720,7 @@
         <div class="about-gallery-head reveal-slide" style="--delay: 160ms;">
         <span data-i18n="galleryKicker">Field Log</span>
         <h3 data-i18n="galleryTitle">현장 기록</h3>
+        <span class="gallery-hint" data-i18n="galleryHint">Swipe →</span>
       </div>
         <div class="about-gallery reveal-slide" style="--delay: 220ms;" aria-label="ALTIS field activity photos">
         <figure class="about-photo">
@@ -1838,6 +1854,7 @@
             "DAQ, 센서 인터페이스, 점화 제어, 통신 모듈 등 전자부 시스템을 개발합니다.",
           galleryKicker: "Field Log",
           galleryTitle: "현장 기록",
+          galleryHint: "스와이프 →",
           partnerTitle: "Partners",
           partnerEmptyTitle: "아직 스폰서가 없습니다",
           partnerEmptyBody: "ALTIS는 여러분의 관심을 매우 환영합니다.",
@@ -1895,6 +1912,7 @@
             "Develops avionics systems including DAQ, sensor interfaces, ignition control, and communications modules.",
           galleryKicker: "Field Log",
           galleryTitle: "Field Log",
+          galleryHint: "Swipe →",
           partnerTitle: "Partners",
           partnerEmptyTitle: "No sponsors yet",
           partnerEmptyBody: "ALTIS warmly welcomes your interest and support.",
