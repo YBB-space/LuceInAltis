@@ -166,6 +166,39 @@
       gap: 12px;
     }
 
+    .nav-instagram-link {
+      display: none;
+    }
+
+    .menu-toggle {
+      display: none;
+      border-color: rgba(255, 255, 255, 0.35);
+      color: var(--cloud);
+      background: transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .menu-toggle::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(255, 120, 78, 0.08), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
+
+    .nav.is-open .menu-toggle {
+      border-color: var(--ember);
+      color: var(--ember);
+      box-shadow: 0 10px 26px rgba(255, 120, 78, 0.2);
+    }
+
+    .nav.is-open .menu-toggle::after {
+      opacity: 1;
+    }
+
     .nav-cta.lang-toggle {
       border-color: rgba(255, 255, 255, 0.35);
       color: var(--cloud);
@@ -519,6 +552,9 @@
     }
 
     @media (max-width: 900px) {
+      .menu-toggle {
+        display: inline-flex;
+      }
       .tech-subsection {
         grid-template-columns: 1fr;
       }
@@ -1290,9 +1326,82 @@
       .hero-inner {
         padding: 90px 24px 70px;
       }
-      nav { display: none; }
+      .nav-actions {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .nav {
+        position: relative;
+        align-items: flex-start;
+      }
+
+      nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin: 0;
+        padding: 8px 0 12px;
+        background:
+          linear-gradient(180deg, rgba(255, 120, 78, 0.08), transparent 35%),
+          rgba(6, 7, 9, 0.96);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-top: 1px solid rgba(255, 120, 78, 0.35);
+        border-radius: 0;
+        box-shadow: 0 16px 36px rgba(4, 6, 10, 0.6);
+        backdrop-filter: blur(18px);
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(-6px);
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+      }
+
+      .nav.is-open nav {
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      nav a {
+        margin-right: 0;
+        font-size: 12px;
+        letter-spacing: 0.2em;
+        padding: 12px 24px;
+        border-radius: 0;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        transition: color 0.2s ease, background 0.2s ease;
+      }
+
+      nav a:hover {
+        background: rgba(255, 120, 78, 0.12);
+        color: var(--glow);
+      }
+
       .nav {
         justify-content: space-between;
+      }
+      .nav-actions {
+        flex-wrap: nowrap;
+        gap: 8px;
+      }
+      .nav-cta {
+        padding: 8px 12px;
+        font-size: 10px;
+        letter-spacing: 0.2em;
+      }
+      .instagram-link {
+        display: none;
+      }
+      .nav-instagram-link {
+        display: block;
       }
       .partner-logos {
         grid-template-columns: 1fr;
@@ -1316,7 +1425,13 @@
       }
 
       .about-gallery {
-        grid-template-columns: 1fr;
+        display: flex;
+        gap: 16px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-padding: 16px;
+        padding-bottom: 12px;
+        -webkit-overflow-scrolling: touch;
       }
 
       .about-photo,
@@ -1324,6 +1439,21 @@
       .about-photo.tall {
         grid-column: span 1;
         min-height: 240px;
+        flex: 0 0 82%;
+        scroll-snap-align: center;
+      }
+
+      .about-gallery::-webkit-scrollbar {
+        height: 6px;
+      }
+
+      .about-gallery::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .about-gallery::-webkit-scrollbar-thumb {
+        background: rgba(255, 120, 78, 0.45);
+        border-radius: 999px;
       }
 
       .partner-logo {
@@ -1355,18 +1485,20 @@
         <img class="brand-logo" src="img/altis_logo2.svg" alt="ALTIS logo" />
         <span class="brand-name"><small>Luche In</small>ALTIS</span>
       </div>
-      <nav>
+      <nav id="primary-nav">
         <a href="#home" data-i18n="navHome">Home</a>
         <a href="#about" data-i18n="navAbout">About</a>
         <a href="#team" data-i18n="navTeams">Teams</a>
         <a href="#tech" data-i18n="navTech">Tech</a>
         <a href="partners.html" data-i18n="navPartners">Partners</a>
+        <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">Instagram</a>
       </nav>
       <div class="nav-actions">
+        <button class="nav-cta menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
         <button class="nav-cta lang-toggle" type="button" data-i18n-html="langToggle">
           <span class="lang-option lang-kr">KR</span> / <span class="lang-option lang-en">EN</span>
         </button>
-        <a class="nav-cta" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">Instagram</a>
+        <a class="nav-cta instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">Instagram</a>
       </div>
     </div>
   </header>
@@ -1846,6 +1978,36 @@
 
       document.addEventListener("altis-lang-change", syncLabel);
       syncLabel();
+    })();
+
+    (() => {
+      const nav = document.querySelector(".nav");
+      const menuBtn = document.querySelector(".menu-toggle");
+      if (!nav || !menuBtn) return;
+
+      const closeMenu = () => {
+        nav.classList.remove("is-open");
+        menuBtn.setAttribute("aria-expanded", "false");
+      };
+
+      menuBtn.addEventListener("click", () => {
+        const isOpen = nav.classList.toggle("is-open");
+        menuBtn.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      nav.querySelectorAll("nav a").forEach((link) => {
+        link.addEventListener("click", closeMenu);
+      });
+
+      const mql = window.matchMedia("(max-width: 900px)");
+      const handleResize = () => {
+        if (!mql.matches) closeMenu();
+      };
+      if (mql.addEventListener) {
+        mql.addEventListener("change", handleResize);
+      } else {
+        mql.addListener(handleResize);
+      }
     })();
 
     (() => {
