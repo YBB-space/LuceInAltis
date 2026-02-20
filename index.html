@@ -1206,6 +1206,14 @@
       flex-shrink: 0;
     }
 
+    .partner-logo img.logo-easyeda {
+      max-height: 46px;
+    }
+
+    .partner-logo img.logo-jlcpcb {
+      max-height: 94px;
+    }
+
     .partner-desc {
       position: absolute;
       right: 18px;
@@ -1216,6 +1224,7 @@
       color: var(--cloud);
       pointer-events: none;
       padding-left: 14px;
+      display: none;
     }
 
     .partner-desc::before {
@@ -1299,7 +1308,7 @@
 
     .partner-logo:hover img {
       filter: grayscale(0) brightness(1);
-      transform: translateX(-110px) scale(0.70);
+      transform: none;
     }
 
     .partner-logo:hover::after {
@@ -1754,14 +1763,20 @@
     </div>
     <div class="container">
       <div class="partner-logos reveal-slide" style="--delay: 0ms;" aria-label="Partner logos">
-        <div class="partner-logo">
-          <div class="partner-placeholder">
-            <strong data-i18n="partnerEmptyTitle">No sponsors yet</strong>
-            <span class="line"></span>
-            <span data-i18n="partnerEmptyBody">ALTIS는 여러분의 관심을 매우 환영합니다.</span>
-            <a class="btn" href="partners.html" data-i18n="partnerEmptyLink">자세히 보기</a>
+        <a class="partner-logo" href="https://jlcpcb.com/" target="_blank" rel="noopener noreferrer" aria-label="JLCPCB">
+          <img class="logo-jlcpcb" src="img/JLCPCB_logo.png" alt="JLCPCB logo" loading="lazy" />
+          <div class="partner-desc">
+            <h5>JLCPCB</h5>
+            <p>PCB / PCBA Manufacturing</p>
           </div>
-        </div>
+        </a>
+        <a class="partner-logo" href="https://easyeda.com/" target="_blank" rel="noopener noreferrer" aria-label="EasyEDA">
+          <img class="logo-easyeda" src="img/Easy_eda_logo.png" alt="EasyEDA logo" loading="lazy" />
+          <div class="partner-desc">
+            <h5>EasyEDA</h5>
+            <p>Cloud EDA / PCB Design</p>
+          </div>
+        </a>
       </div>
     </div>
   </section>
