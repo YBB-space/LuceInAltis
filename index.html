@@ -2374,6 +2374,7 @@
   <script type="module">
     import * as THREE from "three";
     import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+    import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
     import { ThreeMFLoader } from "three/addons/loaders/3MFLoader.js";
 
     const stage = document.getElementById("motor-3d-stage");
@@ -2390,9 +2391,15 @@
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.08;
       stage.appendChild(renderer.domElement);
 
       const scene = new THREE.Scene();
+      const pmremGenerator = new THREE.PMREMGenerator(renderer);
+      const motorEnvironment = pmremGenerator.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+      pmremGenerator.dispose();
+      scene.environment = motorEnvironment;
       const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 5000);
       camera.position.set(0, 80, 220);
       let motorModel = null;
@@ -2436,6 +2443,10 @@
       const fillLight = new THREE.DirectionalLight(0x9fbce0, 0.48);
       fillLight.position.set(-160, 90, -140);
       scene.add(fillLight);
+
+      const rimLight = new THREE.DirectionalLight(0xdbe7ff, 0.52);
+      rimLight.position.set(-220, 180, 210);
+      scene.add(rimLight);
 
       const loader = new ThreeMFLoader();
       const fitCameraToObject = (object) => {
@@ -2481,36 +2492,47 @@
           group.scale.setScalar(scale);
           group.rotation.copy(initialMotorRotation);
 
-          // Apply a subtle metallic finish for the motor model.
-          const metalTint = new THREE.Color(0xb8bec7);
+          // Convert to a stronger metallic finish so highlights read clearly.
+          const metalTint = new THREE.Color(0xc2c9d2);
+          const toMetalMaterial = (mat) => {
+            if (!mat || !mat.isMaterial) return mat;
+            const baseColor = mat.color ? mat.color.clone() : new THREE.Color(0xb8bec7);
+            baseColor.lerp(metalTint, 0.32);
+
+            const metalMat = new THREE.MeshPhysicalMaterial({
+              color: baseColor,
+              map: mat.map || null,
+              normalMap: mat.normalMap || null,
+              aoMap: mat.aoMap || null,
+              emissiveMap: mat.emissiveMap || null,
+              emissive: mat.emissive ? mat.emissive.clone() : new THREE.Color(0x000000),
+              emissiveIntensity: mat.emissiveIntensity ?? 1,
+              transparent: mat.transparent ?? false,
+              opacity: mat.opacity ?? 1,
+              alphaMap: mat.alphaMap || null,
+              side: mat.side ?? THREE.FrontSide,
+              vertexColors: mat.vertexColors === true,
+              flatShading: mat.flatShading ?? false,
+              metalness: 0.86,
+              roughness: 0.22,
+              clearcoat: 0.5,
+              clearcoatRoughness: 0.2,
+              envMapIntensity: 1.45
+            });
+
+            if ("name" in mat) {
+              metalMat.name = mat.name;
+            }
+            return metalMat;
+          };
+
           group.traverse((node) => {
             if (!node.isMesh || !node.material) return;
-            const materials = Array.isArray(node.material) ? node.material : [node.material];
-            materials.forEach((mat) => {
-              if (!mat || !mat.isMaterial) return;
-              if ("color" in mat && mat.color) {
-                mat.color.lerp(metalTint, 0.22);
-              }
-              if ("metalness" in mat) {
-                mat.metalness = Math.max(mat.metalness ?? 0, 0.58);
-              }
-              if ("roughness" in mat) {
-                mat.roughness = Math.min(mat.roughness ?? 1, 0.34);
-              }
-              if ("envMapIntensity" in mat) {
-                mat.envMapIntensity = 0.82;
-              }
-              if ("clearcoat" in mat) {
-                mat.clearcoat = Math.max(mat.clearcoat ?? 0, 0.24);
-              }
-              if ("clearcoatRoughness" in mat) {
-                mat.clearcoatRoughness = Math.min(mat.clearcoatRoughness ?? 1, 0.24);
-              }
-              if ("shininess" in mat) {
-                mat.shininess = Math.max(mat.shininess ?? 30, 110);
-              }
-              mat.needsUpdate = true;
-            });
+            if (Array.isArray(node.material)) {
+              node.material = node.material.map((mat) => toMetalMaterial(mat));
+            } else {
+              node.material = toMetalMaterial(node.material);
+            }
           });
 
           motorModel = group;
@@ -2575,9 +2597,15 @@
 
       const recoveryRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       recoveryRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      recoveryRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+      recoveryRenderer.toneMappingExposure = 1.06;
       recoveryStage.appendChild(recoveryRenderer.domElement);
 
       const recoveryScene = new THREE.Scene();
+      const recoveryPmremGenerator = new THREE.PMREMGenerator(recoveryRenderer);
+      const recoveryEnvironment = recoveryPmremGenerator.fromScene(new RoomEnvironment(recoveryRenderer), 0.04).texture;
+      recoveryPmremGenerator.dispose();
+      recoveryScene.environment = recoveryEnvironment;
       const recoveryCamera = new THREE.PerspectiveCamera(42, 1, 0.1, 5000);
       recoveryCamera.position.set(0, 70, 210);
       let recoveryModel = null;
@@ -2604,6 +2632,10 @@
       const recoveryFillLight = new THREE.DirectionalLight(0x9fbce0, 0.52);
       recoveryFillLight.position.set(-160, 90, -140);
       recoveryScene.add(recoveryFillLight);
+
+      const recoveryRimLight = new THREE.DirectionalLight(0xdbe7ff, 0.48);
+      recoveryRimLight.position.set(-220, 180, 210);
+      recoveryScene.add(recoveryRimLight);
 
       const recoveryLoader = new ThreeMFLoader();
       const fitRecoveryCameraToObject = (object) => {
@@ -2640,6 +2672,48 @@
           const scale = targetSize / maxSize;
           group.scale.setScalar(scale);
           group.rotation.copy(recoveryInitialRotation);
+
+          const recoveryMetalTint = new THREE.Color(0xc1c8d2);
+          const toRecoveryMetalMaterial = (mat) => {
+            if (!mat || !mat.isMaterial) return mat;
+            const baseColor = mat.color ? mat.color.clone() : new THREE.Color(0xb7bec8);
+            baseColor.lerp(recoveryMetalTint, 0.28);
+
+            const metalMat = new THREE.MeshPhysicalMaterial({
+              color: baseColor,
+              map: mat.map || null,
+              normalMap: mat.normalMap || null,
+              aoMap: mat.aoMap || null,
+              emissiveMap: mat.emissiveMap || null,
+              emissive: mat.emissive ? mat.emissive.clone() : new THREE.Color(0x000000),
+              emissiveIntensity: mat.emissiveIntensity ?? 1,
+              transparent: mat.transparent ?? false,
+              opacity: mat.opacity ?? 1,
+              alphaMap: mat.alphaMap || null,
+              side: mat.side ?? THREE.FrontSide,
+              vertexColors: mat.vertexColors === true,
+              flatShading: mat.flatShading ?? false,
+              metalness: 0.82,
+              roughness: 0.26,
+              clearcoat: 0.44,
+              clearcoatRoughness: 0.24,
+              envMapIntensity: 1.32
+            });
+
+            if ("name" in mat) {
+              metalMat.name = mat.name;
+            }
+            return metalMat;
+          };
+
+          group.traverse((node) => {
+            if (!node.isMesh || !node.material) return;
+            if (Array.isArray(node.material)) {
+              node.material = node.material.map((mat) => toRecoveryMetalMaterial(mat));
+            } else {
+              node.material = toRecoveryMetalMaterial(node.material);
+            }
+          });
 
           recoveryModel = group;
           recoveryScene.add(group);
