@@ -34,6 +34,7 @@
       color: var(--cloud);
       background: #07080a;
       letter-spacing: 0.02em;
+      overflow-x: hidden;
     }
 
     body::before {
@@ -299,18 +300,18 @@
 
     .hero h1 {
       font-size: clamp(40px, 6vw, 82px);
-      margin: 0 0 16px;
+      margin: 0 0 26px;
       line-height: 0.95;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.12em;
     }
 
     .hero-tagline {
-      margin: 0 0 26px;
+      margin: 0 0 14px;
       color: #dfe6f2;
       font-size: 15px;
       font-weight: 600;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.22em;
       text-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     }
 
@@ -690,6 +691,143 @@
       width: min(100%, 260px);
     }
 
+    .tech-subsection-recovery .tech-visual {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .tech-subsection-motor {
+      grid-template-columns: minmax(300px, 0.92fr) minmax(420px, 1.3fr);
+      gap: clamp(26px, 2.6vw, 40px);
+    }
+
+    .tech-subsection-motor.tech-stack-item {
+      width: min(100%, 1160px);
+    }
+
+    .tech-subsection-motor .tech-details {
+      max-width: 560px;
+    }
+
+    .tech-subsection-motor .tech-visual {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      width: min(100%, 940px);
+      justify-self: center;
+    }
+
+    .motor-3d-stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      min-height: clamp(500px, 62vh, 760px);
+      border-radius: 0;
+      border: 0;
+      background: transparent;
+      overflow: visible;
+      isolation: isolate;
+    }
+
+    .motor-3d-stage::before {
+      content: "";
+      position: absolute;
+      inset: -8% -10% -12%;
+      background: radial-gradient(
+        circle at 50% 46%,
+        rgba(166, 196, 230, 0.16) 0%,
+        rgba(105, 140, 178, 0.1) 30%,
+        rgba(0, 0, 0, 0) 72%
+      );
+      filter: blur(24px);
+      opacity: 0.72;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .motor-3d-stage::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -2%;
+      width: min(92%, 760px);
+      height: clamp(140px, 34%, 260px);
+      transform: translateX(-50%);
+      background: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0.45) 0%,
+        rgba(0, 0, 0, 0.24) 38%,
+        rgba(0, 0, 0, 0) 76%
+      );
+      filter: blur(14px);
+      opacity: 0.72;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .motor-3d-stage canvas {
+      display: block;
+      position: relative;
+      z-index: 1;
+      border-radius: 0;
+      filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.3)) drop-shadow(0 0 20px rgba(132, 172, 214, 0.14));
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .tech-subsection-recovery .motor-3d-stage::before {
+      content: "";
+      display: block;
+      inset: 10% 8% 14%;
+      background: radial-gradient(
+        circle at 50% 44%,
+        rgba(132, 172, 214, 0.12) 0%,
+        rgba(132, 172, 214, 0.05) 34%,
+        rgba(0, 0, 0, 0) 72%
+      );
+      opacity: 0.62;
+      filter: blur(14px);
+    }
+
+    .tech-subsection-recovery .motor-3d-stage::after {
+      content: "";
+      display: block;
+      left: 50%;
+      bottom: 6%;
+      width: min(76%, 520px);
+      height: clamp(92px, 24%, 172px);
+      transform: translateX(-50%);
+      background: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0.32) 0%,
+        rgba(0, 0, 0, 0.14) 42%,
+        rgba(0, 0, 0, 0) 78%
+      );
+      opacity: 0.66;
+      filter: blur(10px);
+    }
+
+    .tech-subsection-recovery .motor-3d-stage canvas {
+      filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.24)) drop-shadow(0 0 10px rgba(132, 172, 214, 0.08));
+    }
+
+    .motor-3d-fallback {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(230, 236, 245, 0.74);
+      background: rgba(7, 10, 14, 0.5);
+      text-align: center;
+      padding: 14px;
+    }
+
     .tech-subsection-airframe {
       grid-template-columns: 1fr;
       gap: clamp(14px, 1.8vw, 22px);
@@ -702,12 +840,14 @@
     .tech-subsection-airframe .tech-visual {
       width: min(100%, 820px);
       margin: 0 auto;
-      padding: 0;
-      border: 0;
-      background: transparent;
-      box-shadow: none;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 28px;
+      background: linear-gradient(160deg, rgba(15, 19, 26, 0.86), rgba(8, 11, 16, 0.62));
+      box-shadow: 0 22px 46px rgba(2, 5, 10, 0.44);
       position: relative;
       isolation: isolate;
+      overflow: hidden;
     }
 
     .tech-subsection-airframe .tech-visual::before {
@@ -720,14 +860,34 @@
       z-index: -1;
     }
 
+    .tech-subsection-airframe .tech-visual::after {
+      content: "";
+      position: absolute;
+      inset: 18% 6% 12%;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(120, 158, 206, 0.2) 0%,
+        rgba(120, 158, 206, 0.08) 38%,
+        rgba(120, 158, 206, 0) 76%
+      );
+      filter: blur(22px);
+      pointer-events: none;
+      z-index: -1;
+    }
+
     .tech-subsection-airframe .tech-visual img {
       aspect-ratio: 21 / 6;
       object-fit: contain;
       border: 0;
+      border-radius: 24px;
       background: rgba(7, 9, 12, 0.72);
-      filter: brightness(0.94) contrast(0.92);
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 92%, transparent 100%);
-      mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 92%, transparent 100%);
+      filter:
+        brightness(0.98)
+        contrast(0.96)
+        drop-shadow(0 24px 30px rgba(0, 0, 0, 0.42))
+        drop-shadow(0 0 22px rgba(120, 158, 206, 0.18));
+      -webkit-mask-image: none;
+      mask-image: none;
     }
 
     .tech-subsection-airframe .tech-details {
@@ -780,10 +940,15 @@
       }
       .tech-subsection {
         grid-template-columns: 1fr;
+        gap: clamp(20px, 5vw, 34px);
       }
 
       .tech-subsection .tech-visual {
         order: 0;
+      }
+
+      .tech-subsection .tech-details {
+        order: 1;
       }
 
       .tech-slider {
@@ -816,6 +981,29 @@
         width: 100%;
       }
 
+      .tech-subsection-motor .tech-visual {
+        width: 100%;
+        justify-self: stretch;
+      }
+
+      .motor-3d-stage {
+        width: 100%;
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        min-height: clamp(380px, 78vw, 560px);
+        overflow: hidden;
+      }
+
+      .motor-3d-stage::before {
+        inset: -6% -4% -8%;
+      }
+
+      .motor-3d-stage::after {
+        width: min(88%, 520px);
+        height: clamp(120px, 30%, 220px);
+      }
+
       .tech-stack {
         position: relative;
         top: auto;
@@ -835,13 +1023,18 @@
         width: 100%;
         transform: none !important;
         filter: none !important;
-        opacity: 0;
-        display: none;
+        opacity: 1;
+        display: grid;
+        pointer-events: auto;
       }
 
       .tech-stack-item.is-active {
         display: grid;
         opacity: 1;
+      }
+
+      .tech-stack-item + .tech-stack-item {
+        margin-top: clamp(56px, 11vw, 92px);
       }
     }
 
@@ -1861,11 +2054,10 @@
     <div class="hero-slide hero-slide-b is-next" aria-hidden="true"></div>
     <div class="hero-inner">
       <div>
-        <h1 data-i18n-html="heroTitle">우주를 향하는<br />우리의 꿈</h1>
         <p class="hero-tagline" data-i18n="heroTagline">LUCE IN ALTIS</p>
+        <h1 data-i18n-html="heroTitle">우주를 향하는<br />우리의 꿈</h1>
         <div class="hero-actions">
           <a class="btn primary" href="partners.html" data-i18n="heroCtaSupport">Support for ALTIS</a>
-          <a class="btn" href="#media" data-i18n="heroCtaMedia">YouTube Feature</a>
           <a class="btn" href="#about" data-i18n="heroCtaAbout">About ALTIS</a>
         </div>
       </div>
@@ -1966,7 +2158,7 @@
         </div>
       </div>
 
-      <div class="tech-subsection tech-stack-item" style="--delay: 160ms;">
+      <div class="tech-subsection tech-subsection-recovery tech-stack-item" style="--delay: 160ms;">
         <div class="tech-details">
           <span class="tech-kicker">Recovery</span>
           <h3>PARACHUTE EJECTION SYSTEM</h3>
@@ -1982,15 +2174,34 @@
           </div>
         </div>
         <figure class="tech-visual">
-          <img src="img/altis_mission.png" alt="ALTIS 낙하산 사출 시스템 설계 이미지" loading="lazy" />
-          <figcaption>Parachute Module // ALTIS</figcaption>
+          <div class="motor-3d-stage" id="recovery-3d-stage" aria-label="ALTIS ejection assembly 3D model viewer">
+          </div>
         </figure>
       </div>
 
-      <div class="tech-subsection left tech-subsection-airframe tech-stack-item" style="--delay: 200ms;">
+      <div class="tech-subsection tech-subsection-motor tech-stack-item" style="--delay: 200ms;">
+        <div class="tech-details">
+          <span class="tech-kicker">Propulsion</span>
+          <h3>Pioneer1 1st motor</h3>
+          <p data-i18n="techMotorBody">
+            이번 모터는 2 MPa의 비교적 낮은 압력을 기준으로 안전을 우선해 설계한 고체 모터입니다.
+            실제 제작과 시험을 염두에 두고 구조를 단순화했으며, 안정적인 점화와 추력 확보를 목표로 반복 시험에 적합한 형상으로 개발했습니다.
+          </p>
+          <div class="tech-specs">
+            <div>3D Model</div>
+            <div>Solid Motor</div>
+            <div>Test Geometry</div>
+          </div>
+        </div>
+        <figure class="tech-visual">
+          <div class="motor-3d-stage" id="motor-3d-stage" aria-label="ALTIS solid motor 3D model viewer">
+          </div>
+        </figure>
+      </div>
+
+      <div class="tech-subsection left tech-subsection-airframe tech-stack-item" style="--delay: 240ms;">
         <figure class="tech-visual">
           <img src="img/structure.png" alt="ALTIS 동체 구조 설계 도면" loading="lazy" />
-          <figcaption>Structure Design // ALTIS</figcaption>
         </figure>
         <div class="tech-details">
           <span class="tech-kicker">Airframe</span>
@@ -2152,6 +2363,323 @@
     LUCE IN ALTIS  — © ALTIS with YBB
   </footer>
 
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+    import { ThreeMFLoader } from "three/addons/loaders/3MFLoader.js";
+
+    const stage = document.getElementById("motor-3d-stage");
+    if (!stage) {
+      // No motor 3D container in current page.
+    } else {
+      const showFallback = (text) => {
+        if (stage.querySelector(".motor-3d-fallback")) return;
+        const fallback = document.createElement("div");
+        fallback.className = "motor-3d-fallback";
+        fallback.textContent = text;
+        stage.appendChild(fallback);
+      };
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      stage.appendChild(renderer.domElement);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 5000);
+      camera.position.set(0, 80, 220);
+      let motorModel = null;
+      const homeCameraPosition = new THREE.Vector3();
+      const homeTarget = new THREE.Vector3();
+      const returnFromCameraPosition = new THREE.Vector3();
+      const returnFromTarget = new THREE.Vector3();
+      let returningHome = false;
+      let returnProgress = 0;
+      const returnDuration = 0.55;
+      const clock = new THREE.Clock();
+      const initialMotorRotation = new THREE.Euler(
+        THREE.MathUtils.degToRad(-90),
+        THREE.MathUtils.degToRad(0),
+        THREE.MathUtils.degToRad(0)
+      );
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.enablePan = false;
+      controls.enableZoom = false;
+      controls.minDistance = 80;
+      controls.maxDistance = 520;
+      controls.autoRotate = false;
+      controls.addEventListener("start", () => {
+        returningHome = false;
+        returnProgress = 0;
+      });
+      controls.addEventListener("end", () => {
+        returnFromCameraPosition.copy(camera.position);
+        returnFromTarget.copy(controls.target);
+        returnProgress = 0;
+        returningHome = true;
+      });
+
+      scene.add(new THREE.AmbientLight(0xffffff, 0.72));
+      const keyLight = new THREE.DirectionalLight(0xffffff, 0.86);
+      keyLight.position.set(180, 220, 140);
+      scene.add(keyLight);
+
+      const fillLight = new THREE.DirectionalLight(0x9fbce0, 0.48);
+      fillLight.position.set(-160, 90, -140);
+      scene.add(fillLight);
+
+      const loader = new ThreeMFLoader();
+      const fitCameraToObject = (object) => {
+        object.updateWorldMatrix(true, true);
+        const box = new THREE.Box3().setFromObject(object);
+        const sphere = box.getBoundingSphere(new THREE.Sphere());
+        const radius = sphere.radius || 1;
+
+        const vFov = THREE.MathUtils.degToRad(camera.fov);
+        const hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
+        const fitHeightDistance = radius / Math.tan(vFov / 2);
+        const fitWidthDistance = radius / Math.tan(hFov / 2);
+        const fitOffset = 1.03;
+        const baseDistance = Math.max(fitHeightDistance, fitWidthDistance) * fitOffset;
+        const motorDesktopWidthBaseline = 700;
+        const motorDesktopCompensation = window.matchMedia("(max-width: 900px)").matches
+          ? 1
+          : Math.max(1, stage.clientWidth / motorDesktopWidthBaseline);
+        const distance = baseDistance * motorDesktopCompensation;
+
+        controls.target.copy(sphere.center);
+        camera.position.set(sphere.center.x, sphere.center.y, sphere.center.z + distance);
+        homeTarget.copy(controls.target);
+        homeCameraPosition.copy(camera.position);
+        camera.near = Math.max(0.1, distance / 200);
+        camera.far = distance * 20;
+        camera.updateProjectionMatrix();
+        controls.update();
+      };
+
+      loader.load(
+        "3d/1st_motor_3d.3mf",
+        (group) => {
+          const box = new THREE.Box3().setFromObject(group);
+          const size = box.getSize(new THREE.Vector3());
+          const center = box.getCenter(new THREE.Vector3());
+
+          group.position.sub(center);
+
+          const maxSize = Math.max(size.x, size.y, size.z) || 1;
+          const targetSize = 180;
+          const scale = targetSize / maxSize;
+          group.scale.setScalar(scale);
+          group.rotation.copy(initialMotorRotation);
+
+          // Apply a subtle metallic finish for the motor model.
+          const metalTint = new THREE.Color(0xb8bec7);
+          group.traverse((node) => {
+            if (!node.isMesh || !node.material) return;
+            const materials = Array.isArray(node.material) ? node.material : [node.material];
+            materials.forEach((mat) => {
+              if (!mat || !mat.isMaterial) return;
+              if ("color" in mat && mat.color) {
+                mat.color.lerp(metalTint, 0.22);
+              }
+              if ("metalness" in mat) {
+                mat.metalness = Math.max(mat.metalness ?? 0, 0.58);
+              }
+              if ("roughness" in mat) {
+                mat.roughness = Math.min(mat.roughness ?? 1, 0.34);
+              }
+              if ("envMapIntensity" in mat) {
+                mat.envMapIntensity = 0.82;
+              }
+              if ("clearcoat" in mat) {
+                mat.clearcoat = Math.max(mat.clearcoat ?? 0, 0.24);
+              }
+              if ("clearcoatRoughness" in mat) {
+                mat.clearcoatRoughness = Math.min(mat.clearcoatRoughness ?? 1, 0.24);
+              }
+              if ("shininess" in mat) {
+                mat.shininess = Math.max(mat.shininess ?? 30, 110);
+              }
+              mat.needsUpdate = true;
+            });
+          });
+
+          motorModel = group;
+          scene.add(group);
+          fitCameraToObject(group);
+        },
+        undefined,
+        () => {
+          showFallback("3D model load failed");
+        }
+      );
+
+      const resize = () => {
+        const width = Math.max(1, stage.clientWidth);
+        const height = Math.max(1, stage.clientHeight);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height, false);
+        if (motorModel) {
+          fitCameraToObject(motorModel);
+        }
+      };
+
+      resize();
+      window.addEventListener("resize", resize);
+
+      const tick = () => {
+        const dt = clock.getDelta();
+        if (motorModel) {
+          motorModel.rotation.z += 0.01;
+        }
+        if (returningHome) {
+          returnProgress = Math.min(1, returnProgress + dt / returnDuration);
+          const eased = 1 - (1 - returnProgress) * (1 - returnProgress);
+          camera.position.lerpVectors(returnFromCameraPosition, homeCameraPosition, eased);
+          controls.target.lerpVectors(returnFromTarget, homeTarget, eased);
+          if (returnProgress >= 1) {
+            camera.position.copy(homeCameraPosition);
+            controls.target.copy(homeTarget);
+            returningHome = false;
+          }
+        }
+        controls.update();
+        renderer.render(scene, camera);
+        window.requestAnimationFrame(tick);
+      };
+
+      tick();
+    }
+
+    const recoveryStage = document.getElementById("recovery-3d-stage");
+    if (!recoveryStage) {
+      // No recovery 3D container in current page.
+    } else {
+      const showRecoveryFallback = (text) => {
+        if (recoveryStage.querySelector(".motor-3d-fallback")) return;
+        const fallback = document.createElement("div");
+        fallback.className = "motor-3d-fallback";
+        fallback.textContent = text;
+        recoveryStage.appendChild(fallback);
+      };
+
+      const recoveryRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      recoveryRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      recoveryStage.appendChild(recoveryRenderer.domElement);
+
+      const recoveryScene = new THREE.Scene();
+      const recoveryCamera = new THREE.PerspectiveCamera(42, 1, 0.1, 5000);
+      recoveryCamera.position.set(0, 70, 210);
+      let recoveryModel = null;
+      const recoveryClock = new THREE.Clock();
+      const recoveryInitialRotation = new THREE.Euler(
+        THREE.MathUtils.degToRad(-90),
+        0,
+        0
+      );
+
+      const recoveryControls = new OrbitControls(recoveryCamera, recoveryRenderer.domElement);
+      recoveryControls.enableDamping = true;
+      recoveryControls.enablePan = false;
+      recoveryControls.enableZoom = false;
+      recoveryControls.minDistance = 80;
+      recoveryControls.maxDistance = 520;
+      recoveryControls.autoRotate = false;
+
+      recoveryScene.add(new THREE.AmbientLight(0xffffff, 0.74));
+      const recoveryKeyLight = new THREE.DirectionalLight(0xffffff, 0.88);
+      recoveryKeyLight.position.set(180, 220, 140);
+      recoveryScene.add(recoveryKeyLight);
+
+      const recoveryFillLight = new THREE.DirectionalLight(0x9fbce0, 0.52);
+      recoveryFillLight.position.set(-160, 90, -140);
+      recoveryScene.add(recoveryFillLight);
+
+      const recoveryLoader = new ThreeMFLoader();
+      const fitRecoveryCameraToObject = (object) => {
+        object.updateWorldMatrix(true, true);
+        const box = new THREE.Box3().setFromObject(object);
+        const sphere = box.getBoundingSphere(new THREE.Sphere());
+        const radius = sphere.radius || 1;
+
+        const vFov = THREE.MathUtils.degToRad(recoveryCamera.fov);
+        const hFov = 2 * Math.atan(Math.tan(vFov / 2) * recoveryCamera.aspect);
+        const fitHeightDistance = radius / Math.tan(vFov / 2);
+        const fitWidthDistance = radius / Math.tan(hFov / 2);
+        const distance = Math.max(fitHeightDistance, fitWidthDistance) * 1.08;
+
+        recoveryControls.target.copy(sphere.center);
+        recoveryCamera.position.set(sphere.center.x, sphere.center.y, sphere.center.z + distance);
+        recoveryCamera.near = Math.max(0.1, distance / 200);
+        recoveryCamera.far = distance * 20;
+        recoveryCamera.updateProjectionMatrix();
+        recoveryControls.update();
+      };
+
+      recoveryLoader.load(
+        "3d/sachul_assembly.3mf",
+        (group) => {
+          const box = new THREE.Box3().setFromObject(group);
+          const size = box.getSize(new THREE.Vector3());
+          const center = box.getCenter(new THREE.Vector3());
+
+          group.position.sub(center);
+
+          const maxSize = Math.max(size.x, size.y, size.z) || 1;
+          const targetSize = 190;
+          const scale = targetSize / maxSize;
+          group.scale.setScalar(scale);
+          group.rotation.copy(recoveryInitialRotation);
+
+          recoveryModel = group;
+          recoveryScene.add(group);
+          fitRecoveryCameraToObject(group);
+        },
+        undefined,
+        () => {
+          showRecoveryFallback("3D model load failed");
+        }
+      );
+
+      const resizeRecovery = () => {
+        const width = Math.max(1, recoveryStage.clientWidth);
+        const height = Math.max(1, recoveryStage.clientHeight);
+        recoveryCamera.aspect = width / height;
+        recoveryCamera.updateProjectionMatrix();
+        recoveryRenderer.setSize(width, height, false);
+        if (recoveryModel) {
+          fitRecoveryCameraToObject(recoveryModel);
+        }
+      };
+
+      resizeRecovery();
+      window.addEventListener("resize", resizeRecovery);
+
+      const tickRecovery = () => {
+        if (recoveryModel) {
+          const dt = recoveryClock.getDelta();
+          recoveryModel.rotation.z += dt * 0.45;
+        } else {
+          recoveryClock.getDelta();
+        }
+        recoveryControls.update();
+        recoveryRenderer.render(recoveryScene, recoveryCamera);
+        window.requestAnimationFrame(tickRecovery);
+      };
+
+      tickRecovery();
+    }
+  </script>
   <script>
     (() => {
       const slides = document.querySelectorAll(".hero-slide");
