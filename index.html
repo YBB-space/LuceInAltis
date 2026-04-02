@@ -261,23 +261,38 @@
       background-position: center;
       z-index: 0;
       opacity: 0;
-      transform: translateX(100%);
-      transition: transform 1.2s ease, opacity 1.2s ease;
+      transform: translateX(24%) scale(1.04);
+      filter: saturate(0.9) brightness(0.92) blur(1.2px);
+      transition:
+        transform 0.95s cubic-bezier(0.2, 0.65, 0.2, 1),
+        opacity 0.95s ease,
+        filter 0.95s ease;
     }
 
     .hero-slide.is-active {
       opacity: 1;
-      transform: translateX(0);
+      transform: translateX(0) scale(1);
+      filter: saturate(1) brightness(1) blur(0);
     }
 
     .hero-slide.is-next {
       opacity: 0;
-      transform: translateX(100%);
+      transform: translateX(24%) scale(1.04);
+    }
+
+    .hero-slide.is-prev {
+      opacity: 0;
+      transform: translateX(-24%) scale(1.04);
     }
 
     .hero-slide.is-out {
       opacity: 0;
-      transform: translateX(-100%);
+      transform: translateX(-18%) scale(1.02);
+    }
+
+    .hero-slide.is-out-right {
+      opacity: 0;
+      transform: translateX(18%) scale(1.02);
     }
 
     .hero-slide-a {
@@ -290,6 +305,18 @@
       background-image:
         linear-gradient(90deg, rgba(7, 9, 12, 0.9) 0%, rgba(7, 9, 12, 0.55) 45%, rgba(7, 9, 12, 0.15) 70%),
         url("img/hero_launch.png");
+    }
+
+    .hero-slide-c {
+      background-image:
+        linear-gradient(90deg, rgba(7, 9, 12, 0.9) 0%, rgba(7, 9, 12, 0.55) 45%, rgba(7, 9, 12, 0.15) 70%),
+        url("img/altis_bg.png");
+    }
+
+    .hero-slide-d {
+      background-image:
+        linear-gradient(90deg, rgba(7, 9, 12, 0.9) 0%, rgba(7, 9, 12, 0.55) 45%, rgba(7, 9, 12, 0.15) 70%),
+        url("img/altis_bg2.JPG");
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -319,6 +346,39 @@
       display: flex;
       flex-wrap: wrap;
       gap: 16px;
+    }
+
+    .hero-swipe-controls {
+      position: absolute;
+      right: clamp(22px, 4vw, 54px);
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+      display: block;
+    }
+
+    .hero-swipe-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(220, 232, 248, 0.32);
+      background: rgba(10, 14, 20, 0.56);
+      color: #e7effb;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .hero-swipe-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(18, 25, 35, 0.72);
+      border-color: rgba(232, 241, 252, 0.5);
+    }
+
+    .hero-swipe-btn:focus-visible {
+      outline: 2px solid rgba(255, 120, 78, 0.9);
+      outline-offset: 2px;
     }
 
     .btn {
@@ -711,6 +771,46 @@
       max-width: 560px;
     }
 
+    .motor-switch-row {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .motor-switch-label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(222, 233, 247, 0.74);
+    }
+
+    .motor-switch-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(220, 232, 248, 0.34);
+      background: rgba(10, 14, 20, 0.56);
+      color: #e7effb;
+      display: grid;
+      place-items: center;
+      font-size: 26px;
+      line-height: 1;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .motor-switch-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(18, 25, 35, 0.72);
+      border-color: rgba(232, 241, 252, 0.5);
+    }
+
+    .motor-switch-btn:disabled {
+      opacity: 0.55;
+      cursor: wait;
+    }
+
     .tech-subsection-motor .tech-visual {
       padding: 0;
       border: 0;
@@ -838,56 +938,80 @@
     }
 
     .tech-subsection-airframe .tech-visual {
-      width: min(100%, 820px);
+      width: min(100%, 560px);
       margin: 0 auto;
-      padding: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 28px;
-      background: linear-gradient(160deg, rgba(15, 19, 26, 0.86), rgba(8, 11, 16, 0.62));
-      box-shadow: 0 22px 46px rgba(2, 5, 10, 0.44);
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
       position: relative;
       isolation: isolate;
       overflow: hidden;
+      --airframe-blend: 0;
     }
 
     .tech-subsection-airframe .tech-visual::before {
-      content: "";
-      position: absolute;
-      inset: 10% -2% 20%;
-      background: radial-gradient(ellipse at center, rgba(146, 171, 205, 0.16) 0%, transparent 72%);
-      filter: blur(14px);
-      pointer-events: none;
-      z-index: -1;
+      content: none;
     }
 
     .tech-subsection-airframe .tech-visual::after {
-      content: "";
-      position: absolute;
-      inset: 18% 6% 12%;
-      background: radial-gradient(
-        ellipse at center,
-        rgba(120, 158, 206, 0.2) 0%,
-        rgba(120, 158, 206, 0.08) 38%,
-        rgba(120, 158, 206, 0) 76%
-      );
-      filter: blur(22px);
-      pointer-events: none;
-      z-index: -1;
+      content: none;
     }
 
     .tech-subsection-airframe .tech-visual img {
       aspect-ratio: 21 / 6;
       object-fit: contain;
       border: 0;
-      border-radius: 24px;
-      background: rgba(7, 9, 12, 0.72);
+      border-radius: 0;
+      background: transparent;
+      position: relative;
+      z-index: 1;
       filter:
-        brightness(0.98)
-        contrast(0.96)
-        drop-shadow(0 24px 30px rgba(0, 0, 0, 0.42))
-        drop-shadow(0 0 22px rgba(120, 158, 206, 0.18));
+        brightness(1.03)
+        contrast(1.02);
       -webkit-mask-image: none;
       mask-image: none;
+    }
+
+    .airframe-crossfade {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 6;
+      cursor: pointer;
+    }
+
+    .airframe-image {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transform-origin: center center;
+      transition: opacity 0.3s ease-out, transform 0.3s ease-out, filter 0.3s ease-out;
+      will-change: opacity, transform, filter;
+    }
+
+    .airframe-crossfade:focus-visible {
+      outline: 2px solid rgba(255, 120, 78, 0.9);
+      outline-offset: 4px;
+    }
+
+    .tech-subsection-airframe .tech-visual .airframe-image-base {
+      z-index: 1;
+      opacity: calc(1 - var(--airframe-blend));
+      transform: scale(calc(1 + (var(--airframe-blend) * 0.018)));
+      filter: brightness(calc(1 - (var(--airframe-blend) * 0.12)));
+    }
+
+    .tech-subsection-airframe .tech-visual .airframe-image-overlay {
+      z-index: 2;
+      opacity: var(--airframe-blend);
+      transform: scale(calc(1.012 - (var(--airframe-blend) * 0.012)));
+      filter: brightness(calc(0.98 + (var(--airframe-blend) * 0.2))) contrast(calc(1 + (var(--airframe-blend) * 0.22)));
+      mix-blend-mode: screen;
+      pointer-events: none;
     }
 
     .tech-subsection-airframe .tech-details {
@@ -1849,13 +1973,82 @@
       outline-offset: 2px;
     }
 
-    footer {
-      padding: 32px 24px 60px;
+    .site-footer {
+      margin-top: 20px;
+      background: linear-gradient(180deg, #050608 0%, #040507 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    }
+
+    .site-footer-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 58px 32px 28px;
+    }
+
+    .site-footer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      margin-top: 18px;
+    }
+
+    .site-footer-col h4 {
+      margin: 0 0 20px;
+      font-size: 18px;
+      line-height: 1;
+      letter-spacing: 0.02em;
+      font-family: var(--font-display);
+      color: #5ea2ff;
+    }
+
+    .site-footer-col h5 {
+      margin: 0 0 20px;
+      font-size: clamp(16px, 1.2vw, 20px);
+      line-height: 1;
+      letter-spacing: -0.01em;
+      font-weight: 700;
+      color: #edf3ff;
+    }
+
+    .site-footer-col p {
+      margin: 0 0 10px;
+      color: #97a5bc;
+      font-size: clamp(11px, 0.75vw, 13px);
+      line-height: 1.52;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+    }
+
+    .site-footer-contact {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px 16px;
       text-align: center;
-      color: var(--haze);
-      font-size: 12px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
+    }
+
+    .site-footer-contact p {
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    .site-footer-contact p:last-child {
+      white-space: normal;
+    }
+
+    .site-footer-divider {
+      margin: 0 0 14px;
+      border-top: 1px solid rgba(144, 169, 209, 0.18);
+    }
+
+    .site-footer-copy {
+      margin: 20px 0 0;
+      text-align: center;
+      color: #687892;
+      font-size: clamp(12px, 0.85vw, 15px);
+      line-height: 1.5;
+      letter-spacing: -0.01em;
     }
 
     @media (max-width: 900px) {
@@ -1865,8 +2058,31 @@
       .hero-inner {
         padding: 90px 24px 70px;
       }
+      .hero-swipe-controls {
+        right: 16px;
+      }
+      .hero-swipe-btn {
+        width: 40px;
+        height: 40px;
+      }
       .about-intro {
         padding: 0 24px;
+      }
+      .site-footer-inner {
+        padding: 42px 24px 22px;
+      }
+      .site-footer-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      .site-footer-col h4 {
+        font-size: 17px;
+      }
+      .site-footer-divider {
+        margin-top: 12px;
+      }
+      .site-footer-copy {
+        text-align: left;
       }
       .gallery-hint {
         display: inline-block;
@@ -2052,6 +2268,8 @@
   <section class="hero" id="home">
     <div class="hero-slide hero-slide-a is-active" aria-hidden="true"></div>
     <div class="hero-slide hero-slide-b is-next" aria-hidden="true"></div>
+    <div class="hero-slide hero-slide-c" aria-hidden="true"></div>
+    <div class="hero-slide hero-slide-d" aria-hidden="true"></div>
     <div class="hero-inner">
       <div>
         <p class="hero-tagline" data-i18n="heroTagline">LUCE IN ALTIS</p>
@@ -2061,6 +2279,9 @@
           <a class="btn" href="#about" data-i18n="heroCtaAbout">About ALTIS</a>
         </div>
       </div>
+    </div>
+    <div class="hero-swipe-controls" aria-label="Hero swipe controls">
+      <button class="hero-swipe-btn hero-swipe-next" type="button" aria-label="Next slide">&#8250;</button>
     </div>
   </section>
 
@@ -2154,7 +2375,7 @@
             <div>Safe Ops</div>
             <div>Mission Control</div>
           </div>
-          <a class="btn tech-cta" href="https://flash6.kro.kr" data-i18n="techFlashCta">flash 프로그램 사용해보기</a>
+          <a class="btn tech-cta" href="https://flash6.kro.kr" data-i18n="techFlashCta">Go to FLASH</a>
         </div>
       </div>
 
@@ -2182,7 +2403,7 @@
       <div class="tech-subsection tech-subsection-motor tech-stack-item" style="--delay: 200ms;">
         <div class="tech-details">
           <span class="tech-kicker">Propulsion</span>
-          <h3>Pioneer1 1st motor</h3>
+          <h3 id="motor-model-title">Pioneer1 1st motor</h3>
           <p data-i18n="techMotorBody">
             이번 모터는 2 MPa의 비교적 낮은 압력을 기준으로 안전을 우선해 설계한 고체 모터입니다.
             실제 제작과 시험을 염두에 두고 구조를 단순화했으며, 안정적인 점화와 추력 확보를 목표로 반복 시험에 적합한 형상으로 개발했습니다.
@@ -2191,6 +2412,10 @@
             <div>3D Model</div>
             <div>Solid Motor</div>
             <div>Test Geometry</div>
+          </div>
+          <div class="motor-switch-row">
+            <span class="motor-switch-label">Next Model</span>
+            <button class="motor-switch-btn" id="motor-switch-btn" type="button" aria-label="Switch to next motor model">&#8250;</button>
           </div>
         </div>
         <figure class="tech-visual">
@@ -2201,7 +2426,10 @@
 
       <div class="tech-subsection left tech-subsection-airframe tech-stack-item" style="--delay: 240ms;">
         <figure class="tech-visual">
-          <img src="img/structure.png" alt="ALTIS 동체 구조 설계 도면" loading="lazy" />
+          <div class="airframe-crossfade" role="button" tabindex="0" aria-label="Toggle airframe view">
+            <img class="airframe-image airframe-image-base" src="img/altis_3dimg.png?v=1" alt="ALTIS 동체 외형 렌더링" loading="eager" fetchpriority="high" decoding="async" />
+            <img class="airframe-image airframe-image-overlay" src="img/altis_struc.png?v=1" alt="ALTIS 동체 구조 설계 도면" loading="eager" fetchpriority="high" decoding="async" />
+          </div>
         </figure>
         <div class="tech-details">
           <span class="tech-kicker">Airframe</span>
@@ -2359,8 +2587,18 @@
     </div>
   </section>
 
-  <footer>
-    LUCE IN ALTIS  — © ALTIS with YBB
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="site-footer-divider"></div>
+      <p class="site-footer-copy">© ALTIS. All rights reserved.</p>
+      <div class="site-footer-grid">
+        <div class="site-footer-col site-footer-contact">
+          <p>Email: ybb1833@gnu.ac.kr</p>
+          <p>Instagram: @altis_official</p>
+          <p>Address: 경상남도 진주시 진주대로 501 경상국립대학교 407동 항공우주산학협력관</p>
+        </div>
+      </div>
+    </div>
   </footer>
 
   <script type="importmap">
@@ -2403,6 +2641,14 @@
       const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 5000);
       camera.position.set(0, 80, 220);
       let motorModel = null;
+      let motorModelIndex = 0;
+      let isMotorModelLoading = false;
+      const motorModelTitle = document.getElementById("motor-model-title");
+      const motorSwitchBtn = document.getElementById("motor-switch-btn");
+      const motorModelConfigs = [
+        { path: "3d/1st_motor_3d.3mf", title: "Pioneer1 1st motor" },
+        { path: "3d/2st_motor_3d.3mf", title: "Pioneer1 2st motor" }
+      ];
       const homeCameraPosition = new THREE.Vector3();
       const homeTarget = new THREE.Vector3();
       const returnFromCameraPosition = new THREE.Vector3();
@@ -2449,6 +2695,38 @@
       scene.add(rimLight);
 
       const loader = new ThreeMFLoader();
+      const toMotorMaterial = (mat) => {
+        if (!mat || !mat.isMaterial) return mat;
+        const metalTint = new THREE.Color(0xc2c9d2);
+        const baseColor = mat.color ? mat.color.clone() : new THREE.Color(0xb8bec7);
+        baseColor.lerp(metalTint, 0.32);
+
+        const metalMat = new THREE.MeshPhysicalMaterial({
+          color: baseColor,
+          map: mat.map || null,
+          normalMap: mat.normalMap || null,
+          aoMap: mat.aoMap || null,
+          emissiveMap: mat.emissiveMap || null,
+          emissive: mat.emissive ? mat.emissive.clone() : new THREE.Color(0x000000),
+          emissiveIntensity: mat.emissiveIntensity ?? 1,
+          transparent: mat.transparent ?? false,
+          opacity: mat.opacity ?? 1,
+          alphaMap: mat.alphaMap || null,
+          side: mat.side ?? THREE.FrontSide,
+          vertexColors: mat.vertexColors === true,
+          flatShading: mat.flatShading ?? false,
+          metalness: 0.86,
+          roughness: 0.22,
+          clearcoat: 0.5,
+          clearcoatRoughness: 0.2,
+          envMapIntensity: 1.45
+        });
+
+        if ("name" in mat) {
+          metalMat.name = mat.name;
+        }
+        return metalMat;
+      };
       const fitCameraToObject = (object) => {
         object.updateWorldMatrix(true, true);
         const box = new THREE.Box3().setFromObject(object);
@@ -2477,9 +2755,21 @@
         controls.update();
       };
 
-      loader.load(
-        "3d/1st_motor_3d.3mf",
-        (group) => {
+      const loadMotorModel = (index) => {
+        if (isMotorModelLoading) return;
+        isMotorModelLoading = true;
+        if (motorSwitchBtn) motorSwitchBtn.disabled = true;
+
+        const safeIndex = (index + motorModelConfigs.length) % motorModelConfigs.length;
+        const config = motorModelConfigs[safeIndex];
+
+        loader.load(
+          config.path,
+          (group) => {
+          if (motorModel) {
+            scene.remove(motorModel);
+          }
+
           const box = new THREE.Box3().setFromObject(group);
           const size = box.getSize(new THREE.Vector3());
           const center = box.getCenter(new THREE.Vector3());
@@ -2492,58 +2782,40 @@
           group.scale.setScalar(scale);
           group.rotation.copy(initialMotorRotation);
 
-          // Convert to a stronger metallic finish so highlights read clearly.
-          const metalTint = new THREE.Color(0xc2c9d2);
-          const toMetalMaterial = (mat) => {
-            if (!mat || !mat.isMaterial) return mat;
-            const baseColor = mat.color ? mat.color.clone() : new THREE.Color(0xb8bec7);
-            baseColor.lerp(metalTint, 0.32);
-
-            const metalMat = new THREE.MeshPhysicalMaterial({
-              color: baseColor,
-              map: mat.map || null,
-              normalMap: mat.normalMap || null,
-              aoMap: mat.aoMap || null,
-              emissiveMap: mat.emissiveMap || null,
-              emissive: mat.emissive ? mat.emissive.clone() : new THREE.Color(0x000000),
-              emissiveIntensity: mat.emissiveIntensity ?? 1,
-              transparent: mat.transparent ?? false,
-              opacity: mat.opacity ?? 1,
-              alphaMap: mat.alphaMap || null,
-              side: mat.side ?? THREE.FrontSide,
-              vertexColors: mat.vertexColors === true,
-              flatShading: mat.flatShading ?? false,
-              metalness: 0.86,
-              roughness: 0.22,
-              clearcoat: 0.5,
-              clearcoatRoughness: 0.2,
-              envMapIntensity: 1.45
-            });
-
-            if ("name" in mat) {
-              metalMat.name = mat.name;
-            }
-            return metalMat;
-          };
-
           group.traverse((node) => {
             if (!node.isMesh || !node.material) return;
             if (Array.isArray(node.material)) {
-              node.material = node.material.map((mat) => toMetalMaterial(mat));
+              node.material = node.material.map((mat) => toMotorMaterial(mat));
             } else {
-              node.material = toMetalMaterial(node.material);
+              node.material = toMotorMaterial(node.material);
             }
           });
 
           motorModel = group;
+          motorModelIndex = safeIndex;
           scene.add(group);
           fitCameraToObject(group);
+          if (motorModelTitle) {
+            motorModelTitle.textContent = config.title;
+          }
+          isMotorModelLoading = false;
+          if (motorSwitchBtn) motorSwitchBtn.disabled = false;
         },
-        undefined,
-        () => {
-          showFallback("3D model load failed");
-        }
-      );
+          undefined,
+          () => {
+            showFallback("3D model load failed");
+            isMotorModelLoading = false;
+            if (motorSwitchBtn) motorSwitchBtn.disabled = false;
+          }
+        );
+      };
+
+      loadMotorModel(0);
+      if (motorSwitchBtn) {
+        motorSwitchBtn.addEventListener("click", () => {
+          loadMotorModel(motorModelIndex + 1);
+        });
+      }
 
       const resize = () => {
         const width = Math.max(1, stage.clientWidth);
@@ -2756,33 +3028,99 @@
   </script>
   <script>
     (() => {
-      const slides = document.querySelectorAll(".hero-slide");
+      const hero = document.querySelector(".hero");
+      if (!hero) return;
+
+      const slides = hero.querySelectorAll(".hero-slide");
       if (slides.length < 2) return;
 
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (reduceMotion) return;
-
+      const nextBtn = hero.querySelector(".hero-swipe-next");
       let active = 0;
-      const intervalMs = 10000;
-      const transitionMs = 1200;
+      let animating = false;
+      let timerId = null;
+      const intervalMs = 4500;
+      const transitionMs = reduceMotion ? 0 : 950;
+      const allStateClasses = ["is-active", "is-next", "is-prev", "is-out", "is-out-right"];
+      const normalize = (index) => (index + slides.length) % slides.length;
 
-      window.setInterval(() => {
+      const parkSlides = () => {
+        const prevIndex = normalize(active - 1);
+        slides.forEach((slide, idx) => {
+          slide.classList.remove(...allStateClasses);
+          if (idx === active) {
+            slide.classList.add("is-active");
+          } else if (idx === prevIndex) {
+            slide.classList.add("is-prev");
+          } else {
+            slide.classList.add("is-next");
+          }
+        });
+      };
+
+      const moveTo = (nextIndex, direction) => {
+        if (animating || nextIndex === active) return;
+
         const current = slides[active];
-        const nextIndex = (active + 1) % slides.length;
         const next = slides[nextIndex];
+        animating = true;
 
         current.classList.remove("is-active");
-        current.classList.add("is-out");
-        next.classList.remove("is-next");
+        current.classList.add(direction > 0 ? "is-out" : "is-out-right");
+        next.classList.remove("is-next", "is-prev");
         next.classList.add("is-active");
 
         window.setTimeout(() => {
-          current.classList.remove("is-out");
-          current.classList.add("is-next");
+          active = nextIndex;
+          parkSlides();
+          animating = false;
         }, transitionMs);
+      };
 
-        active = nextIndex;
-      }, intervalMs);
+      const nextSlide = () => {
+        moveTo(normalize(active + 1), 1);
+      };
+
+      const prevSlide = () => {
+        moveTo(normalize(active - 1), -1);
+      };
+
+      const restartTimer = () => {
+        if (timerId) window.clearInterval(timerId);
+        if (reduceMotion) return;
+        timerId = window.setInterval(() => {
+          nextSlide();
+        }, intervalMs);
+      };
+
+      parkSlides();
+      restartTimer();
+
+      if (nextBtn) {
+        nextBtn.addEventListener("click", () => {
+          nextSlide();
+          restartTimer();
+        });
+      }
+
+      let touchStartX = null;
+      hero.addEventListener("touchstart", (event) => {
+        if (!event.touches || event.touches.length !== 1) return;
+        touchStartX = event.touches[0].clientX;
+      }, { passive: true });
+
+      hero.addEventListener("touchend", (event) => {
+        if (touchStartX === null || !event.changedTouches || !event.changedTouches.length) return;
+        const diffX = event.changedTouches[0].clientX - touchStartX;
+        touchStartX = null;
+        if (Math.abs(diffX) < 40) return;
+        if (diffX > 0) {
+          prevSlide();
+        } else {
+          nextSlide();
+        }
+        restartTimer();
+      }, { passive: true });
     })();
 
     (() => {
@@ -2819,7 +3157,7 @@
             "비행 데이터 계측과 점화 제어를 담당하는 에비오닉스 보드입니다. 전원 안정화, 센서 인터페이스, 릴레이 제어 모듈을 통합해 발사 시퀀스를 안정적으로 수행합니다.",
           techFlashBody:
             "현장 점화와 계측을 위한 통합 콘솔로, 시스템 상태 확인과 실시간 데이터 모니터링을 제공합니다. 안정성을 우선한 작업 흐름으로 점화 준비부터 기록 관리까지 하나의 화면에서 제어합니다.",
-          techFlashCta: "flash 프로그램 사용해보기",
+          techFlashCta: "Go to FLASH",
           techRecoveryBody:
             "비행 종료 후 안전한 회수를 위해 낙하산 사출 모듈을 설계했습니다. 분리부 하우징과 가이드 구조를 단순화해 신뢰성을 높이고, 현장 점검과 조립이 쉬운 구조로 구성했습니다.",
           techAirframeBody:
@@ -2886,7 +3224,7 @@
             "This avionics board handles flight data acquisition and ignition control. It integrates power regulation, sensor interfaces, and relay control modules to execute the launch sequence reliably.",
           techFlashBody:
             "An integrated console for field ignition and measurement, providing system status checks and real-time data monitoring. With safety-first workflows, it controls everything from ignition prep to logging in a single screen.",
-          techFlashCta: "flash 프로그램 사용해보기",
+          techFlashCta: "Go to FLASH",
           techRecoveryBody:
             "We designed a parachute ejection module for safe recovery after flight. By simplifying the separation housing and guide structure, we improved reliability and made on-site inspection and assembly easier.",
           techAirframeBody:
@@ -3035,6 +3373,8 @@
     (() => {
       const track = document.querySelector(".tech-scroll-track");
       const stack = document.querySelector(".tech-stack");
+      const airframeVisual = document.querySelector(".tech-subsection-airframe .tech-visual");
+      const airframeCrossfade = document.querySelector(".airframe-crossfade");
       if (!track || !stack) return;
 
       const items = Array.from(stack.querySelectorAll(".tech-stack-item"));
@@ -3042,6 +3382,7 @@
 
       let current = -1;
       let rafId = null;
+      let airframeManualUntil = 0;
 
       const render = (index) => {
         current = index;
@@ -3065,6 +3406,16 @@
         rafId = null;
         if (window.matchMedia("(max-width: 900px)").matches) {
           if (current !== 0) render(0);
+          if (airframeVisual) {
+            const rect = airframeVisual.getBoundingClientRect();
+            const vh = window.innerHeight || document.documentElement.clientHeight || 1;
+            const start = vh * 0.88;
+            const end = vh * 0.34;
+            const blendMobile = Math.min(1, Math.max(0, (start - rect.top) / Math.max(1, start - end)));
+            if (Date.now() >= airframeManualUntil) {
+              airframeVisual.style.setProperty("--airframe-blend", blendMobile.toFixed(3));
+            }
+          }
           return;
         }
 
@@ -3078,6 +3429,16 @@
         const progress = Math.min(1, Math.max(0, -rect.top / maxScroll));
         const nextIndex = Math.min(items.length - 1, Math.floor(progress * items.length));
         if (nextIndex !== current) render(nextIndex);
+
+        if (airframeVisual) {
+          // Blend in the final phase of tech scroll so airframe section morphs naturally.
+          const blendStart = 0.72;
+          const blendEnd = 0.96;
+          const blendDesktop = Math.min(1, Math.max(0, (progress - blendStart) / (blendEnd - blendStart)));
+          if (Date.now() >= airframeManualUntil) {
+            airframeVisual.style.setProperty("--airframe-blend", blendDesktop.toFixed(3));
+          }
+        }
       };
 
       const requestUpdate = () => {
@@ -3087,6 +3448,26 @@
 
       window.addEventListener("scroll", requestUpdate, { passive: true });
       window.addEventListener("resize", requestUpdate);
+
+      if (airframeVisual && airframeCrossfade) {
+        const toggleAirframeBlend = () => {
+          const currentBlend = Number.parseFloat(
+            getComputedStyle(airframeVisual).getPropertyValue("--airframe-blend")
+          ) || 0;
+          const nextBlend = currentBlend >= 0.5 ? 0 : 1;
+          airframeVisual.style.setProperty("--airframe-blend", String(nextBlend));
+          // Keep manual state briefly before returning to scroll-driven blend.
+          airframeManualUntil = Date.now() + 2200;
+        };
+
+        airframeCrossfade.addEventListener("click", toggleAirframeBlend);
+        airframeCrossfade.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            toggleAirframeBlend();
+          }
+        });
+      }
 
       requestUpdate();
     })();
@@ -3112,6 +3493,7 @@
 
       items.forEach((item) => observer.observe(item));
     })();
+
   </script>
 </body>
 </html>
