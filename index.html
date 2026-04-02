@@ -86,6 +86,28 @@
       line-height: 1.7;
     }
 
+    .partner-invite-link {
+      justify-self: start;
+      margin-top: 4px;
+      color: rgba(225, 235, 247, 0.92);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255, 120, 78, 0.46);
+      font-size: 14px;
+      line-height: 1.7;
+      letter-spacing: 0.01em;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .partner-invite-link:hover {
+      color: #ffffff;
+      border-color: rgba(255, 120, 78, 0.88);
+    }
+
+    .partner-invite-link:focus-visible {
+      outline: 2px solid rgba(255, 120, 78, 0.9);
+      outline-offset: 4px;
+    }
+
     .noise {
       position: fixed;
       inset: 0;
@@ -96,6 +118,14 @@
       opacity: 0.08;
       pointer-events: none;
       mix-blend-mode: screen;
+    }
+
+    /* Casual deterrence only: does not fully prevent extraction. */
+    img, canvas, video {
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-user-drag: none;
+      -webkit-touch-callout: none;
     }
 
     header {
@@ -298,7 +328,7 @@
     .hero-slide-a {
       background-image:
         linear-gradient(90deg, rgba(7, 9, 12, 0.9) 0%, rgba(7, 9, 12, 0.55) 45%, rgba(7, 9, 12, 0.15) 70%),
-        url("img/hero_launch2.png");
+        url("img/altis_bg.png");
     }
 
     .hero-slide-b {
@@ -430,6 +460,7 @@
     .tech {
       position: relative;
     }
+
 
     .tech-layout {
       display: grid;
@@ -938,7 +969,7 @@
     }
 
     .tech-subsection-airframe .tech-visual {
-      width: min(100%, 560px);
+      width: min(100%, 860px);
       margin: 0 auto;
       padding: 0;
       border: 0;
@@ -947,71 +978,35 @@
       box-shadow: none;
       position: relative;
       isolation: isolate;
-      overflow: hidden;
-      --airframe-blend: 0;
+      overflow: visible;
     }
 
-    .tech-subsection-airframe .tech-visual::before {
-      content: none;
-    }
-
+    .tech-subsection-airframe .tech-visual::before,
     .tech-subsection-airframe .tech-visual::after {
       content: none;
     }
 
     .tech-subsection-airframe .tech-visual img {
+      display: block;
+      width: 100%;
+      height: auto;
       aspect-ratio: 21 / 6;
       object-fit: contain;
+      object-position: center;
       border: 0;
       border-radius: 0;
       background: transparent;
       position: relative;
       z-index: 1;
+      cursor: pointer;
+      transition: opacity 0.85s ease, filter 0.35s ease;
       filter:
         brightness(1.03)
-        contrast(1.02);
+        contrast(1.02)
+        drop-shadow(0 18px 28px rgba(0, 0, 0, 0.34))
+        drop-shadow(0 0 26px rgba(120, 158, 206, 0.18));
       -webkit-mask-image: none;
       mask-image: none;
-    }
-
-    .airframe-crossfade {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 21 / 6;
-      cursor: pointer;
-    }
-
-    .airframe-image {
-      position: absolute;
-      inset: 0;
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      transform-origin: center center;
-      transition: opacity 0.3s ease-out, transform 0.3s ease-out, filter 0.3s ease-out;
-      will-change: opacity, transform, filter;
-    }
-
-    .airframe-crossfade:focus-visible {
-      outline: 2px solid rgba(255, 120, 78, 0.9);
-      outline-offset: 4px;
-    }
-
-    .tech-subsection-airframe .tech-visual .airframe-image-base {
-      z-index: 1;
-      opacity: calc(1 - var(--airframe-blend));
-      transform: scale(calc(1 + (var(--airframe-blend) * 0.018)));
-      filter: brightness(calc(1 - (var(--airframe-blend) * 0.12)));
-    }
-
-    .tech-subsection-airframe .tech-visual .airframe-image-overlay {
-      z-index: 2;
-      opacity: var(--airframe-blend);
-      transform: scale(calc(1.012 - (var(--airframe-blend) * 0.012)));
-      filter: brightness(calc(0.98 + (var(--airframe-blend) * 0.2))) contrast(calc(1 + (var(--airframe-blend) * 0.22)));
-      mix-blend-mode: screen;
-      pointer-events: none;
     }
 
     .tech-subsection-airframe .tech-details {
@@ -1079,6 +1074,7 @@
         position: relative;
         height: auto;
       }
+
 
       .tech-slides {
         transform: none !important;
@@ -2082,7 +2078,7 @@
         margin-top: 12px;
       }
       .site-footer-copy {
-        text-align: left;
+        text-align: center;
       }
       .gallery-hint {
         display: inline-block;
@@ -2254,6 +2250,7 @@
         <a href="#media" data-i18n="navMedia">Media</a>
         <a href="partners.html" data-i18n="navPartners">Partners</a>
         <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">Instagram</a>
+        <a class="nav-instagram-link" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener">YouTube</a>
       </nav>
       <div class="nav-actions">
         <button class="nav-cta menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
@@ -2261,6 +2258,7 @@
           <span class="lang-option lang-kr">KR</span> / <span class="lang-option lang-en">EN</span>
         </button>
         <a class="nav-cta instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">Instagram</a>
+        <a class="nav-cta instagram-link" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener">YouTube</a>
       </div>
     </div>
   </header>
@@ -2426,10 +2424,7 @@
 
       <div class="tech-subsection left tech-subsection-airframe tech-stack-item" style="--delay: 240ms;">
         <figure class="tech-visual">
-          <div class="airframe-crossfade" role="button" tabindex="0" aria-label="Toggle airframe view">
-            <img class="airframe-image airframe-image-base" src="img/altis_3dimg.png?v=1" alt="ALTIS 동체 외형 렌더링" loading="eager" fetchpriority="high" decoding="async" />
-            <img class="airframe-image airframe-image-overlay" src="img/altis_struc.png?v=1" alt="ALTIS 동체 구조 설계 도면" loading="eager" fetchpriority="high" decoding="async" />
-          </div>
+          <img id="airframe-toggle-image" src="img/altis_3dimg.png" alt="ALTIS 동체 외형 렌더링" loading="lazy" />
         </figure>
         <div class="tech-details">
           <span class="tech-kicker">Airframe</span>
@@ -2566,6 +2561,7 @@
   <section class="section" id="partner">
     <div class="section-head">
       <h2 data-i18n="partnerTitle">Partners</h2>
+      <a class="partner-invite-link" href="partners.html">우리의 다음 발사를 함께 만들고 싶으신가요? 파트너로 참여해 주세요.</a>
     </div>
     <div class="container">
       <div class="partner-logos reveal-slide" style="--delay: 0ms;" aria-label="Partner logos">
@@ -2590,7 +2586,7 @@
   <footer class="site-footer">
     <div class="site-footer-inner">
       <div class="site-footer-divider"></div>
-      <p class="site-footer-copy">© ALTIS. All rights reserved.</p>
+      <p class="site-footer-copy">© 2026 ALTIS. All rights reserved.</p>
       <div class="site-footer-grid">
         <div class="site-footer-col site-footer-contact">
           <p>Email: ybb1833@gnu.ac.kr</p>
@@ -3373,8 +3369,6 @@
     (() => {
       const track = document.querySelector(".tech-scroll-track");
       const stack = document.querySelector(".tech-stack");
-      const airframeVisual = document.querySelector(".tech-subsection-airframe .tech-visual");
-      const airframeCrossfade = document.querySelector(".airframe-crossfade");
       if (!track || !stack) return;
 
       const items = Array.from(stack.querySelectorAll(".tech-stack-item"));
@@ -3382,7 +3376,6 @@
 
       let current = -1;
       let rafId = null;
-      let airframeManualUntil = 0;
 
       const render = (index) => {
         current = index;
@@ -3406,16 +3399,6 @@
         rafId = null;
         if (window.matchMedia("(max-width: 900px)").matches) {
           if (current !== 0) render(0);
-          if (airframeVisual) {
-            const rect = airframeVisual.getBoundingClientRect();
-            const vh = window.innerHeight || document.documentElement.clientHeight || 1;
-            const start = vh * 0.88;
-            const end = vh * 0.34;
-            const blendMobile = Math.min(1, Math.max(0, (start - rect.top) / Math.max(1, start - end)));
-            if (Date.now() >= airframeManualUntil) {
-              airframeVisual.style.setProperty("--airframe-blend", blendMobile.toFixed(3));
-            }
-          }
           return;
         }
 
@@ -3429,16 +3412,6 @@
         const progress = Math.min(1, Math.max(0, -rect.top / maxScroll));
         const nextIndex = Math.min(items.length - 1, Math.floor(progress * items.length));
         if (nextIndex !== current) render(nextIndex);
-
-        if (airframeVisual) {
-          // Blend in the final phase of tech scroll so airframe section morphs naturally.
-          const blendStart = 0.72;
-          const blendEnd = 0.96;
-          const blendDesktop = Math.min(1, Math.max(0, (progress - blendStart) / (blendEnd - blendStart)));
-          if (Date.now() >= airframeManualUntil) {
-            airframeVisual.style.setProperty("--airframe-blend", blendDesktop.toFixed(3));
-          }
-        }
       };
 
       const requestUpdate = () => {
@@ -3448,26 +3421,6 @@
 
       window.addEventListener("scroll", requestUpdate, { passive: true });
       window.addEventListener("resize", requestUpdate);
-
-      if (airframeVisual && airframeCrossfade) {
-        const toggleAirframeBlend = () => {
-          const currentBlend = Number.parseFloat(
-            getComputedStyle(airframeVisual).getPropertyValue("--airframe-blend")
-          ) || 0;
-          const nextBlend = currentBlend >= 0.5 ? 0 : 1;
-          airframeVisual.style.setProperty("--airframe-blend", String(nextBlend));
-          // Keep manual state briefly before returning to scroll-driven blend.
-          airframeManualUntil = Date.now() + 2200;
-        };
-
-        airframeCrossfade.addEventListener("click", toggleAirframeBlend);
-        airframeCrossfade.addEventListener("keydown", (event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            toggleAirframeBlend();
-          }
-        });
-      }
 
       requestUpdate();
     })();
@@ -3492,6 +3445,93 @@
       });
 
       items.forEach((item) => observer.observe(item));
+    })();
+
+    (() => {
+      const airframeImage = document.getElementById("airframe-toggle-image");
+      if (!airframeImage) return;
+      const airframeVisual = airframeImage.closest(".tech-visual");
+      if (!airframeVisual) return;
+
+      let changing = false;
+      let currentSrc = airframeImage.getAttribute("src") || "img/altis_3dimg.png";
+
+      const setAirframeImage = (nextSrc, nextAlt) => {
+        if (changing || currentSrc === nextSrc) return;
+        changing = true;
+        airframeImage.style.opacity = "0";
+
+        window.setTimeout(() => {
+          airframeImage.onload = () => {
+            airframeImage.style.opacity = "1";
+            changing = false;
+            airframeImage.onload = null;
+          };
+          airframeImage.src = nextSrc;
+          airframeImage.alt = nextAlt;
+          currentSrc = nextSrc;
+        }, 260);
+      };
+
+      airframeImage.addEventListener("click", () => {
+        const is3d = currentSrc.includes("altis_3dimg.png");
+        setAirframeImage(
+          is3d ? "img/altis_struc.png" : "img/altis_3dimg.png",
+          is3d ? "ALTIS 동체 구조 설계 도면" : "ALTIS 동체 외형 렌더링"
+        );
+      });
+
+      let rafId = null;
+      const updateByScroll = () => {
+        rafId = null;
+        const rect = airframeVisual.getBoundingClientRect();
+        const vh = window.innerHeight || document.documentElement.clientHeight || 1;
+
+        // 가까워질수록 3D 이미지로 전환 (히스테리시스로 깜빡임 방지)
+        const start = vh * 0.92;
+        const end = vh * 0.38;
+        const proximity = Math.min(1, Math.max(0, (start - rect.top) / Math.max(1, start - end)));
+
+        if (proximity >= 0.8) {
+          setAirframeImage("img/altis_struc.png", "ALTIS 동체 구조 설계 도면");
+        } else if (proximity <= 0.22) {
+          setAirframeImage("img/altis_3dimg.png", "ALTIS 동체 외형 렌더링");
+        }
+      };
+
+      const requestUpdate = () => {
+        if (rafId !== null) return;
+        rafId = window.requestAnimationFrame(updateByScroll);
+      };
+
+      window.addEventListener("scroll", requestUpdate, { passive: true });
+      window.addEventListener("resize", requestUpdate);
+      requestUpdate();
+    })();
+
+    (() => {
+      // Client-side blocking for casual users (not foolproof).
+      document.addEventListener("contextmenu", (event) => {
+        const target = event.target;
+        if (target instanceof HTMLElement && target.closest("img, video, canvas")) {
+          event.preventDefault();
+        }
+      });
+
+      document.addEventListener("dragstart", (event) => {
+        const target = event.target;
+        if (target instanceof HTMLElement && target.closest("img, video, canvas")) {
+          event.preventDefault();
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        const key = event.key.toLowerCase();
+        const isMeta = event.ctrlKey || event.metaKey;
+        if ((isMeta && (key === "s" || key === "p" || key === "u")) || key === "printscreen") {
+          event.preventDefault();
+        }
+      });
     })();
 
   </script>
