@@ -3,7 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ALTIS // Partners</title>
+  <title>ALTIS</title>
+  <link rel="icon" href="img/altis_logo.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Rajdhani:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  />
   <style>
     :root {
       --ink: #0b0d0f;
@@ -14,14 +21,16 @@
       --ember: #ff3b1f;
       --glow: #ff784e;
       --panel: rgba(17, 20, 24, 0.85);
-      --font-sans: "Pretendard", "SUIT", "Noto Sans KR", "Apple SD Gothic Neo",
+      --font-sans: "Noto Sans KR", "Pretendard", "SUIT", "Apple SD Gothic Neo",
         "Malgun Gothic", "NanumSquare", "Nanum Gothic", sans-serif;
-      --font-display: "Space Grotesk", "DIN Condensed", "Oswald",
-        var(--font-sans);
+      --font-display: "Rajdhani", var(--font-sans);
     }
 
     * { box-sizing: border-box; }
-    html, body { height: 100%; }
+    html, body {
+      height: 100%;
+      scroll-behavior: smooth;
+    }
     body {
       margin: 0;
       font-family: var(--font-sans);
@@ -50,7 +59,7 @@
     .container {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 0 24px;
+      padding: 0 clamp(20px, 2.2vw, 28px);
     }
 
     header {
@@ -113,11 +122,19 @@
       text-decoration: none;
       color: var(--cloud);
       margin-right: 18px;
+      padding: 3px 0;
+      border-bottom: 1px solid transparent;
       font-size: 12px;
       letter-spacing: 0.2em;
+      transition: color 0.2s ease, border-color 0.2s ease;
     }
 
     nav a:last-child { margin-right: 0; }
+
+    nav a:hover {
+      color: #ffffff;
+      border-bottom-color: rgba(255, 120, 78, 0.62);
+    }
 
     .nav-cta {
       padding: 10px 18px;
@@ -127,6 +144,14 @@
       font-size: 11px;
       letter-spacing: 0.3em;
       text-decoration: none;
+      transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      border-color: var(--glow);
+      color: var(--glow);
+      background: rgba(255, 120, 78, 0.1);
     }
 
     .hero {
@@ -141,7 +166,7 @@
 
     .hero p {
       margin: 12px 0 0;
-      color: var(--haze);
+      color: rgba(214, 224, 238, 0.72);
       font-size: 15px;
       line-height: 1.7;
       max-width: 70ch;
@@ -156,6 +181,7 @@
       box-shadow: 0 22px 50px rgba(4, 6, 10, 0.55);
       display: grid;
       gap: 16px;
+      transition: transform 0.22s ease, border-color 0.22s ease;
     }
 
     .panel h2 {
@@ -207,11 +233,30 @@
       margin-top: 8px;
       padding: 12px 22px;
       border: 1px solid var(--cloud);
+      border-radius: 999px;
+      background: rgba(9, 11, 14, 0.34);
       color: var(--cloud);
       text-decoration: none;
       text-transform: uppercase;
       font-size: 11px;
       letter-spacing: 0.2em;
+      font-weight: 600;
+      transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(233, 238, 245, 0.82);
+      color: #ffffff;
+      background: rgba(18, 22, 28, 0.75);
+      box-shadow: 0 10px 24px rgba(4, 6, 10, 0.35);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .panel:hover {
+        transform: translateY(-2px);
+        border-color: rgba(255, 255, 255, 0.2);
+      }
     }
 
     footer {
@@ -240,15 +285,14 @@
         <a href="index.html#about">About</a>
         <a href="teams.html">Teams</a>
         <a href="index.html#tech">Tech</a>
-        <a href="partners.html">Partners</a>
+        <a href="sponsers.html">Partners</a>
       </nav>
-      <a class="nav-cta" href="index.html">Go to Home</a>
+      <a class="nav-cta" href="dashboard.html">Go to FLASH</a>
     </div>
   </header>
 
   <main class="container">
     <section class="hero">
-      <h1>Partners</h1>
       <div class="panel">
         <h2>We Welcome Your Support</h2>
         <p>
@@ -257,7 +301,7 @@
         </p>
         <div class="contact">
           <strong>Contact</strong>
-          <span>ybb1833@naver.com</span>
+          <span>email : haechan031217@gnu.ac.kr | instagram : @ altis_official</span>
         </div>
         <div class="tags">
           <span>Sponsorship</span>
