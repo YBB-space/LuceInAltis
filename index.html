@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Luce In - ALTIS</title>
-  <link rel="icon" href="img/altis_logo2.svg" type="image/svg+xml" />
+  <title>Luce In ALTIS</title>
+  <link rel="icon" href="img/altis_logo2.png" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Rajdhani:wght@500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700;800&family=Rajdhani:wght@500;600;700&display=swap"
     rel="stylesheet"
   />
   <style>
@@ -172,7 +172,7 @@
     }
 
     .brand-logo {
-      height: 28px;
+      height: 40px;
       width: auto;
       display: block;
       filter: brightness(0) invert(1);
@@ -1812,26 +1812,63 @@
     }
 
     .partner-logos {
-      margin-top: 24px;
+      --partner-columns: 3;
+      margin-top: 28px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(var(--partner-columns), minmax(0, 1fr));
+      align-items: center;
+      gap: 20px clamp(20px, 3vw, 36px);
+      padding: 12px 10px;
+      position: relative;
+    }
+
+    .partner-logos.is-two-logos {
+      --partner-columns: 2;
+      max-width: 880px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .partner-logos::before,
+    .partner-logos::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      pointer-events: none;
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0),
+        rgba(144, 169, 209, 0.32),
+        rgba(255, 255, 255, 0)
+      );
+    }
+
+    .partner-logos::before {
+      top: 0;
+    }
+
+    .partner-logos::after {
+      bottom: 0;
+      opacity: 0.78;
     }
 
     .partner-logo {
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 18px;
-      background: linear-gradient(130deg, rgba(34, 38, 44, 0.5), rgba(14, 16, 20, 0.9));
+      border: none;
+      border-radius: 0;
+      padding: 10px 6px;
+      background: transparent;
       display: flex;
       align-items: center;
       gap: 16px;
       justify-content: center;
-      min-height: 120px;
-      box-shadow: 0 14px 34px rgba(3, 6, 12, 0.35);
+      width: 100%;
+      min-height: 100px;
+      box-shadow: none;
       position: relative;
-      overflow: hidden;
-      transition: transform 0.3s ease, border-color 0.3s ease;
+      overflow: visible;
+      transition: transform 0.25s ease;
       text-decoration: none;
     }
 
@@ -1852,6 +1889,18 @@
 
     .partner-logo img.logo-jlcpcb {
       max-height: 94px;
+    }
+
+    .partner-logo img.logo-innospace {
+      max-height: 124px;
+    }
+
+    .partner-logo-featured {
+      transform: translateY(-2px);
+    }
+
+    .partner-logo-featured img {
+      filter: grayscale(0.25) brightness(0.95);
     }
 
     .partner-desc {
@@ -1932,27 +1981,20 @@
     }
 
     .partner-logo::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(200px 120px at 50% 0%, rgba(255, 120, 78, 0.2), transparent 70%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
+      content: none;
     }
 
     .partner-logo:hover {
+      transform: translateY(-2px);
+    }
+
+    .partner-logo-featured:hover {
       transform: translateY(-4px);
-      border-color: rgba(255, 120, 78, 0.4);
     }
 
     .partner-logo:hover img {
       filter: grayscale(0) brightness(1);
       transform: none;
-    }
-
-    .partner-logo:hover::after {
-      opacity: 1;
     }
 
     .partner-logo:hover .partner-desc {
@@ -1983,8 +2025,10 @@
 
     .site-footer-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 0;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      column-gap: 20px;
+      row-gap: 0;
       margin-top: 18px;
     }
 
@@ -2017,19 +2061,21 @@
 
     .site-footer-contact {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 8px 16px;
-      text-align: center;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 6px;
+      text-align: left;
     }
 
     .site-footer-contact p {
       margin: 0;
-      white-space: nowrap;
-    }
-
-    .site-footer-contact p:last-child {
+      font-family: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      font-size: clamp(13px, 0.95vw, 16px);
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: -0.01em;
+      -webkit-font-smoothing: antialiased;
       white-space: normal;
     }
 
@@ -2039,12 +2085,17 @@
     }
 
     .site-footer-copy {
-      margin: 20px 0 0;
-      text-align: center;
+      margin: 0;
+      text-align: right;
+      justify-self: end;
+      align-self: start;
+      font-family: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
       color: #687892;
       font-size: clamp(12px, 0.85vw, 15px);
+      font-weight: 400;
       line-height: 1.5;
       letter-spacing: -0.01em;
+      -webkit-font-smoothing: antialiased;
     }
 
     @media (max-width: 900px) {
@@ -2069,7 +2120,8 @@
       }
       .site-footer-grid {
         grid-template-columns: 1fr;
-        gap: 30px;
+        row-gap: 10px;
+        justify-items: start;
       }
       .site-footer-col h4 {
         font-size: 17px;
@@ -2078,7 +2130,9 @@
         margin-top: 12px;
       }
       .site-footer-copy {
-        text-align: center;
+        text-align: left !important;
+        justify-self: start !important;
+        width: 100%;
       }
       .gallery-hint {
         display: inline-block;
@@ -2162,6 +2216,13 @@
       }
       .partner-logos {
         grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 8px 0;
+      }
+
+      .partner-logos::before,
+      .partner-logos::after {
+        opacity: 0.5;
       }
 
       .partner-intro {
@@ -2217,6 +2278,16 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
+        min-height: 84px;
+        padding: 8px 0;
+      }
+
+      .partner-logo-featured {
+        transform: none;
+      }
+
+      .partner-logo img.logo-innospace {
+        max-height: 108px;
       }
 
       .partner-logo img {
@@ -2239,8 +2310,7 @@
   <header>
     <div class="nav">
       <div class="brand">
-        <img class="brand-logo" src="img/altis_logo2.svg" alt="ALTIS logo" />
-        <span class="brand-name"><small>luce In</small>ALTIS</span>
+        <img class="brand-logo" src="img/altis_logo2.png" alt="ALTIS logo" />
       </div>
       <nav id="primary-nav">
         <a href="#home" data-i18n="navHome">Home</a>
@@ -2248,7 +2318,7 @@
         <a href="#team" data-i18n="navTeams">Teams</a>
         <a href="#tech" data-i18n="navTech">Tech</a>
         <a href="#media" data-i18n="navMedia">Media</a>
-        <a href="partners.html" data-i18n="navPartners">Partners</a>
+        <a href="sponsors.html" data-i18n="navsponsors">sponsors</a>
         <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">Instagram</a>
         <a class="nav-instagram-link" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener">YouTube</a>
       </nav>
@@ -2273,7 +2343,7 @@
         <p class="hero-tagline" data-i18n="heroTagline">LUCE IN ALTIS</p>
         <h1 data-i18n-html="heroTitle">우주를 향하는<br />우리의 꿈</h1>
         <div class="hero-actions">
-          <a class="btn primary" href="partners.html" data-i18n="heroCtaSupport">Support for ALTIS</a>
+          <a class="btn primary" href="sponsors.html" data-i18n="heroCtaSupport">Support for ALTIS</a>
           <a class="btn" href="#about" data-i18n="heroCtaAbout">About ALTIS</a>
         </div>
       </div>
@@ -2560,8 +2630,8 @@
 
   <section class="section" id="partner">
     <div class="section-head">
-      <h2 data-i18n="partnerTitle">Partners</h2>
-      <a class="partner-invite-link" href="partners.html">우리의 다음 발사를 함께 만들고 싶으신가요? 파트너로 참여해 주세요.</a>
+      <h2 data-i18n="partnerTitle">sponsors</h2>
+      <a class="partner-invite-link" href="sponsors.html">우리의 다음 발사를 함께 만들고 싶으신가요? 파트너로 참여해 주세요.</a>
     </div>
     <div class="container">
       <div class="partner-logos reveal-slide" style="--delay: 0ms;" aria-label="Partner logos">
@@ -2570,6 +2640,13 @@
           <div class="partner-desc">
             <h5>JLCPCB</h5>
             <p>PCB / PCBA Manufacturing</p>
+          </div>
+        </a>
+        <a id="partner-logo-innospace" class="partner-logo partner-logo-featured" href="https://www.innospc.com" target="_blank" rel="noopener noreferrer" aria-label="INNOSPACE">
+          <img class="logo-innospace" src="img/innospace_logo.png" alt="INNOSPACE logo" loading="lazy" />
+          <div class="partner-desc">
+            <h5>INNOSPACE</h5>
+            <p>Launch Service Partner</p>
           </div>
         </a>
         <a class="partner-logo" href="https://easyeda.com/" target="_blank" rel="noopener noreferrer" aria-label="EasyEDA">
@@ -2586,13 +2663,12 @@
   <footer class="site-footer">
     <div class="site-footer-inner">
       <div class="site-footer-divider"></div>
-      <p class="site-footer-copy">© 2026 ALTIS. All rights reserved.</p>
       <div class="site-footer-grid">
         <div class="site-footer-col site-footer-contact">
-          <p>Email: ybb1833@gnu.ac.kr</p>
-          <p>Instagram: @altis_official</p>
-          <p>Address: 경상남도 진주시 진주대로 501 경상국립대학교 407동 항공우주산학협력관</p>
+          <p>Address: 진주대로 501 | Founded Date: March 2021</p>
+          <p>CONTACT | email : haechan031217@gnu.ac.kr / instargram : @ altis_official</p>
         </div>
+        <p class="site-footer-copy">© 2021-2026 ALTIS. All rights reserved.</p>
       </div>
     </div>
   </footer>
@@ -2610,6 +2686,16 @@
     import { OrbitControls } from "three/addons/controls/OrbitControls.js";
     import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
     import { ThreeMFLoader } from "three/addons/loaders/3MFLoader.js";
+
+    const SHOW_INNOSPACE_LOGO = 0; // INNOSPACE_LOGO 0: hide, 1: show
+    const innospacePartnerLogo = document.getElementById("partner-logo-innospace");
+    const partnerLogos = document.querySelector(".partner-logos");
+    if (innospacePartnerLogo) {
+      innospacePartnerLogo.style.display = SHOW_INNOSPACE_LOGO === 1 ? "" : "none";
+    }
+    if (partnerLogos) {
+      partnerLogos.classList.toggle("is-two-logos", SHOW_INNOSPACE_LOGO !== 1);
+    }
 
     const stage = document.getElementById("motor-3d-stage");
     if (!stage) {
@@ -3128,7 +3214,7 @@
           navTeams: "Teams",
           navTech: "Tech",
           navMedia: "Media",
-          navPartners: "Partners",
+          navsponsors: "sponsors",
           langToggle: "<span class=\"lang-option lang-kr\">KR</span> / <span class=\"lang-option lang-en\">EN</span>",
           heroTitle: "Our Dream<br />Toward the Cosmos",
           heroTagline: "LUCE IN ALTIS",
@@ -3184,7 +3270,7 @@
           mediaVideo2Title: "로켓도 직접 만드는 학과가 있다?!│우문현답 EP.1",
           mediaVideo2Body: "#우주항공청 #KASA #경상대 #항공우주 ",
           mediaWatch: "유튜브에서 보기",
-          partnerTitle: "Partners",
+          partnerTitle: "sponsors",
           partnerEmptyTitle: "아직 스폰서가 없습니다",
           partnerEmptyBody: "ALTIS는 여러분의 관심을 매우 환영합니다.",
           partnerEmptyLink: "자세히 보기",
@@ -3195,7 +3281,7 @@
           navTeams: "Teams",
           navTech: "Tech",
           navMedia: "Media",
-          navPartners: "Partners",
+          navsponsors: "sponsors",
           langToggle: "<span class=\"lang-option lang-en\">EN</span> / <span class=\"lang-option lang-kr\">KR</span>",
           heroTitle: "Our Dream<br />Toward the Cosmos",
           heroTagline: "LUCE IN ALTIS",
@@ -3251,7 +3337,7 @@
           mediaVideo2Title: "ALTIS Feature Video 2",
           mediaVideo2Body: "An interview-style highlight with team introduction and project scenes.",
           mediaWatch: "Watch on YouTube",
-          partnerTitle: "Partners",
+          partnerTitle: "sponsors",
           partnerEmptyTitle: "No sponsors yet",
           partnerEmptyBody: "ALTIS warmly welcomes your interest and support.",
           partnerEmptyLink: "Learn more",
