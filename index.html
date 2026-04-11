@@ -2568,7 +2568,7 @@
         <div class="about-video reveal-slide" style="--delay: 0ms;">
           <iframe
             id="altisVideo"
-            src="https://www.youtube-nocookie.com/embed/oeK6ZHVvSsA?autoplay=1&mute=1&controls=0&loop=1&playlist=oeK6ZHVvSsA&modestbranding=1&rel=0&playsinline=1&enablejsapi=1"
+            src="https://www.youtube-nocookie.com/embed/oeK6ZHVvSsA?autoplay=1&mute=1&controls=0&loop=1&playlist=oeK6ZHVvSsA&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&vq=hd1080"
             title="ALTIS landing video"
             loading="eager"
             referrerpolicy="strict-origin-when-cross-origin"
@@ -3625,9 +3625,19 @@
           );
         };
 
+        const applyHighQuality = () => {
+          ["hd1080", "hd720", "large"].forEach((quality) => {
+            postPlayerCommand("setPlaybackQualityRange", [quality]);
+            postPlayerCommand("setPlaybackQuality", [quality]);
+          });
+        };
+
         const initIframePlayer = () => {
           postPlayerCommand("mute");
+          applyHighQuality();
           postPlayerCommand("playVideo");
+          window.setTimeout(applyHighQuality, 600);
+          window.setTimeout(applyHighQuality, 1400);
           syncLabel(true);
         };
 
@@ -3642,6 +3652,8 @@
             postPlayerCommand("unMute");
             postPlayerCommand("setVolume", [100]);
           }
+          postPlayerCommand("playVideo");
+          applyHighQuality();
           syncLabel(isMuted);
         });
 
