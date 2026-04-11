@@ -581,8 +581,38 @@
 
     .tech {
       position: relative;
+      padding-top: 8px;
     }
 
+    .tech::before {
+      content: none;
+    }
+
+    .tech::after {
+      content: none;
+    }
+
+    .tech-head {
+      gap: 6px;
+      margin-bottom: 0;
+    }
+
+    .tech-head-kicker {
+      color: var(--haze);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .tech-head h2 {
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .tech-head p {
+      max-width: 64ch;
+      color: var(--haze);
+    }
 
     .tech-layout {
       display: grid;
@@ -593,11 +623,11 @@
 
     .tech-visual {
       margin: 0;
-      border-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: linear-gradient(135deg, rgba(16, 20, 26, 0.95), rgba(10, 12, 16, 0.7));
-      padding: 18px;
-      box-shadow: 0 24px 48px rgba(4, 6, 10, 0.5);
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(12, 15, 20, 0.58);
+      padding: 14px;
+      box-shadow: none;
       display: grid;
       gap: 12px;
     }
@@ -605,7 +635,7 @@
     .tech-visual img {
       width: 100%;
       display: block;
-      border-radius: 12px;
+      border-radius: 10px;
       background: #0b0d10;
     }
 
@@ -632,15 +662,7 @@
     }
 
     .pcb-focus-wrap::before {
-      content: "";
-      position: absolute;
-      inset: 18% 8% 14%;
-      background:
-        radial-gradient(circle at 50% 45%, rgba(255, 120, 78, 0.2) 0%, rgba(255, 120, 78, 0.06) 36%, transparent 72%),
-        radial-gradient(circle at 55% 52%, rgba(79, 168, 255, 0.16) 0%, transparent 68%);
-      filter: blur(12px);
-      z-index: -2;
-      pointer-events: none;
+      content: none;
     }
 
     .pcb-focus-image {
@@ -649,9 +671,7 @@
       background: transparent;
       border: 0;
       border-radius: 0;
-      filter:
-        drop-shadow(0 24px 34px rgba(0, 0, 0, 0.62))
-        drop-shadow(0 0 28px rgba(255, 120, 78, 0.18));
+      filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.42));
     }
 
     /* Fallback for older markup that still uses .tech-visual + altis_pcb.png */
@@ -670,9 +690,7 @@
       width: min(100%, 460px);
       border-radius: 0;
       background: transparent;
-      filter:
-        drop-shadow(0 26px 36px rgba(0, 0, 0, 0.62))
-        drop-shadow(0 0 30px rgba(255, 120, 78, 0.18));
+      filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.42));
     }
 
     .tech-visual:has(img[src*="altis_pcb.png"]) figcaption,
@@ -687,7 +705,7 @@
 
     .tech-kicker {
       font-size: 11px;
-      letter-spacing: 0.32em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--haze);
     }
@@ -703,7 +721,7 @@
       margin: 0;
       color: var(--haze);
       font-size: 14px;
-      line-height: 1.8;
+      line-height: 1.72;
     }
 
     .tech-points {
@@ -743,11 +761,32 @@
       padding: 8px 12px;
       border-radius: 999px;
       border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(14, 17, 22, 0.7);
+      background: rgba(14, 17, 22, 0.58);
       font-size: 11px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--cloud);
+      transition: border-color 0.2s ease;
+    }
+
+    .tech-specs div:hover {
+      border-color: rgba(255, 255, 255, 0.28);
+    }
+
+    .tech-cta {
+      justify-self: start;
+      margin-top: 4px;
+      border-color: rgba(255, 255, 255, 0.28);
+      color: var(--cloud);
+      background: rgba(9, 11, 14, 0.34);
+      box-shadow: none;
+    }
+
+    .tech-cta:hover {
+      border-color: rgba(233, 238, 245, 0.82);
+      color: #ffffff;
+      background: rgba(18, 22, 28, 0.75);
+      transform: none;
     }
 
     .tech-cards {
@@ -788,37 +827,20 @@
       line-height: 1.6;
     }
 
-    .tech-subsection {
-      margin-top: 48px;
-      display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-      gap: 32px;
-      align-items: center;
-    }
-
-    .tech-subsection .tech-details {
-      gap: 14px;
-    }
-
-    .tech-subsection .tech-visual {
-      order: 2;
-    }
-
-    .tech-subsection.left .tech-visual {
-      order: 0;
-    }
-
-    .tech-scroll-track {
-      position: relative;
-      height: clamp(2100px, 320vh, 3200px);
-      margin-top: 24px;
-    }
-
     .tech-stack {
       position: sticky;
       top: clamp(76px, 10vh, 112px);
       height: clamp(700px, 82vh, 920px);
       overflow: hidden;
+      border-radius: 0;
+    }
+
+    .tech-stack::before {
+      content: none;
+    }
+
+    .tech-stack::after {
+      content: none;
     }
 
     .tech-stack .tech-subsection {
@@ -834,12 +856,26 @@
       margin-left: auto;
       margin-right: auto;
       width: min(100%, 1040px);
+      padding: 0;
+      border-radius: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
       opacity: var(--stack-opacity, 0);
       transform: translateY(calc(-50% + var(--stack-shift, 0%))) scale(var(--stack-scale, 1));
       filter: var(--stack-filter, none);
       transition: transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
       pointer-events: none;
       z-index: var(--stack-z, 1);
+      isolation: auto;
+    }
+
+    .tech-stack-item::before {
+      content: none;
+    }
+
+    .tech-stack-item::after {
+      content: none;
     }
 
     .tech-stack-item.is-active {
@@ -881,6 +917,32 @@
       --stack-scale: 0.9;
       --stack-shift: 280%;
       --stack-z: 1;
+    }
+
+    .tech-subsection {
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: 32px;
+      align-items: center;
+    }
+
+    .tech-subsection .tech-details {
+      gap: 14px;
+    }
+
+    .tech-subsection .tech-visual {
+      order: 2;
+    }
+
+    .tech-subsection.left .tech-visual {
+      order: 0;
+    }
+
+    .tech-scroll-track {
+      position: relative;
+      height: clamp(2100px, 320vh, 3200px);
+      margin-top: 20px;
     }
 
     .tech-subsection-avionics {
@@ -1146,39 +1208,23 @@
       justify-content: center;
     }
 
-    .tech {
-      position: relative;
-    }
-
-    .tech-slider {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    .tech-slides {
-      width: 100%;
-      transition: transform 0.6s ease;
-      will-change: transform;
-    }
-
-    .tech-slide {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-    }
-
-    .tech-slide .container {
-      width: 100%;
-    }
-
     @media (max-width: 900px) {
       .menu-toggle {
         display: inline-flex;
       }
+
+      .tech {
+        padding-top: 8px;
+      }
+
+      .tech-head {
+        margin-bottom: 0;
+      }
+
+      .tech-head-kicker {
+        letter-spacing: 0.16em;
+      }
+
       .tech-subsection {
         grid-template-columns: 1fr;
         gap: clamp(20px, 5vw, 34px);
@@ -1196,7 +1242,6 @@
         position: relative;
         height: auto;
       }
-
 
       .tech-slides {
         transform: none !important;
@@ -1268,6 +1313,10 @@
         opacity: 1;
         display: grid;
         pointer-events: auto;
+        padding: 0;
+        border-radius: 0;
+        border: 0;
+        background: transparent;
       }
 
       .tech-stack-item.is-active {
@@ -2510,7 +2559,7 @@
     <div class="container">
       <div class="about-layout">
         <div class="about-video reveal-slide" style="--delay: 0ms;">
-          <video id="altisVideo" src="img/altis_web_vid.mp4" autoplay muted playsinline loop preload="metadata"></video>
+          <video id="altisVideo" src="vid/altis_land_vid.mp4" autoplay muted playsinline loop preload="metadata"></video>
           <button class="mute-btn" type="button" data-target="altisVideo">Muted</button>
         </div>
         <div class="about-hero-grid reveal-slide" style="--delay: 120ms;">
