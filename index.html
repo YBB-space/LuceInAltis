@@ -1494,22 +1494,29 @@
     }
 
     .about-video {
-      border-radius: 18px;
+      border-radius: 10px;
       overflow: hidden;
       border: 1px solid rgba(255, 255, 255, 0.08);
       background: rgba(9, 11, 14, 0.8);
       box-shadow: 0 18px 40px rgba(4, 6, 10, 0.45);
-      max-width: 960px;
+      width: 100%;
+      max-width: 1120px;
+      aspect-ratio: 16 / 9;
       margin: 36px auto 0;
       position: relative;
     }
 
-    .about-video video {
+    .about-video video,
+    .about-video iframe {
       width: 100%;
-      aspect-ratio: 16 / 9;
-      height: auto;
+      height: 100%;
       display: block;
       object-fit: cover;
+      border: 0;
+    }
+
+    .about-video iframe {
+      pointer-events: none;
     }
 
     .about-video video::-webkit-media-controls {
@@ -2559,7 +2566,15 @@
     <div class="container">
       <div class="about-layout">
         <div class="about-video reveal-slide" style="--delay: 0ms;">
-          <video id="altisVideo" src="vid/altis_land_vid.mp4" autoplay muted playsinline loop preload="metadata"></video>
+          <iframe
+            id="altisVideo"
+            src="https://www.youtube-nocookie.com/embed/oeK6ZHVvSsA?autoplay=1&mute=1&controls=0&loop=1&playlist=oeK6ZHVvSsA&modestbranding=1&rel=0&playsinline=1&enablejsapi=1"
+            title="ALTIS landing video"
+            loading="eager"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="autoplay; encrypted-media; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
           <button class="mute-btn" type="button" data-target="altisVideo">Muted</button>
         </div>
         <div class="about-hero-grid reveal-slide" style="--delay: 120ms;">
@@ -3585,8 +3600,8 @@
       const btn = document.querySelector(".mute-btn");
       if (!btn) return;
       const targetId = btn.getAttribute("data-target");
-      const video = document.getElementById(targetId);
-      if (!video) return;
+      const media = document.getElementById(targetId);
+      if (!media) return;
 
       const labelMap = {
         ko: { muted: "음소거", sound: "소리 켜짐" },
@@ -3594,18 +3609,56 @@
       };
 
       const getLang = () => (document.documentElement.lang === "en" ? "en" : "ko");
-      const syncLabel = () => {
+      const syncLabel = (isMuted) => {
         const lang = getLang();
-        btn.textContent = video.muted ? labelMap[lang].muted : labelMap[lang].sound;
+        btn.textContent = isMuted ? labelMap[lang].muted : labelMap[lang].sound;
       };
 
-      btn.addEventListener("click", () => {
-        video.muted = !video.muted;
-        syncLabel();
-      });
+      if (media.tagName === "IFRAME") {
+        let isMuted = true;
+        const iframe = media;
+        const postPlayerCommand = (func, args = []) => {
+          if (!iframe.contentWindow) return;
+          iframe.contentWindow.postMessage(
+            JSON.stringify({ event: "command", func, args }),
+            "*"
+          );
+        };
 
-      document.addEventListener("altis-lang-change", syncLabel);
-      syncLabel();
+        const initIframePlayer = () => {
+          postPlayerCommand("mute");
+          postPlayerCommand("playVideo");
+          syncLabel(true);
+        };
+
+        iframe.addEventListener("load", initIframePlayer);
+        window.setTimeout(initIframePlayer, 260);
+
+        btn.addEventListener("click", () => {
+          isMuted = !isMuted;
+          if (isMuted) {
+            postPlayerCommand("mute");
+          } else {
+            postPlayerCommand("unMute");
+            postPlayerCommand("setVolume", [100]);
+          }
+          syncLabel(isMuted);
+        });
+
+        document.addEventListener("altis-lang-change", () => syncLabel(isMuted));
+        syncLabel(isMuted);
+        return;
+      }
+
+      if (media instanceof HTMLMediaElement) {
+        btn.addEventListener("click", () => {
+          media.muted = !media.muted;
+          syncLabel(media.muted);
+        });
+
+        document.addEventListener("altis-lang-change", () => syncLabel(media.muted));
+        syncLabel(media.muted);
+      }
     })();
 
     (() => {
