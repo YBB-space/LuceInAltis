@@ -346,13 +346,17 @@
 
     .sponsor-hero-video {
       position: absolute;
-      inset: 0;
+      top: 50%;
+      left: 50%;
       z-index: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center right;
+      width: max(100vw, 177.78vh);
+      height: max(56.25vw, 100vh);
+      min-width: 100%;
+      min-height: 100%;
+      transform: translate(-50%, -50%);
       display: block;
+      border: 0;
+      pointer-events: none;
       filter: saturate(0.95) contrast(1.04);
     }
 
@@ -713,7 +717,7 @@
       }
 
       .sponsor-hero-video {
-        object-position: 68% center;
+        transform: translate(-44%, -50%);
       }
 
       .site-footer-inner {
@@ -788,9 +792,15 @@
   <main>
     <section class="hero">
       <div class="sponsor-hero-bg" aria-hidden="true">
-        <video class="sponsor-hero-video" autoplay muted playsinline loop preload="metadata">
-          <source src="vid/sponsors_land_vid.mp4" type="video/mp4" />
-        </video>
+        <iframe
+          class="sponsor-hero-video"
+          src="https://www.youtube-nocookie.com/embed/UE8PCtKHmc8?autoplay=1&mute=1&controls=0&loop=1&playlist=UE8PCtKHmc8&modestbranding=1&rel=0&playsinline=1"
+          title="ALTIS sponsor landing video background"
+          loading="eager"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allow="autoplay; encrypted-media; picture-in-picture; web-share"
+          tabindex="-1"
+        ></iframe>
       </div>
       <div class="hero-inner">
         <div class="support-copy">
