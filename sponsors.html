@@ -794,7 +794,7 @@
       <div class="sponsor-hero-bg" aria-hidden="true">
         <iframe
           class="sponsor-hero-video"
-          src="https://www.youtube-nocookie.com/embed/UE8PCtKHmc8?autoplay=1&mute=1&controls=0&loop=1&playlist=UE8PCtKHmc8&modestbranding=1&rel=0&playsinline=1"
+          src="https://www.youtube-nocookie.com/embed/UE8PCtKHmc8?autoplay=1&mute=1&controls=0&loop=1&playlist=UE8PCtKHmc8&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&vq=hd1080"
           title="ALTIS sponsor landing video background"
           loading="eager"
           referrerpolicy="strict-origin-when-cross-origin"
@@ -890,6 +890,37 @@
       });
 
       apply(document.documentElement.lang === "en" ? "en" : "ko");
+    })();
+
+    (() => {
+      const iframe = document.querySelector(".sponsor-hero-video");
+      if (!(iframe instanceof HTMLIFrameElement)) return;
+
+      const postPlayerCommand = (func, args = []) => {
+        if (!iframe.contentWindow) return;
+        iframe.contentWindow.postMessage(
+          JSON.stringify({ event: "command", func, args }),
+          "*"
+        );
+      };
+
+      const applyHighQuality = () => {
+        ["hd1080", "hd720", "large"].forEach((quality) => {
+          postPlayerCommand("setPlaybackQualityRange", [quality]);
+          postPlayerCommand("setPlaybackQuality", [quality]);
+        });
+      };
+
+      const initHeroVideo = () => {
+        postPlayerCommand("mute");
+        applyHighQuality();
+        postPlayerCommand("playVideo");
+        window.setTimeout(applyHighQuality, 600);
+        window.setTimeout(applyHighQuality, 1400);
+      };
+
+      iframe.addEventListener("load", initHeroVideo);
+      window.setTimeout(initHeroVideo, 320);
     })();
   </script>
 </body>
