@@ -15,7 +15,7 @@ N
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;700&family=Sora:wght@400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500;700&family=Sora:wght@400;500&display=swap"
     rel="stylesheet"
   />
   <style>
@@ -125,6 +125,103 @@ N
       opacity: 0.08;
       pointer-events: none;
       mix-blend-mode: screen;
+    }
+
+    .coming-soon {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      min-height: 100vh;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: #07080a;
+    }
+
+    .coming-soon-video-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .coming-soon-video-bg iframe {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: max(100vw, 177.78vh);
+      height: max(56.25vw, 100vh);
+      min-width: 100%;
+      min-height: 100%;
+      transform: translate(-50%, -50%) scale(1.08);
+      object-fit: cover;
+      filter: blur(8px) brightness(0.52) saturate(0.9);
+      pointer-events: none;
+      border: 0;
+    }
+
+    .coming-soon::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(8, 10, 14, 0.4) 0%, rgba(8, 10, 14, 0.58) 100%),
+        radial-gradient(760px 420px at 14% 12%, rgba(255, 120, 78, 0.2), transparent 66%),
+        radial-gradient(680px 360px at 84% 14%, rgba(106, 164, 255, 0.16), transparent 70%);
+    }
+
+    .coming-soon-card {
+      position: relative;
+      z-index: 2;
+      width: min(760px, 100%);
+      border: 0;
+      background: transparent;
+      backdrop-filter: none;
+      border-radius: 0;
+      padding: clamp(16px, 4vw, 28px);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .coming-soon-title {
+      margin: 0;
+      font-size: clamp(34px, 7vw, 64px);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-shadow: 0 0 24px rgba(255, 120, 78, 0.28);
+    }
+
+    .coming-soon-desc {
+      margin: 16px 0 0;
+      color: rgba(233, 238, 245, 0.88);
+      font-size: 15px;
+      line-height: 1.75;
+      letter-spacing: 0.04em;
+    }
+
+    .coming-soon-logo-bottom {
+      width: clamp(44px, 6vw, 68px);
+      height: auto;
+      display: block;
+      margin: 128px auto 0;
+      filter: brightness(0) invert(1);
+      opacity: 0.95;
+    }
+
+    .coming-soon-logo-caption {
+      margin: 10px 0 0;
+      color: rgba(233, 238, 245, 0.62);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      text-transform: lowercase;
     }
 
     /* Casual deterrence only: does not fully prevent extraction. */
@@ -421,6 +518,17 @@ N
       pointer-events: none;
     }
 
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(900px 460px at 26% 28%, rgba(0, 0, 0, 0.48) 0%, rgba(0, 0, 0, 0.28) 38%, rgba(0, 0, 0, 0) 74%),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.1) 38%, rgba(0, 0, 0, 0) 68%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
     .hero-video-bg {
       position: absolute;
       inset: 0;
@@ -448,10 +556,11 @@ N
       font-size: clamp(36px, 5.2vw, 64px);
       margin: 0 0 16px;
       line-height: 1.04;
-      letter-spacing: -0.02em;
+      letter-spacing: 0.06em;
       max-width: 16ch;
       text-wrap: balance;
       min-height: calc(1.04em * 3);
+      text-shadow: 0 6px 20px rgba(0, 0, 0, 0.42);
     }
 
     .hero h1.is-typing::after {
@@ -473,7 +582,11 @@ N
       font-size: 15px;
       font-weight: 100;
       letter-spacing: 0.12em;
-      text-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      text-shadow: 0 6px 18px rgba(0, 0, 0, 0.42);
+    }
+
+    .hero-tagline-accent {
+      font-weight: 500;
     }
 
     .hero-actions {
@@ -968,43 +1081,80 @@ N
       max-width: 560px;
     }
 
-    .motor-switch-row {
-      margin-top: 14px;
+    .motor-overview-title {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 4.4vw, 56px);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .motor-overview-table {
+      margin-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .motor-overview-row {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(220px, 1fr);
+      align-items: center;
+      gap: 16px;
+      min-height: 54px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: clamp(13px, 0.9vw, 16px);
+      font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      color: rgba(242, 246, 252, 0.92);
+    }
+
+    .motor-overview-row dt {
+      margin: 0;
+    }
+
+    .motor-overview-row dd {
+      margin: 0;
+      justify-self: end;
+      text-align: right;
+      color: rgba(242, 246, 252, 0.76);
+      font-family: "Noto Sans KR", "SUIT", "Pretendard", sans-serif;
+      font-weight: 300;
+    }
+
+    .motor-overview-note {
+      margin: 16px 0 0;
+      font-size: clamp(12px, 0.9vw, 14px);
+      color: rgba(216, 225, 238, 0.74);
+      letter-spacing: -0.01em;
+    }
+
+    .motor-next-row {
+      margin-top: 12px;
       display: flex;
       align-items: center;
       gap: 10px;
-    }
-
-    .motor-switch-label {
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(222, 233, 247, 0.74);
+      flex-wrap: wrap;
     }
 
     .motor-switch-btn {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      border: 1px solid rgba(220, 232, 248, 0.34);
-      background: rgba(10, 14, 20, 0.56);
-      color: #e7effb;
-      display: grid;
-      place-items: center;
-      font-size: 26px;
-      line-height: 1;
+      border: 1px solid rgba(255, 255, 255, 0.34);
+      background: transparent;
+      color: rgba(245, 249, 255, 0.92);
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       cursor: pointer;
-      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+      transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
     }
 
     .motor-switch-btn:hover {
       transform: translateY(-1px);
-      background: rgba(18, 25, 35, 0.72);
-      border-color: rgba(232, 241, 252, 0.5);
+      border-color: rgba(255, 255, 255, 0.62);
     }
 
     .motor-switch-btn:disabled {
-      opacity: 0.55;
+      opacity: 0.5;
       cursor: wait;
     }
 
@@ -2615,6 +2765,15 @@ N
       letter-spacing: 0.02em;
       color: rgba(255, 255, 255, 0.78);
       pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    }
+
+    .lang-toggle.is-hidden,
+    .lang-float-label.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px);
+      pointer-events: none;
     }
     .btn:hover,
     .nav-cta:hover,
@@ -2625,7 +2784,11 @@ N
       box-shadow: var(--shadow-blue);
     }
 
-    .hero::before { background: none; }
+    .hero::before {
+      background:
+        radial-gradient(900px 460px at 26% 28%, rgba(0, 0, 0, 0.48) 0%, rgba(0, 0, 0, 0.28) 38%, rgba(0, 0, 0, 0) 74%),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.1) 38%, rgba(0, 0, 0, 0) 68%);
+    }
     .tech-kicker,
     .about-footer-kicker,
     .gallery-hint {
@@ -2636,17 +2799,24 @@ N
       color: rgba(255, 255, 255, 0.78);
     }
 
-    .tech-subsection,
     .media-card,
     .about-team-card,
-    .site-footer,
-    .tech-visual,
-    .motor-3d-stage,
-    .pcb-focus-wrap {
+    .site-footer {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--line-dark);
       border-radius: 8px;
       box-shadow: var(--shadow-blue);
+    }
+
+    .tech-subsection,
+    .tech-visual,
+    .motor-3d-stage,
+    .pcb-focus-wrap,
+    .tech-specs div {
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
     }
 
     .about-hero-grid,
@@ -2691,7 +2861,7 @@ N
       .brand-name { font-size: 15px; }
       .section { padding-top: 72px; padding-bottom: 72px; }
       .hero h1 {
-        letter-spacing: -0.42px;
+        letter-spacing: 0.6px;
         max-width: 18ch;
         min-height: calc(1.08em * 3);
       }
@@ -2711,6 +2881,24 @@ N
   </style>
 </head>
 <body>
+  <section id="coming-soon-page" class="coming-soon" aria-live="polite">
+    <div class="coming-soon-video-bg" aria-hidden="true">
+      <iframe
+        src="https://www.youtube.com/embed/UE8PCtKHmc8?autoplay=1&mute=1&controls=0&loop=1&playlist=UE8PCtKHmc8&modestbranding=1&rel=0&playsinline=1"
+        title="ALTIS coming soon background video"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      ></iframe>
+    </div>
+    <div class="coming-soon-card">
+      <h1 class="coming-soon-title">COMING SOON</h1>
+      <p class="coming-soon-desc">새로운 페이지를 준비하고 있습니다. 곧 공개됩니다.</p>
+      <img class="coming-soon-logo-bottom" src="img/altis_logo.png" alt="ALTIS logo" />
+      <p class="coming-soon-logo-caption">luce in altis</p>
+    </div>
+  </section>
+  <div id="site-content">
   <div class="noise"></div>
   <header>
     <div class="nav">
@@ -2761,7 +2949,7 @@ N
     </div>
     <div class="hero-inner">
       <div>
-        <p class="hero-tagline" data-i18n="heroTagline">경상국립대학교 항공우주공학부 로켓동아리, ALTIS</p>
+        <p class="hero-tagline" data-i18n-html="heroTagline">경상국립대학교 항공우주공학부 로켓동아리 <span class="hero-tagline-accent">ALTIS</span></p>
         <h1 data-i18n-html="heroTitle">개척의 하늘에서 피운 꿈,<br>우주로 번지다</h1>
         <div class="hero-actions">
           <a class="btn primary" href="sponsors.html" data-i18n="heroCtaSupport">Support for ALTIS</a>
@@ -2921,20 +3109,32 @@ N
 
       <div class="tech-subsection tech-subsection-motor tech-stack-item" style="--delay: 200ms;">
         <div class="tech-details">
-          <span class="tech-kicker">Propulsion</span>
-          <h3 id="motor-model-title">Pioneer1 1st motor</h3>
-          <p data-i18n="techMotorBody">
-            이번 모터는 2 MPa의 비교적 낮은 압력을 기준으로 안전을 우선해 설계한 고체 모터입니다.
-            실제 제작과 시험을 염두에 두고 구조를 단순화했으며, 안정적인 점화와 추력 확보를 목표로 반복 시험에 적합한 형상으로 개발했습니다.
-          </p>
-          <div class="tech-specs">
-            <div>3D Model</div>
-            <div>Solid Motor</div>
-            <div>Test Geometry</div>
-          </div>
-          <div class="motor-switch-row">
-            <span class="motor-switch-label">Next Model</span>
-            <button class="motor-switch-btn" id="motor-switch-btn" type="button" aria-label="Switch to next motor model">&#8250;</button>
+          <span class="tech-kicker">Propulsion - 1stg</span>
+          <h3 class="motor-overview-title">OVERVIEW</h3>
+          <dl class="motor-overview-table" aria-label="Motor specification overview">
+            <div class="motor-overview-row">
+              <dt>Type</dt>
+              <dd>Solid Rocket Motor</dd>
+            </div>
+            <div class="motor-overview-row">
+              <dt>Propellant</dt>
+              <dd>KNSB</dd>
+            </div>
+            <div class="motor-overview-row">
+              <dt>Design Chamber Pressure</dt>
+              <dd>2.0 MPa</dd>
+            </div>
+            <div class="motor-overview-row">
+              <dt>Burn Time</dt>
+              <dd>1.6 s</dd>
+            </div>
+            <div class="motor-overview-row">
+              <dt>Max Thrust (kgf)</dt>
+              <dd>32.85</dd>
+            </div>
+          </dl>
+          <div class="motor-next-row">
+            <button class="motor-switch-btn" id="motor-switch-btn" type="button" aria-label="Switch to next motor model">Next Motor →</button>
           </div>
         </div>
         <figure class="tech-visual">
@@ -3091,6 +3291,7 @@ N
       </div>
     </div>
   </footer>
+  </div>
 
   <script type="importmap">
     {
@@ -3106,15 +3307,22 @@ N
     import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
     import { ThreeMFLoader } from "three/addons/loaders/3MFLoader.js";
 
-    const SHOW_INNOSPACE_LOGO = 1; // INNOSPACE_LOGO 0: hide, 1: show
-    const innospacePartnerLogo = document.getElementById("partner-logo-innospace");
-    const partnerLogos = document.querySelector(".partner-logos");
-    if (innospacePartnerLogo) {
-      innospacePartnerLogo.style.display = SHOW_INNOSPACE_LOGO === 1 ? "" : "none";
-    }
-    if (partnerLogos) {
-      partnerLogos.classList.toggle("is-two-logos", SHOW_INNOSPACE_LOGO !== 1);
-    }
+    const SHOW_COMING_SOON = 0; // COMING_SOON 0: off, 1: on
+    const siteContent = document.getElementById("site-content");
+    const comingSoonPage = document.getElementById("coming-soon-page");
+    const isComingSoon = SHOW_COMING_SOON === 1;
+    if (siteContent) siteContent.style.display = isComingSoon ? "none" : "";
+    if (comingSoonPage) comingSoonPage.style.display = isComingSoon ? "flex" : "none";
+    if (!isComingSoon) {
+      const SHOW_INNOSPACE_LOGO = 1; // INNOSPACE_LOGO 0: hide, 1: show
+      const innospacePartnerLogo = document.getElementById("partner-logo-innospace");
+      const partnerLogos = document.querySelector(".partner-logos");
+      if (innospacePartnerLogo) {
+        innospacePartnerLogo.style.display = SHOW_INNOSPACE_LOGO === 1 ? "" : "none";
+      }
+      if (partnerLogos) {
+        partnerLogos.classList.toggle("is-two-logos", SHOW_INNOSPACE_LOGO !== 1);
+      }
 
     const stage = document.getElementById("motor-3d-stage");
     if (!stage) {
@@ -3526,6 +3734,7 @@ N
 
       tickRecovery();
     }
+    }
   </script>
   <script>
     (() => {
@@ -3540,7 +3749,7 @@ N
           navsponsors: "sponsors",
           langToggle: "<span class=\"lang-option lang-kr\">KR</span> / <span class=\"lang-option lang-en\">EN</span>",
           heroTitle: "개척의 하늘에서 피운 꿈,<br>우주로 번지다",
-          heroTagline: "경상국립대학교 항공우주공학부 로켓동아리, ALTIS",
+          heroTagline: "경상국립대학교 항공우주공학부 로켓동아리 ALTIS",
           heroCtaSupport: "Support for ALTIS",
           heroCtaMedia: "YouTube 영상 보기",
           heroCtaAbout: "About ALTIS",  
@@ -3605,7 +3814,7 @@ N
           navsponsors: "sponsors",
           langToggle: "<span class=\"lang-option lang-kr\">KR</span> / <span class=\"lang-option lang-en\">EN</span>",
           heroTitle: "Our Dream<br />Toward the Cosmos",
-          heroTagline: "LUCE IN ALTIS",
+          heroTagline: "LUCE IN <span class=\"hero-tagline-accent\">ALTIS</span>",
           heroCtaSupport: "Support for ALTIS",
           heroCtaMedia: "YouTube Feature",
           heroCtaAbout: "About ALTIS",
@@ -3786,6 +3995,23 @@ N
           applyLang(nextLang);
         });
       }
+    })();
+
+    (() => {
+      const toggle = document.querySelector(".lang-toggle");
+      const label = document.querySelector(".lang-float-label");
+      if (!toggle && !label) return;
+
+      const topThreshold = 120;
+      const syncLangUiVisibility = () => {
+        const shouldShow = window.scrollY <= topThreshold;
+        if (toggle) toggle.classList.toggle("is-hidden", !shouldShow);
+        if (label) label.classList.toggle("is-hidden", !shouldShow);
+      };
+
+      syncLangUiVisibility();
+      window.addEventListener("scroll", syncLangUiVisibility, { passive: true });
+      window.addEventListener("resize", syncLangUiVisibility);
     })();
 
     (() => {
