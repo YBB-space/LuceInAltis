@@ -114,6 +114,18 @@
       margin-top: 8px;
     }
 
+    @media (min-width: 901px) {
+      #partner .section-head {
+        justify-items: start;
+        text-align: left;
+      }
+
+      #partner .partner-invite-link {
+        justify-self: start;
+        text-align: left;
+      }
+    }
+
     .partner-invite-link:hover {
       color: #ffffff;
       border-color: rgba(255, 120, 78, 0.88);
@@ -415,6 +427,22 @@
       display: none;
     }
 
+    .nav-social-icon {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-social-icon-fill {
+      fill: currentColor;
+      stroke: none;
+    }
+
     .social-cta {
       display: inline-flex;
       align-items: center;
@@ -462,15 +490,15 @@
     @media (hover: hover) and (pointer: fine) {
       .social-cta:hover,
       .social-cta:focus-visible {
-        width: 122px;
+        width: 108px;
         padding: 9px 12px;
-        gap: 8px;
+        gap: 7px;
         justify-content: flex-start;
       }
 
       .social-cta:hover .social-label,
       .social-cta:focus-visible .social-label {
-        max-width: 92px;
+        max-width: 76px;
         opacity: 1;
         transform: translateX(0);
       }
@@ -496,9 +524,9 @@
     }
 
     .nav.is-open .menu-toggle {
-      border-color: var(--ember);
-      color: var(--ember);
-      box-shadow: 0 10px 26px rgba(255, 120, 78, 0.2);
+      border-color: rgba(255, 255, 255, 0.55);
+      color: #ffffff;
+      box-shadow: none;
     }
 
     .nav.is-open .menu-toggle::after {
@@ -2324,6 +2352,15 @@
       margin-right: auto;
     }
 
+    .partner-logo-track,
+    .partner-logo-set {
+      display: contents;
+    }
+
+    .partner-logo-set[aria-hidden="true"] {
+      display: none;
+    }
+
     .partner-logos::before,
     .partner-logos::after {
       content: none;
@@ -2486,6 +2523,19 @@
       outline-offset: 2px;
     }
 
+    @keyframes partnerLogoMarquee {
+      to {
+        transform: translateX(calc(-50% - (var(--partner-marquee-gap, 40px) / 2)));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .partner-logo-track {
+        animation: none !important;
+        transform: none !important;
+      }
+    }
+
     .site-footer {
       margin-top: 20px;
       background: linear-gradient(180deg, #050608 0%, #040507 100%);
@@ -2632,14 +2682,13 @@
         right: 0;
         display: flex;
         flex-direction: column;
+        align-items: stretch;
         gap: 0;
         margin: 0;
         padding: 8px 0 12px;
-        background:
-          linear-gradient(180deg, rgba(255, 120, 78, 0.08), transparent 35%),
-          rgba(6, 7, 9, 0.96);
+        background: rgba(6, 7, 9, 0.96);
         border: 1px solid rgba(255, 255, 255, 0.08);
-        border-top: 1px solid rgba(255, 120, 78, 0.35);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 0;
         box-shadow: 0 16px 36px rgba(4, 6, 10, 0.6);
         backdrop-filter: none;
@@ -2659,6 +2708,8 @@
       }
 
       nav a {
+        display: block;
+        width: 100%;
         margin-right: 0;
         font-size: 12px;
         letter-spacing: 0.2em;
@@ -2671,13 +2722,14 @@
       }
 
       nav a:hover {
-        background: rgba(255, 120, 78, 0.12);
-        color: var(--glow);
+        background: rgba(255, 255, 255, 0.06);
+        color: #ffffff;
       }
 
       .nav-tech-dropdown {
         display: block;
         margin-right: 0;
+        width: 100%;
       }
 
       .nav-tech-link {
@@ -2689,24 +2741,60 @@
 
       .nav-tech-dropdown-menu {
         position: static;
+        left: 0;
+        right: 0;
+        width: 100%;
+        margin: 0;
         min-width: 0;
         padding: 0;
         border: 0;
         box-shadow: none;
         background: rgba(255, 255, 255, 0.03);
+        opacity: 0;
+        visibility: hidden;
+        transform: none;
+        pointer-events: none;
+        max-height: 0;
+        overflow: hidden;
+        border-radius: 0;
+        transition: max-height 0.2s ease, opacity 0.2s ease, visibility 0.2s ease;
+      }
+
+      .nav-tech-dropdown.is-open .nav-tech-dropdown-menu {
         opacity: 1;
         visibility: visible;
-        transform: none;
         pointer-events: auto;
+        max-height: 420px;
+        transform: none !important;
+      }
+
+      .nav-tech-dropdown:hover .nav-tech-dropdown-menu,
+      .nav-tech-dropdown:focus-within .nav-tech-dropdown-menu {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        max-height: 0;
+      }
+
+      .nav-tech-dropdown.is-open:hover .nav-tech-dropdown-menu,
+      .nav-tech-dropdown.is-open:focus-within .nav-tech-dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        max-height: 420px;
       }
 
       .nav-tech-dropdown-menu a {
-        padding: 10px 32px;
-        font-size: 11px;
+        padding: 17px 24px;
+        font-size: 12px;
+        line-height: 1.25;
+        text-align: left;
+        letter-spacing: 0.12em;
       }
 
       .nav {
         justify-content: space-between;
+        align-items: center;
       }
       .nav-actions {
         flex-wrap: nowrap;
@@ -2721,12 +2809,72 @@
         display: none;
       }
       .nav-instagram-link {
-        display: block;
+        display: flex;
+        align-items: center;
+        gap: 12px;
       }
+      #partner {
+        padding-top: 56px;
+        padding-bottom: 58px;
+      }
+
+      #partner .section-head {
+        gap: 8px;
+        margin-bottom: 16px;
+        padding: 0 24px;
+      }
+
+      #partner .section-head h2 {
+        font-size: clamp(24px, 7vw, 30px);
+        line-height: 1.18;
+        letter-spacing: 0;
+        text-transform: none;
+      }
+
+      #partner .partner-invite-link {
+        max-width: 360px;
+        margin-top: 0;
+        border-bottom: 0;
+        color: rgba(255, 255, 255, 0.72);
+        font-size: 13px;
+        line-height: 1.55;
+        letter-spacing: 0;
+      }
+
       .partner-logos {
-        grid-template-columns: 1fr;
-        gap: 10px;
-        padding: 8px 0;
+        display: block;
+        max-width: 100%;
+        margin-right: auto;
+        margin-left: auto;
+        padding: 2px 0 4px;
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+        mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+      }
+
+      .partner-logos.is-two-logos {
+        max-width: 100%;
+      }
+
+      .partner-logo-track {
+        --partner-marquee-gap: clamp(32px, 9vw, 48px);
+        display: flex;
+        align-items: center;
+        width: max-content;
+        gap: var(--partner-marquee-gap);
+        animation: partnerLogoMarquee 18s linear infinite;
+        will-change: transform;
+      }
+
+      .partner-logo-set,
+      .partner-logo-set[aria-hidden="true"] {
+        display: flex;
+        align-items: center;
+        gap: var(--partner-marquee-gap);
+      }
+
+      .partner-logos:hover .partner-logo-track {
+        animation-play-state: paused;
       }
 
       .partner-logos::before,
@@ -2736,6 +2884,22 @@
 
       .partner-intro {
         grid-template-columns: 1fr;
+      }
+
+      .hero-actions {
+        transform: none;
+        margin-top: 14px !important;
+        gap: 14px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-actions .btn {
+        width: auto;
+      }
+
+      .hero-actions .btn:not(.primary) {
+        align-self: flex-start;
       }
 
       .flash-panel {
@@ -2784,19 +2948,35 @@
       }
 
       .partner-logo {
-        flex-direction: column;
+        flex: 0 0 auto;
+        flex-direction: row;
         align-items: center;
         text-align: center;
-        min-height: 84px;
-        padding: 8px 0;
+        width: auto;
+        min-height: 86px;
+        padding: 0;
       }
 
       .partner-logo-featured {
         transform: none;
       }
 
+      .partner-logo img.logo-jlcpcb {
+        width: 210px;
+        max-width: none;
+        max-height: none;
+      }
+
       .partner-logo img.logo-innospace {
-        max-height: 108px;
+        width: 230px;
+        max-width: none;
+        max-height: none;
+      }
+
+      .partner-logo img.logo-easyeda {
+        width: 216px;
+        max-width: none;
+        max-height: none;
       }
 
       .partner-logo img {
@@ -3058,6 +3238,52 @@
         font-size: 10px;
       }
     }
+
+    @media (max-width: 900px), (max-width: 1180px) and (pointer: coarse) {
+      .hero-inner {
+        padding: max(104px, calc(env(safe-area-inset-top) + 86px)) 24px max(110px, calc(env(safe-area-inset-bottom) + 84px));
+      }
+
+      .hero h1 {
+        line-height: 1.14;
+        margin-bottom: 0;
+        min-height: calc(1.14em * 2);
+        max-width: min(18ch, 100%);
+        transition: opacity 0.54s ease, transform 0.54s ease, filter 0.54s ease;
+      }
+
+      .hero h1.is-soft-changing {
+        opacity: 0;
+        transform: translateY(10px);
+        filter: blur(5px);
+      }
+
+      .hero h1.is-typing::after {
+        content: none;
+      }
+
+      .hero-actions {
+        transform: none !important;
+        margin-top: clamp(30px, 8vw, 46px) !important;
+        gap: clamp(18px, 6vw, 34px);
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .hero-actions .btn {
+        max-width: 100%;
+        width: auto;
+        white-space: nowrap;
+      }
+
+      .hero-actions .btn.primary {
+        padding-inline: clamp(20px, 6vw, 26px);
+      }
+
+      .hero-actions .btn:not(.primary) {
+        align-self: center;
+      }
+    }
   </style>
 </head>
 <body>
@@ -3101,8 +3327,21 @@
         </div>
         <a href="#media" data-i18n="navMedia">Media</a>
         <a href="sponsors.html" data-i18n="navsponsors">sponsors</a>
-        <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">Instagram</a>
-        <a class="nav-instagram-link" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener">YouTube</a>
+        <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">
+          <svg class="nav-social-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <circle class="nav-social-icon-fill" cx="17.4" cy="6.6" r="1.1"></circle>
+          </svg>
+          Instagram
+        </a>
+        <a class="nav-instagram-link" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener">
+          <svg class="nav-social-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="6.5" width="18" height="11" rx="3.2"></rect>
+            <path class="nav-social-icon-fill" d="M10 9.5 15.6 12 10 14.5Z"></path>
+          </svg>
+          YouTube
+        </a>
       </nav>
       <div class="nav-actions">
         <button class="nav-cta menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
@@ -3154,27 +3393,54 @@
     </div>
     <div class="container">
       <div class="partner-logos reveal-slide" style="--delay: 0ms;" aria-label="Partner logos">
-        <a class="partner-logo" href="https://jlcpcb.com/" target="_blank" rel="noopener noreferrer" aria-label="JLCPCB">
-          <img class="logo-jlcpcb" src="img/JLCPCB_logo.png" alt="JLCPCB logo" loading="lazy" />
-          <div class="partner-desc">
-            <h5>JLCPCB</h5>
-            <p>PCB / PCBA Manufacturing</p>
+        <div class="partner-logo-track">
+          <div class="partner-logo-set">
+            <a class="partner-logo" href="https://jlcpcb.com/" target="_blank" rel="noopener noreferrer" aria-label="JLCPCB">
+              <img class="logo-jlcpcb" src="img/JLCPCB_logo.png" alt="JLCPCB logo" loading="lazy" />
+              <div class="partner-desc">
+                <h5>JLCPCB</h5>
+                <p>PCB / PCBA Manufacturing</p>
+              </div>
+            </a>
+            <a id="partner-logo-innospace" class="partner-logo partner-logo-featured" data-partner="innospace" href="https://www.innospc.com" target="_blank" rel="noopener noreferrer" aria-label="INNOSPACE">
+              <img class="logo-innospace" src="img/innospace_logo.png" alt="INNOSPACE logo" loading="lazy" />
+              <div class="partner-desc">
+                <h5>INNOSPACE</h5>
+                <p>Launch Service Partner</p>
+              </div>
+            </a>
+            <a class="partner-logo" href="https://easyeda.com/" target="_blank" rel="noopener noreferrer" aria-label="EasyEDA">
+              <img class="logo-easyeda" src="img/Easy_eda_logo.png" alt="EasyEDA logo" loading="lazy" />
+              <div class="partner-desc">
+                <h5>EasyEDA</h5>
+                <p>Cloud EDA / PCB Design</p>
+              </div>
+            </a>
           </div>
-        </a>
-        <a id="partner-logo-innospace" class="partner-logo partner-logo-featured" href="https://www.innospc.com" target="_blank" rel="noopener noreferrer" aria-label="INNOSPACE">
-          <img class="logo-innospace" src="img/innospace_logo.png" alt="INNOSPACE logo" loading="lazy" />
-          <div class="partner-desc">
-            <h5>INNOSPACE</h5>
-            <p>Launch Service Partner</p>
+          <div class="partner-logo-set" aria-hidden="true">
+            <a class="partner-logo" href="https://jlcpcb.com/" target="_blank" rel="noopener noreferrer" aria-label="JLCPCB" tabindex="-1">
+              <img class="logo-jlcpcb" src="img/JLCPCB_logo.png" alt="" loading="lazy" />
+              <div class="partner-desc">
+                <h5>JLCPCB</h5>
+                <p>PCB / PCBA Manufacturing</p>
+              </div>
+            </a>
+            <a class="partner-logo partner-logo-featured" data-partner="innospace" href="https://www.innospc.com" target="_blank" rel="noopener noreferrer" aria-label="INNOSPACE" tabindex="-1">
+              <img class="logo-innospace" src="img/innospace_logo.png" alt="" loading="lazy" />
+              <div class="partner-desc">
+                <h5>INNOSPACE</h5>
+                <p>Launch Service Partner</p>
+              </div>
+            </a>
+            <a class="partner-logo" href="https://easyeda.com/" target="_blank" rel="noopener noreferrer" aria-label="EasyEDA" tabindex="-1">
+              <img class="logo-easyeda" src="img/Easy_eda_logo.png" alt="" loading="lazy" />
+              <div class="partner-desc">
+                <h5>EasyEDA</h5>
+                <p>Cloud EDA / PCB Design</p>
+              </div>
+            </a>
           </div>
-        </a>
-        <a class="partner-logo" href="https://easyeda.com/" target="_blank" rel="noopener noreferrer" aria-label="EasyEDA">
-          <img class="logo-easyeda" src="img/Easy_eda_logo.png" alt="EasyEDA logo" loading="lazy" />
-          <div class="partner-desc">
-            <h5>EasyEDA</h5>
-            <p>Cloud EDA / PCB Design</p>
-          </div>
-        </a>
+        </div>
       </div>
     </div>
   </section>
@@ -3380,12 +3646,12 @@
     if (siteContent) siteContent.style.display = isComingSoon ? "none" : "";
     if (comingSoonPage) comingSoonPage.style.display = isComingSoon ? "flex" : "none";
     if (!isComingSoon) {
-      const SHOW_INNOSPACE_LOGO = 0; // INNOSPACE_LOGO 0: hide, 1: show
-      const innospacePartnerLogo = document.getElementById("partner-logo-innospace");
+      const SHOW_INNOSPACE_LOGO = 1; // INNOSPACE_LOGO 0: hide, 1: show
+      const innospacePartnerLogos = document.querySelectorAll("[data-partner='innospace']");
       const partnerLogos = document.querySelector(".partner-logos");
-      if (innospacePartnerLogo) {
-        innospacePartnerLogo.style.display = SHOW_INNOSPACE_LOGO === 1 ? "" : "none";
-      }
+      innospacePartnerLogos.forEach((logo) => {
+        logo.style.display = SHOW_INNOSPACE_LOGO === 1 ? "" : "none";
+      });
       if (partnerLogos) {
         partnerLogos.classList.toggle("is-two-logos", SHOW_INNOSPACE_LOGO !== 1);
       }
@@ -3815,7 +4081,7 @@
           navsponsors: "sponsors",
           langToggle: "<span class=\"lang-option lang-kr\">KR</span> / <span class=\"lang-option lang-en\">EN</span>",
           heroTitle: "개척의 하늘에서 피운 꿈,<br>우주로 번지다",
-          heroTagline: "경상국립대학교 항공우주공학부 로켓동아리 ALTIS",
+          heroTagline: "경상국립대학교 로켓동아리 ALTIS",
           heroCtaSupport: "Support for ALTIS",
           heroCtaMedia: "YouTube 영상 보기",
           heroCtaAbout: "About ALTIS",  
@@ -3866,7 +4132,7 @@
           mediaVideo2Title: "로켓도 직접 만드는 학과가 있다?!│우문현답 EP.1",
           mediaVideo2Body: "#우주항공청 #KASA #경상대 #항공우주 ",
           mediaWatch: "유튜브에서 보기",
-          partnerTitle: "sponsors",
+          partnerTitle: "비상을 함께한 분들",
           partnerEmptyTitle: "아직 스폰서가 없습니다",
           partnerEmptyBody: "ALTIS는 여러분의 관심을 매우 환영합니다.",
           partnerEmptyLink: "자세히 보기",
@@ -3944,16 +4210,63 @@
       const htmlNodes = document.querySelectorAll("[data-i18n-html]");
       const heroTitleNode = document.querySelector(".hero h1[data-i18n-html='heroTitle']");
       let heroTypingTimer = null;
+      let heroFadeTimer = null;
       let heroRotateTimer = null;
       let heroRotateIndex = 0;
       const HERO_ROTATE_INTERVAL_MS = 10000;
+      const HERO_MOBILE_ROTATE_INTERVAL_MS = 6200;
+      const HERO_MOBILE_FADE_DELAY_MS = 320;
+      const heroMobileMql = window.matchMedia("(max-width: 900px)");
       const heroRotateMentSetKo = [
-        "캠퍼스에서 점화한 꿈, 하늘을 넘어 우주로",
         "작은 실험실의 불꽃, 큰 하늘의 궤적으로",
+        "캠퍼스에서 점화한 꿈, 하늘을 넘어 우주로",
         "대학생의 손끝에서, 우주가 시작된다",
         "우리가 만든 로켓, 우리가 여는 우주",
         "개척의 하늘에서 피운 꿈, 우주로 번지다",
       ];
+
+      const isMobileHero = () => heroMobileMql.matches;
+      const getHeroTitleText = (html) => String(html)
+        .replace(/<br\s*\/?>/gi, "\n")
+        .replace(/,\s*/g, ",\n")
+        .replace(/\n+/g, "\n")
+        .trim();
+
+      const renderHeroTitle = (html) => {
+        if (!heroTitleNode) return;
+        const lines = getHeroTitleText(html).split("\n");
+        heroTitleNode.textContent = "";
+        lines.forEach((line, index) => {
+          if (index > 0) heroTitleNode.appendChild(document.createElement("br"));
+          heroTitleNode.append(line);
+        });
+      };
+
+      const setHeroTitleSoft = (html) => {
+        if (!heroTitleNode) return;
+        if (heroTypingTimer) {
+          window.clearTimeout(heroTypingTimer);
+          heroTypingTimer = null;
+        }
+        if (heroFadeTimer) {
+          window.clearTimeout(heroFadeTimer);
+          heroFadeTimer = null;
+        }
+
+        heroTitleNode.classList.remove("is-typing");
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !heroTitleNode.textContent.trim()) {
+          heroTitleNode.classList.remove("is-soft-changing");
+          renderHeroTitle(html);
+          return;
+        }
+
+        heroTitleNode.classList.add("is-soft-changing");
+        heroFadeTimer = window.setTimeout(() => {
+          renderHeroTitle(html);
+          heroTitleNode.classList.remove("is-soft-changing");
+          heroFadeTimer = null;
+        }, HERO_MOBILE_FADE_DELAY_MS);
+      };
 
       const typeHeroTitle = (html) => {
         if (!heroTitleNode) return;
@@ -3961,16 +4274,23 @@
           window.clearTimeout(heroTypingTimer);
           heroTypingTimer = null;
         }
+        if (isMobileHero()) {
+          setHeroTitleSoft(html);
+          return;
+        }
+        if (heroFadeTimer) {
+          window.clearTimeout(heroFadeTimer);
+          heroFadeTimer = null;
+        }
+        heroTitleNode.classList.remove("is-soft-changing");
 
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
           heroTitleNode.classList.remove("is-typing");
-          heroTitleNode.innerHTML = html;
+          renderHeroTitle(html);
           return;
         }
 
-        const source = String(html)
-          .replace(/<br\s*\/?>/gi, "\n")
-          .replace(/,\s*/g, ",\n");
+        const source = getHeroTitleText(html);
         heroTitleNode.textContent = "";
         heroTitleNode.classList.add("is-typing");
 
@@ -4006,7 +4326,7 @@
         heroRotateTimer = window.setInterval(() => {
           heroRotateIndex = (heroRotateIndex + 1) % heroRotateMentSetKo.length;
           typeHeroTitle(heroRotateMentSetKo[heroRotateIndex]);
-        }, HERO_ROTATE_INTERVAL_MS);
+        }, isMobileHero() ? HERO_MOBILE_ROTATE_INTERVAL_MS : HERO_ROTATE_INTERVAL_MS);
       };
 
       const normalizeLang = (lang) => (lang === "en" ? "en" : "ko");
@@ -4031,7 +4351,7 @@
           }
         });
 
-        if (map.heroTitle !== undefined) {
+        if (next !== "ko" && map.heroTitle !== undefined) {
           typeHeroTitle(map.heroTitle);
         }
         startHeroRotation(next);
@@ -4236,10 +4556,13 @@
     (() => {
       const nav = document.querySelector(".nav");
       const menuBtn = document.querySelector(".menu-toggle");
+      const techDropdown = nav?.querySelector(".nav-tech-dropdown");
+      const techLink = nav?.querySelector(".nav-tech-link");
       if (!nav || !menuBtn) return;
 
       const closeMenu = () => {
         nav.classList.remove("is-open");
+        techDropdown?.classList.remove("is-open");
         menuBtn.setAttribute("aria-expanded", "false");
       };
 
@@ -4249,12 +4572,24 @@
       });
 
       nav.querySelectorAll("nav a").forEach((link) => {
-        link.addEventListener("click", closeMenu);
+        link.addEventListener("click", () => {
+          if (link.classList.contains("nav-tech-link")) return;
+          closeMenu();
+        });
+      });
+
+      techLink?.addEventListener("click", (event) => {
+        if (!window.matchMedia("(max-width: 900px)").matches) return;
+        event.preventDefault();
+        techDropdown?.classList.toggle("is-open");
       });
 
       const mql = window.matchMedia("(max-width: 900px)");
       const handleResize = () => {
-        if (!mql.matches) closeMenu();
+        if (!mql.matches) {
+          closeMenu();
+          techDropdown?.classList.remove("is-open");
+        }
       };
       if (mql.addEventListener) {
         mql.addEventListener("change", handleResize);
