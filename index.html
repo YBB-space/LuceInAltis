@@ -3473,9 +3473,14 @@
 
       <div class="about-layout">
         <div class="about-video reveal-slide" style="--delay: 0ms;">
-          <video id="altisVideo" autoplay muted loop playsinline preload="auto">
-            <source src="vid/altis_land_vid.mp4" type="video/mp4">
-          </video>
+          <iframe
+            id="altisVideo"
+            src="https://www.youtube.com/embed/oeK6ZHVvSsA?autoplay=1&mute=1&controls=0&loop=1&playlist=oeK6ZHVvSsA&modestbranding=1&rel=0&playsinline=1&enablejsapi=1"
+            title="ALTIS Design Build Launch video"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe>
           <button class="mute-btn" type="button" data-target="altisVideo">Muted</button>
         </div>
       </div>
@@ -3655,7 +3660,7 @@
     if (siteContent) siteContent.style.display = isComingSoon ? "none" : "";
     if (comingSoonPage) comingSoonPage.style.display = isComingSoon ? "flex" : "none";
     if (!isComingSoon) {
-      const SHOW_INNOSPACE_LOGO = 0; // INNOSPACE_LOGO 0: hide, 1: show
+      const SHOW_INNOSPACE_LOGO = 1; // INNOSPACE_LOGO 0: hide, 1: show
       const innospacePartnerLogos = document.querySelectorAll("[data-partner='innospace']");
       const partnerLogos = document.querySelector(".partner-logos");
       innospacePartnerLogos.forEach((logo) => {
