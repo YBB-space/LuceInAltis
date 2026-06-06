@@ -1776,6 +1776,15 @@
       pointer-events: none;
     }
 
+    .about-video iframe#altisVideo {
+      position: absolute;
+      inset: -7% -2%;
+      width: 104%;
+      height: 114%;
+      transform: scale(1.02);
+      transform-origin: center;
+    }
+
     .about-video video::-webkit-media-controls {
       display: none !important;
     }
@@ -3475,7 +3484,7 @@
         <div class="about-video reveal-slide" style="--delay: 0ms;">
           <iframe
             id="altisVideo"
-            src="https://www.youtube.com/embed/oeK6ZHVvSsA?autoplay=1&mute=1&controls=0&loop=1&playlist=oeK6ZHVvSsA&modestbranding=1&rel=0&playsinline=1&enablejsapi=1"
+            src="https://www.youtube.com/embed/oeK6ZHVvSsA?autoplay=1&mute=1&controls=0&loop=1&playlist=oeK6ZHVvSsA&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&disablekb=1&fs=0&iv_load_policy=3&showinfo=0"
             title="ALTIS Design Build Launch video"
             allow="autoplay; encrypted-media; picture-in-picture"
             referrerpolicy="strict-origin-when-cross-origin"
