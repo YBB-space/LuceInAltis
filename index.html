@@ -2644,6 +2644,13 @@
         grid-template-columns: 1fr;
         gap: 18px;
       }
+      .site-footer {
+        background: transparent !important;
+        border: 0 !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+      }
       .site-footer-inner {
         padding: 42px 24px 22px;
       }
@@ -2656,7 +2663,7 @@
         font-size: 17px;
       }
       .site-footer-divider {
-        margin-top: 12px;
+        display: none;
       }
       .site-footer-copy {
         text-align: left !important;
@@ -3203,7 +3210,9 @@
 
     .site-footer {
       background: #050505;
-      border-top: 0;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
     }
 
     .partner-invite-link {
