@@ -3655,7 +3655,7 @@
     if (siteContent) siteContent.style.display = isComingSoon ? "none" : "";
     if (comingSoonPage) comingSoonPage.style.display = isComingSoon ? "flex" : "none";
     if (!isComingSoon) {
-      const SHOW_INNOSPACE_LOGO = 1; // INNOSPACE_LOGO 0: hide, 1: show
+      const SHOW_INNOSPACE_LOGO = 0; // INNOSPACE_LOGO 0: hide, 1: show
       const innospacePartnerLogos = document.querySelectorAll("[data-partner='innospace']");
       const partnerLogos = document.querySelector(".partner-logos");
       innospacePartnerLogos.forEach((logo) => {
