@@ -1,0 +1,1232 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Join ALTIS</title>
+  <link rel="icon" href="img/altis_logo.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500;700&family=Sora:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --midnight: #000000;
+      --surface-dark: #0a0a0a;
+      --surface-raised: #141414;
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.72);
+      --text-muted: rgba(255, 255, 255, 0.52);
+      --line-dark: rgba(255, 255, 255, 0.14);
+      --glass-light: rgba(255, 255, 255, 0.06);
+      --font-display: "The Future", "Sora", "Noto Sans KR", sans-serif;
+      --font-sans: "The Future", "Sora", "Noto Sans KR", sans-serif;
+      --font-mono: "PP Neue Montreal Mono", "IBM Plex Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      color: var(--text-primary);
+      background: #000;
+      letter-spacing: -0.16px;
+      overflow-x: hidden;
+    }
+
+    body.recruiting-closed main,
+    body.recruiting-closed .site-footer {
+      display: none;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-user-drag: none;
+      -webkit-touch-callout: none;
+    }
+
+    a { color: inherit; }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+        radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 32px 32px, 18px 18px;
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      background: rgba(0, 0, 0, 0.56);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(14px) saturate(125%);
+      -webkit-backdrop-filter: blur(14px) saturate(125%);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.38);
+    }
+
+    .nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand { margin-right: auto; }
+
+    .brand a {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .brand-logo {
+      height: 40px;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+
+    nav {
+      margin-left: auto;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    nav a {
+      margin-right: 18px;
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 100;
+      letter-spacing: -0.16px;
+    }
+
+    nav a:last-child { margin-right: 0; }
+    nav a:hover { color: #fff; }
+
+    .nav-tech-dropdown {
+      position: relative;
+      display: inline-block;
+      margin-right: 18px;
+    }
+
+    .nav-tech-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-right: 0;
+      padding: 2px 0;
+    }
+
+    .nav-tech-link::after {
+      content: "▾";
+      font-size: 12px;
+      line-height: 1;
+      opacity: 0.72;
+      transition: transform 0.18s ease, opacity 0.18s ease;
+    }
+
+    .nav-tech-dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      min-width: 208px;
+      padding: 10px 0;
+      margin: 0;
+      list-style: none;
+      background: rgba(12, 14, 18, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(-50%, 4px);
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+      z-index: 20;
+    }
+
+    .nav-tech-dropdown-menu::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -10px;
+      height: 10px;
+    }
+
+    .nav-tech-dropdown-menu a {
+      display: block;
+      padding: 12px 16px;
+      margin-right: 0;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: rgba(233, 238, 245, 0.9);
+      text-align: center;
+    }
+
+    .nav-tech-dropdown-menu li:last-child a {
+      border-bottom: 0;
+    }
+
+    .nav-tech-dropdown-menu a:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #ffffff;
+    }
+
+    .nav-tech-dropdown:hover .nav-tech-dropdown-menu,
+    .nav-tech-dropdown:focus-within .nav-tech-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, 0);
+      pointer-events: auto;
+    }
+
+    .nav-tech-dropdown:hover .nav-tech-link::after,
+    .nav-tech-dropdown:focus-within .nav-tech-link::after {
+      transform: rotate(180deg);
+      opacity: 0.95;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-cta,
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 18px;
+      border: 1px solid var(--line-dark);
+      border-radius: 4px;
+      background: var(--glass-light);
+      color: #fff;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: -0.16px;
+      text-transform: none;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .nav-cta:hover,
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255, 255, 255, 0.36);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn.primary {
+      background: #fff;
+      border-color: #fff;
+      color: #000;
+    }
+
+    .btn.is-disabled {
+      cursor: default;
+    }
+
+    .btn.is-disabled:hover {
+      transform: none;
+    }
+
+    .menu-toggle { display: none; }
+
+    .social-cta {
+      width: 42px;
+      padding: 9px 10px;
+      overflow: hidden;
+      gap: 0;
+      white-space: nowrap;
+      transition: width 0.25s ease, padding 0.25s ease, gap 0.2s ease, transform 0.2s ease;
+    }
+
+    .social-icon {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .social-icon.fill {
+      fill: currentColor;
+      stroke: none;
+    }
+
+    .social-label {
+      max-width: 0;
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: max-width 0.25s ease, opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .social-cta:hover,
+      .social-cta:focus-visible {
+        width: 108px;
+        padding: 9px 12px;
+        gap: 7px;
+        justify-content: flex-start;
+      }
+
+      .social-cta:hover .social-label,
+      .social-cta:focus-visible .social-label {
+        max-width: 76px;
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .nav-instagram-link { display: none; }
+
+    .nav-social-icon {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-social-icon-fill {
+      fill: currentColor;
+      stroke: none;
+    }
+
+    main { min-height: 100vh; }
+
+    .container {
+      width: min(100%, 1200px);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .hero {
+      min-height: 92vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      isolation: isolate;
+      background: #000;
+    }
+
+    .hero-media {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .hero-media::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background:
+        linear-gradient(90deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.56) 48%, rgba(0, 0, 0, 0.18) 100%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.82) 100%);
+      pointer-events: none;
+    }
+
+    .hero-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(0.82) brightness(0.74);
+      transform: scale(1.02);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 3;
+      width: min(100%, 1200px);
+      margin: 0 auto;
+      padding: 118px 24px 84px;
+    }
+
+    .hero-copy {
+      max-width: 760px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .kicker {
+      margin: 0;
+      font-family: var(--font-mono);
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-weight: 500;
+      letter-spacing: -0.8px;
+    }
+
+    h1 {
+      max-width: 13ch;
+      font-size: clamp(42px, 7vw, 82px);
+      line-height: 0.98;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 60ch;
+      color: var(--text-secondary);
+      font-size: clamp(15px, 1.15vw, 18px);
+      line-height: 1.76;
+      word-break: keep-all;
+    }
+
+    .hero-actions,
+    .cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .section {
+      padding: clamp(72px, 9vw, 112px) 0;
+    }
+
+    .section + .section {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .section-head {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 34px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 1;
+    }
+
+    .section-head p {
+      margin: 0;
+      max-width: 68ch;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      word-break: keep-all;
+    }
+
+    .info-list,
+    .track-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid var(--line-dark);
+    }
+
+    .track-list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .info-item,
+    .track-item {
+      min-height: 178px;
+      padding: 24px 24px 26px;
+      border-bottom: 1px solid var(--line-dark);
+      display: grid;
+      align-content: start;
+      gap: 14px;
+    }
+
+    .info-item + .info-item,
+    .track-item + .track-item {
+      border-left: 1px solid var(--line-dark);
+    }
+
+    .info-item span,
+    .track-item span,
+    .process-step span {
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .info-item h3,
+    .track-item h3 {
+      font-size: clamp(20px, 2vw, 26px);
+    }
+
+    .info-item p,
+    .track-item p,
+    .process-step p,
+    .cta-copy p {
+      margin: 0;
+      color: var(--text-secondary);
+      line-height: 1.66;
+      font-size: 14px;
+      word-break: keep-all;
+    }
+
+    .process {
+      background: #030303;
+    }
+
+    .process-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.88fr) minmax(320px, 0.72fr);
+      gap: clamp(28px, 4vw, 54px);
+      align-items: start;
+    }
+
+    .process-copy {
+      position: sticky;
+      top: 112px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .process-copy h2 {
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 0.98;
+    }
+
+    .process-copy p {
+      margin: 0;
+      color: var(--text-secondary);
+      line-height: 1.76;
+      word-break: keep-all;
+    }
+
+    .process-list {
+      display: grid;
+      border-top: 1px solid var(--line-dark);
+    }
+
+    .process-step {
+      min-height: 136px;
+      padding: 22px 0 24px;
+      border-bottom: 1px solid var(--line-dark);
+      display: grid;
+      gap: 10px;
+    }
+
+    .process-step h3 {
+      font-size: clamp(20px, 2.2vw, 28px);
+    }
+
+    .cta-band {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.72fr);
+      gap: 32px;
+      align-items: end;
+    }
+
+    .cta-copy {
+      display: grid;
+      gap: 14px;
+    }
+
+    .contact-lines {
+      display: grid;
+      gap: 12px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line-dark);
+    }
+
+    .contact-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: baseline;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .contact-line span {
+      min-width: 86px;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .contact-line a { text-decoration: none; }
+
+    .site-footer {
+      margin-top: 20px;
+      background: linear-gradient(180deg, #050608 0%, #040507 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    }
+
+    .site-footer-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 58px 32px 28px;
+    }
+
+    .site-footer-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      column-gap: 20px;
+      row-gap: 0;
+      margin-top: 18px;
+    }
+
+    .site-footer-contact {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 6px;
+      text-align: left;
+    }
+
+    .site-footer-contact p {
+      margin: 0;
+      font-family: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      color: #97a5bc;
+      font-size: clamp(13px, 0.95vw, 16px);
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: -0.01em;
+      -webkit-font-smoothing: antialiased;
+      white-space: normal;
+    }
+
+    .site-footer-divider {
+      margin: 0 0 14px;
+      border-top: 1px solid rgba(144, 169, 209, 0.18);
+    }
+
+    .site-footer-copy {
+      margin: 0;
+      text-align: right;
+      justify-self: end;
+      align-self: start;
+      font-family: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      color: #687892;
+      font-size: clamp(12px, 0.85vw, 15px);
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: -0.01em;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .recruiting-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.72) 100%),
+        radial-gradient(740px 360px at 50% 42%, rgba(255, 255, 255, 0.12), transparent 72%);
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .recruiting-gate::before {
+      content: "";
+      position: absolute;
+      inset: -28px;
+      z-index: -2;
+      background: url("img/altis_fam_img.png") center / cover no-repeat;
+      filter: blur(18px) brightness(0.72) saturate(0.9);
+      transform: scale(1.04);
+    }
+
+    .recruiting-gate::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    body.recruiting-closed .recruiting-gate {
+      display: grid;
+    }
+
+    .recruiting-gate-panel {
+      width: min(100%, 520px);
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      text-align: center;
+      display: grid;
+      justify-items: center;
+      gap: 14px;
+    }
+
+    .recruiting-gate-panel .kicker {
+      color: rgba(255, 255, 255, 0.66);
+    }
+
+    .recruiting-gate-panel h2 {
+      font-size: clamp(34px, 8vw, 58px);
+      line-height: 0.98;
+    }
+
+    .recruiting-gate-panel p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.75;
+      word-break: keep-all;
+    }
+
+    .recruiting-gate-status {
+      justify-self: center;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      color: rgba(255, 255, 255, 0.74);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .recruiting-gate-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+      justify-content: center;
+    }
+
+    @media (max-width: 900px) {
+      .menu-toggle { display: inline-flex; }
+      .instagram-link { display: none; }
+
+      .nav {
+        position: relative;
+        align-items: center;
+      }
+
+      nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        margin: 0;
+        padding: 8px 0 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        background: rgba(6, 7, 9, 0.96);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 0;
+        box-shadow: 0 16px 36px rgba(4, 6, 10, 0.6);
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(-6px);
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+      }
+
+      .nav.is-open nav {
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      nav a {
+        display: flex;
+        width: 100%;
+        margin-right: 0;
+        padding: 12px 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 15px;
+      }
+
+      .nav-tech-dropdown {
+        display: block;
+        margin-right: 0;
+        width: 100%;
+      }
+
+      .nav-tech-link {
+        width: 100%;
+        justify-content: space-between;
+        padding: 12px 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .nav-tech-dropdown-menu {
+        position: static;
+        left: 0;
+        right: 0;
+        width: 100%;
+        margin: 0;
+        min-width: 0;
+        padding: 0;
+        border: 0;
+        box-shadow: none;
+        background: rgba(255, 255, 255, 0.03);
+        opacity: 0;
+        visibility: hidden;
+        transform: none;
+        pointer-events: none;
+        max-height: 0;
+        overflow: hidden;
+        border-radius: 0;
+        transition: max-height 0.2s ease, opacity 0.2s ease, visibility 0.2s ease;
+      }
+
+      .nav-tech-dropdown.is-open .nav-tech-dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        max-height: 420px;
+        transform: none !important;
+      }
+
+      .nav-tech-dropdown:hover .nav-tech-dropdown-menu,
+      .nav-tech-dropdown:focus-within .nav-tech-dropdown-menu {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        max-height: 0;
+      }
+
+      .nav-tech-dropdown.is-open:hover .nav-tech-dropdown-menu,
+      .nav-tech-dropdown.is-open:focus-within .nav-tech-dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        max-height: 420px;
+      }
+
+      .nav-tech-dropdown-menu a {
+        display: block;
+        padding: 17px 24px;
+        font-size: 12px;
+        line-height: 1.25;
+        text-align: left;
+        letter-spacing: 0.12em;
+      }
+
+      .nav-instagram-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .nav-cta {
+        min-height: 38px;
+        padding: 8px 12px;
+      }
+
+      .hero { min-height: 88vh; }
+
+      .hero-inner {
+        padding: 104px 24px 72px;
+      }
+
+      h1 {
+        max-width: 12ch;
+        font-size: clamp(42px, 15vw, 64px);
+      }
+
+      .lead { font-size: 15px; }
+
+      .hero-actions,
+      .cta-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .info-list,
+      .track-list {
+        grid-template-columns: 1fr;
+      }
+
+      .info-item + .info-item,
+      .track-item + .track-item {
+        border-left: 0;
+      }
+
+      .process-layout,
+      .cta-band {
+        grid-template-columns: 1fr;
+      }
+
+      .process-copy {
+        position: static;
+      }
+
+      .site-footer-inner {
+        padding: 42px 24px 22px;
+      }
+
+      .site-footer-grid {
+        grid-template-columns: 1fr;
+        row-gap: 10px;
+        justify-items: start;
+      }
+
+      .site-footer-divider {
+        margin-top: 12px;
+      }
+
+      .site-footer-copy {
+        text-align: left !important;
+        justify-self: start;
+        width: 100%;
+      }
+
+      .recruiting-gate-panel {
+        text-align: center;
+      }
+
+      .recruiting-gate-actions {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <a href="index.html#home" aria-label="Go to home">
+          <img class="brand-logo" src="img/altis_logo.png" alt="ALTIS logo" />
+        </a>
+      </div>
+      <nav id="primary-nav">
+        <a href="index.html#home">Home</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#team">Teams</a>
+        <div class="nav-tech-dropdown">
+          <a href="index.html#tech" class="nav-tech-link">Tech</a>
+          <ul class="nav-tech-dropdown-menu" aria-label="Tech sub menu">
+            <li><a href="tech/avionics.html">AVIONICS</a></li>
+            <li><a href="tech/program.html">PROGRAM</a></li>
+            <li><a href="tech/ejection system.html">EJECTION SYSTEM</a></li>
+            <li><a href="tech/motor.html">MOTOR</a></li>
+            <li><a href="tech/structure.html">STRUCTURE</a></li>
+          </ul>
+        </div>
+        <a href="index.html#media">Media</a>
+        <a href="join.html">Join</a>
+        <a href="sponsors.html">sponsors</a>
+        <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">
+          <svg class="nav-social-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <circle class="nav-social-icon-fill" cx="17.4" cy="6.6" r="1.1"></circle>
+          </svg>
+          Instagram
+        </a>
+        <a class="nav-instagram-link" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener">
+          <svg class="nav-social-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="6.5" width="18" height="11" rx="3.2"></rect>
+            <path class="nav-social-icon-fill" d="M10 9.5 15.6 12 10 14.5Z"></path>
+          </svg>
+          YouTube
+        </a>
+      </nav>
+      <div class="nav-actions">
+        <button class="nav-cta menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+        <a class="nav-cta instagram-link social-cta" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <circle class="social-icon fill" cx="17.4" cy="6.6" r="1.1"></circle>
+          </svg>
+          <span class="social-label">Instagram</span>
+        </a>
+        <a class="nav-cta instagram-link social-cta" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener" aria-label="YouTube">
+          <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="6.5" width="18" height="11" rx="3.2"></rect>
+            <path class="social-icon fill" d="M10 9.5 15.6 12 10 14.5Z"></path>
+          </svg>
+          <span class="social-label">YouTube</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-media" aria-hidden="true">
+        <img src="img/altis_fam_img.png" alt="" />
+      </div>
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="kicker">Recruiting</p>
+          <h1>Join ALTIS</h1>
+          <p class="lead">
+            로켓을 직접 설계하고 제작하며 시험하는 팀에 합류하세요. ALTIS는 배우는 사람보다
+            끝까지 만들어보는 사람을 기다립니다.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary is-disabled" href="#" aria-disabled="true">지원하기</a>
+            <a class="btn" href="#tracks">모집 분야 보기</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about-join">
+      <div class="container">
+        <div class="section-head">
+          <p class="kicker">Who We Need</p>
+          <h2>이런 사람을 기다립니다</h2>
+          <p>
+            전공 지식보다 중요한 것은 실제로 손을 움직여 문제를 해결하려는 태도입니다. 처음이어도 괜찮습니다.
+          </p>
+        </div>
+        <div class="info-list" aria-label="ALTIS recruiting highlights">
+          <article class="info-item">
+            <span>01</span>
+            <h3>Build</h3>
+            <p>아이디어를 도면과 부품, 시험 장비로 바꾸는 제작 중심의 활동에 참여합니다.</p>
+          </article>
+          <article class="info-item">
+            <span>02</span>
+            <h3>Test</h3>
+            <p>실패 데이터를 기록하고 원인을 분석하며 다음 설계에 반영하는 과정을 경험합니다.</p>
+          </article>
+          <article class="info-item">
+            <span>03</span>
+            <h3>Launch</h3>
+            <p>발사 준비, 현장 운영, 안전 점검까지 하나의 프로젝트를 끝까지 함께 완성합니다.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tracks">
+      <div class="container">
+        <div class="section-head">
+          <p class="kicker">Open Tracks</p>
+          <h2>모집 분야</h2>
+          <p>
+            관심 분야를 기준으로 시작하되, 실제 프로젝트에서는 팀 간 협업을 통해 발사체 전체 시스템을 함께 이해합니다.
+          </p>
+        </div>
+        <div class="track-list" aria-label="ALTIS recruiting tracks">
+          <article class="track-item">
+            <span>Propulsion</span>
+            <h3>추진</h3>
+            <p>고체 로켓 모터 설계, 제작, 추력 시험과 추진 시스템 검증</p>
+          </article>
+          <article class="track-item">
+            <span>Avionics</span>
+            <h3>전자</h3>
+            <p>센서, DAQ, 점화 제어, 통신 모듈과 비행 데이터 계측</p>
+          </article>
+          <article class="track-item">
+            <span>Airframe</span>
+            <h3>동체</h3>
+            <p>구조 설계, 하우징 제작, 조립 공정과 탑재체 보호 구조</p>
+          </article>
+          <article class="track-item">
+            <span>Mission</span>
+            <h3>미션</h3>
+            <p>비행 시퀀스, 시험 계획, 현장 운영과 프로젝트 관리</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section process" id="process">
+      <div class="container process-layout">
+        <div class="process-copy">
+          <p class="kicker">How To Join</p>
+          <h2>지원 흐름</h2>
+          <p>
+            구글폼 연결 전까지는 버튼만 준비해두었습니다. 모집이 열리면 같은 위치에 지원 폼 링크를 연결할 수 있습니다.
+          </p>
+          <div class="cta-actions">
+            <a class="btn primary is-disabled" href="#" aria-disabled="true">지원하기</a>
+            <a class="btn" href="#contact">문의하기</a>
+          </div>
+        </div>
+        <div class="process-list" aria-label="ALTIS recruiting process">
+          <article class="process-step">
+            <span>Step 01</span>
+            <h3>지원서 제출</h3>
+            <p>관심 분야, 가능한 활동 시간, 만들고 싶은 프로젝트를 간단히 작성합니다.</p>
+          </article>
+          <article class="process-step">
+            <span>Step 02</span>
+            <h3>팀 미팅</h3>
+            <p>지원 동기와 관심 분야를 확인하고, 현재 진행 중인 프로젝트를 소개합니다.</p>
+          </article>
+          <article class="process-step">
+            <span>Step 03</span>
+            <h3>프로젝트 합류</h3>
+            <p>기초 안전 교육과 온보딩을 거친 뒤 실제 제작·시험 업무에 참여합니다.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container cta-band">
+        <div class="cta-copy">
+          <p class="kicker">Contact</p>
+          <h2>궁금한 점이 있다면</h2>
+          <p>
+            모집 일정, 활동 방식, 팀별 업무가 궁금하다면 아래 연락처로 문의해 주세요.
+          </p>
+        </div>
+        <div class="contact-lines">
+          <div class="contact-line">
+            <span>Email</span>
+            <a href="mailto:haechan031217@gnu.ac.kr">haechan031217@gnu.ac.kr</a>
+          </div>
+          <div class="contact-line">
+            <span>Instagram</span>
+            <a href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">@altis_official</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="site-footer-divider"></div>
+      <div class="site-footer-grid">
+        <div class="site-footer-col site-footer-contact">
+          <p>Address: 진주대로 501 | Founded Date: March 2021</p>
+          <p>CONTACT | email : haechan031217@gnu.ac.kr / instagram : @altis_official</p>
+        </div>
+        <p class="site-footer-copy">© 2021-2026 ALTIS-YBB. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="recruiting-gate" id="recruiting-gate" role="status" aria-live="polite" hidden>
+    <div class="recruiting-gate-panel">
+      <span class="recruiting-gate-status">Recruiting Closed</span>
+      <h2>모집 준비 중</h2>
+      <p>
+        지금은 동아리원을 모집하고 있지 않습니다. 다음 모집이 열리면 이 페이지에서 바로 지원할 수 있게 안내하겠습니다.
+      </p>
+      <div class="recruiting-gate-actions">
+        <a class="btn primary" href="index.html#home">홈으로</a>
+        <a class="btn" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">소식 보기</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const RECRUITING_OPEN = 0; // 0: 모집 닫힘, 1: 모집 중
+
+    (() => {
+      const isOpen = RECRUITING_OPEN === 1;
+      const gate = document.getElementById("recruiting-gate");
+      document.body.classList.toggle("recruiting-closed", !isOpen);
+      if (gate) {
+        gate.hidden = isOpen;
+        gate.setAttribute("aria-hidden", String(isOpen));
+      }
+    })();
+
+    (() => {
+      const nav = document.querySelector(".nav");
+      const menuBtn = document.querySelector(".menu-toggle");
+      const techDropdown = nav?.querySelector(".nav-tech-dropdown");
+      const techLink = nav?.querySelector(".nav-tech-link");
+      if (!nav || !menuBtn) return;
+
+      const closeMenu = () => {
+        nav.classList.remove("is-open");
+        techDropdown?.classList.remove("is-open");
+        menuBtn.setAttribute("aria-expanded", "false");
+      };
+
+      menuBtn.addEventListener("click", () => {
+        const isOpen = nav.classList.toggle("is-open");
+        menuBtn.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      nav.querySelectorAll("nav a").forEach((link) => {
+        link.addEventListener("click", () => {
+          if (link.classList.contains("nav-tech-link")) return;
+          closeMenu();
+        });
+      });
+
+      techLink?.addEventListener("click", (event) => {
+        if (!window.matchMedia("(max-width: 900px)").matches) return;
+        event.preventDefault();
+        techDropdown?.classList.toggle("is-open");
+      });
+
+      const mql = window.matchMedia("(max-width: 900px)");
+      const handleResize = () => {
+        if (!mql.matches) {
+          closeMenu();
+          techDropdown?.classList.remove("is-open");
+        }
+      };
+      if (mql.addEventListener) {
+        mql.addEventListener("change", handleResize);
+      } else {
+        mql.addListener(handleResize);
+      }
+    })();
+
+    (() => {
+      document.querySelectorAll(".btn.is-disabled").forEach((btn) => {
+        btn.addEventListener("click", (event) => {
+          event.preventDefault();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
