@@ -236,7 +236,10 @@
       position: relative;
       min-height: calc(100vh - 73px);
       overflow: hidden;
-      padding: 0;
+      display: grid;
+      place-items: center;
+      padding: clamp(96px, 12vh, 132px) 24px 48px;
+      isolation: isolate;
     }
     .hero-image-bg {
       position: absolute;
@@ -251,54 +254,106 @@
       width: 100%;
       height: 100%;
       transform: none;
-      object-fit: contain;
+      object-fit: cover;
       object-position: center center;
-      filter: brightness(0.52) contrast(1.03);
+      filter: brightness(0.74) contrast(1.04) saturate(0.98);
     }
     .hero::before {
       content: "";
       position: absolute;
       inset: 0;
       z-index: -1;
-      background: transparent;
+      background:
+        linear-gradient(90deg, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.2) 48%, rgba(0, 0, 0, 0.52) 100%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.22) 56%, rgba(5, 6, 7, 0.72) 100%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 120px);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      z-index: 0;
+      height: clamp(210px, 30vh, 320px);
+      background: linear-gradient(180deg, rgba(5, 6, 7, 0) 0%, rgba(5, 6, 7, 0.46) 48%, #050607 100%);
+      pointer-events: none;
     }
 
     .hero-copy {
-      min-height: calc(100vh - 73px);
+      width: min(100%, 820px);
+      min-height: auto;
       display: grid;
       place-items: center;
       text-align: center;
       position: relative;
       z-index: 1;
-      padding: 20px;
+      padding: 0;
     }
-    .hero-copy-kicker {
-      display: inline-block;
-      margin-bottom: 10px;
-      padding: 5px 10px;
+    .hero-content {
+      display: grid;
+      gap: 18px;
+      justify-items: center;
+      min-width: 0;
+    }
+    .hero-kicker {
+      margin: 0;
       font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.14em;
+      font-size: 12px;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: rgba(236, 242, 250, 0.9);
-      border: 1px solid rgba(255,255,255,0.22);
-      border-radius: 999px;
-      background: rgba(10,12,16,0.38);
+      color: rgba(236, 242, 250, 0.78);
     }
     .hero-copy h1 {
       margin: 0;
-      font-size: clamp(30px, 7vw, 68px);
-      letter-spacing: 0.14em;
+      max-width: 9ch;
+      font-size: clamp(56px, 8vw, 104px);
+      letter-spacing: 0.02em;
       text-transform: uppercase;
+      font-weight: 600;
+      line-height: 0.86;
       color: rgba(245, 248, 252, 0.96);
       text-shadow: 0 10px 36px rgba(0, 0, 0, 0.55);
     }
-    .hero-copy p {
-      margin: 14px 0 0;
+    .hero-lead {
+      margin: 0;
+      max-width: 58ch;
       font-size: clamp(13px, 1.9vw, 18px);
-      font-family: var(--font-mono);
-      letter-spacing: 0.08em;
+      line-height: 1.78;
+      letter-spacing: 0;
       color: rgba(230, 236, 245, 0.86);
+      text-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      word-break: keep-all;
+    }
+    .hero-systems {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .hero-system {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 9px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.055);
+      color: rgba(245, 248, 252, 0.92);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .hero + .section {
+      position: relative;
+      margin-top: clamp(-120px, -11vh, -76px);
+      padding-top: clamp(150px, 17vh, 210px);
+      background: linear-gradient(180deg, rgba(5, 6, 7, 0) 0%, rgba(5, 6, 7, 0.82) 42%, #050607 100%);
     }
 
     .section { padding: 28px 0 84px; }
@@ -310,6 +365,14 @@
       gap: 6px;
       justify-items: center;
       text-align: center;
+    }
+    .kicker {
+      margin: 0;
+      font-family: var(--font-mono);
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
     .section-head h2 { margin: 0; font-size: clamp(2rem, 5vw, 2.5rem); }
     .partner-invite-link {
@@ -329,6 +392,19 @@
       align-items: center;
       gap: 20px clamp(20px, 3vw, 36px);
       padding: 12px 10px;
+    }
+    .partner-logos.is-two-logos {
+      --partner-columns: 2;
+      max-width: 880px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .partner-logo-track,
+    .partner-logo-set {
+      display: contents;
+    }
+    .partner-logo-set[aria-hidden="true"] {
+      display: none;
     }
     .partner-logo {
       text-decoration: none;
@@ -350,10 +426,26 @@
       opacity: 0.92;
       transition: filter .25s ease, opacity .25s ease;
     }
+    .partner-desc {
+      display: none;
+    }
     .partner-logo:hover img { filter: none; opacity: 1; }
     .partner-logo img.logo-jlcpcb { max-height: 94px; }
     .partner-logo img.logo-easyeda { max-height: 46px; }
     .partner-logo img.logo-innospace { max-height: 124px; }
+
+    @keyframes partnerLogoMarquee {
+      to {
+        transform: translateX(calc(-50% - (var(--partner-marquee-gap, 40px) / 2)));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .partner-logo-track {
+        animation: none !important;
+        transform: none !important;
+      }
+    }
 
     .site-footer { margin-top: 20px; background: #050505; }
     .site-footer-inner { max-width: 1320px; margin: 0 auto; padding: 58px 32px 28px; }
@@ -372,6 +464,7 @@
     @media (max-width: 900px) {
       .menu-toggle { display: inline-flex; }
       .nav { align-items: flex-start; }
+      .brand-logo { height: 34px; }
       nav {
         position: absolute;
         top: calc(100% + 1px);
@@ -437,19 +530,175 @@
       .nav-actions .social-cta {
         display: none;
       }
-      .partner-logos { grid-template-columns: 1fr; }
+      .hero {
+        min-height: calc(100svh - 73px);
+        padding: 92px 18px 42px;
+      }
+      .hero-copy {
+        width: calc(100vw - 36px);
+        min-height: auto;
+        padding: 0;
+      }
+      .hero-content {
+        width: min(100%, 320px);
+        max-width: 320px;
+        gap: 14px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero-copy h1 {
+        max-width: 100%;
+        font-size: clamp(32px, 8.8vw, 38px);
+        letter-spacing: 0.01em;
+      }
+      .hero-lead {
+        width: 100%;
+        max-width: 27ch;
+        font-size: 14px;
+        line-height: 1.7;
+        white-space: normal;
+        word-break: keep-all;
+        overflow-wrap: anywhere;
+      }
+      .hero-systems {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .hero-system {
+        width: min(100%, 280px);
+        justify-self: center;
+        min-height: 40px;
+      }
+      .section {
+        padding: 42px 0 68px;
+      }
+      .hero + .section {
+        margin-top: -72px;
+        padding-top: 122px;
+        background: linear-gradient(180deg, rgba(5, 6, 7, 0) 0%, rgba(5, 6, 7, 0.46) 42%, #050607 100%);
+      }
+      .section-head {
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      .section-head h2 {
+        font-size: clamp(1.7rem, 8vw, 2.2rem);
+      }
+      .partner-invite-link {
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      .partner-logos {
+        display: block;
+        max-width: 100%;
+        margin-top: 14px;
+        margin-right: auto;
+        margin-left: auto;
+        padding: 2px 0 4px;
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+        mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+      }
+      .partner-logos.is-two-logos {
+        max-width: 100%;
+      }
+      .partner-logo-track {
+        --partner-marquee-gap: clamp(32px, 9vw, 48px);
+        display: flex;
+        align-items: center;
+        width: max-content;
+        gap: var(--partner-marquee-gap);
+        animation: partnerLogoMarquee 18s linear infinite;
+        will-change: transform;
+      }
+      .partner-logo-set,
+      .partner-logo-set[aria-hidden="true"] {
+        display: flex;
+        align-items: center;
+        gap: var(--partner-marquee-gap);
+      }
+      .partner-logos:hover .partner-logo-track {
+        animation-play-state: paused;
+      }
+      .partner-logo {
+        flex: 0 0 auto;
+        min-height: 84px;
+        width: auto;
+        padding: 0;
+      }
+      .partner-logo img.logo-jlcpcb {
+        width: 190px;
+        max-width: none;
+        max-height: none;
+      }
+      .partner-logo img.logo-easyeda {
+        width: 216px;
+        max-width: none;
+        max-height: none;
+      }
+      .partner-logo img.logo-innospace {
+        width: 230px;
+        max-width: none;
+        max-height: none;
+      }
       .site-footer-inner { padding: 42px 24px 22px; }
       .site-footer-grid { grid-template-columns: 1fr; row-gap: 10px; }
       .site-footer-copy { text-align: left; justify-self: start; }
     }
+
+    @media (max-width: 560px) {
+      .nav {
+        padding: 14px 16px;
+      }
+      nav a,
+      .nav-tech-link {
+        font-size: 13px;
+      }
+      .hero-image-bg img {
+        object-fit: cover;
+        object-position: center center;
+      }
+      .hero-copy {
+        width: calc(100vw - 32px);
+        padding: 0;
+      }
+      .hero-content {
+        width: min(100%, 310px);
+      }
+      .hero-copy h1 {
+        font-size: clamp(30px, 8.8vw, 34px);
+      }
+      .hero-lead {
+        max-width: 26ch;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .container,
+      .section-head {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+      .site-footer-inner {
+        padding: 32px 16px 20px;
+      }
+      .site-footer-contact p,
+      .site-footer-copy {
+        font-size: 12px;
+        line-height: 1.55;
+      }
+    }
   </style>
+  <link rel="stylesheet" href="../common-layout.css" />
 </head>
 <body>
   <header>
     <div class="nav">
       <div class="brand">
         <a href="../index.html#home" aria-label="Go to home">
-          <img class="brand-logo" src="../img/altis_logo.png" alt="ALTIS logo" /></a>
+          <img class="brand-logo" src="../img/altis_logo.png" alt="ALTIS logo" />
+        </a>
       </div>
       <nav id="primary-nav">
         <a href="../index.html#about" data-i18n="navAbout">About</a>
@@ -465,7 +714,23 @@
           </ul>
         </div>
         <a href="../index.html#media" data-i18n="navMedia">Media</a>
+        <a href="../join.html" data-i18n="navJoin">Join</a>
         <a href="../sponsors.html" data-i18n="navsponsors">sponsors</a>
+        <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">
+          <svg class="nav-social-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <circle class="nav-social-icon-fill" cx="17.4" cy="6.6" r="1.1"></circle>
+          </svg>
+          Instagram
+        </a>
+        <a class="nav-instagram-link" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener">
+          <svg class="nav-social-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="6.5" width="18" height="11" rx="3.2"></rect>
+            <path class="nav-social-icon-fill" d="M10 9.5 15.6 12 10 14.5Z"></path>
+          </svg>
+          YouTube
+        </a>
       </nav>
       <div class="nav-actions">
         <button class="nav-cta menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
@@ -493,33 +758,80 @@
       <img src="../img/pcb_land.png" alt="" loading="eager" />
     </div>
     <div class="hero-copy">
-      <div>
+      <div class="hero-content">
+        <p class="hero-kicker">ALTIS Avionics Lab</p>
         <h1>AVIONICS</h1>
-        <p>Data acquisition, ignition control, and reliable mission electronics.</p>
+        <p class="hero-lead">
+          ALTIS는 비행 데이터를 계측하고, 점화·전원·통신을 안정적으로 제어하는 미션 전자 시스템을 직접 설계합니다.
+        </p>
+        <div class="hero-systems" aria-label="Avionics systems">
+          <span class="hero-system">Flight Computer</span>
+          <span class="hero-system">Telemetry</span>
+          <span class="hero-system">Power Control</span>
+        </div>
       </div>
     </div>
   </main>
 
   <section class="section" id="partner">
     <div class="section-head">
-      <h2>sponsors</h2>
+      <p class="kicker">Current Partners</p>
+      <h2>비상을 함께한 분들</h2>
       <a class="partner-invite-link" href="../sponsors.html">다음 발사를 함께 만들고 싶으신가요? 파트너로 참여해 주세요.</a>
     </div>
     <div class="container">
       <div class="partner-logos" aria-label="Partner logos">
-        <a class="partner-logo" href="https://jlcpcb.com/" target="_blank" rel="noopener noreferrer" aria-label="JLCPCB">
-          <img class="logo-jlcpcb" src="../img/JLCPCB_logo.png" alt="JLCPCB logo" loading="lazy" />
-        </a>
-        <a class="partner-logo" href="https://www.innospc.com" target="_blank" rel="noopener noreferrer" aria-label="INNOSPACE">
-          <img class="logo-innospace" src="../img/innospace_logo.png" alt="INNOSPACE logo" loading="lazy" />
-        </a>
-        <a class="partner-logo" href="https://easyeda.com/" target="_blank" rel="noopener noreferrer" aria-label="EasyEDA">
-          <img class="logo-easyeda" src="../img/Easy_eda_logo.png" alt="EasyEDA logo" loading="lazy" />
-        </a>
+        <div class="partner-logo-track">
+          <div class="partner-logo-set">
+            <a class="partner-logo" href="https://jlcpcb.com/" target="_blank" rel="noopener noreferrer" aria-label="JLCPCB">
+              <img class="logo-jlcpcb" src="../img/JLCPCB_logo.png" alt="JLCPCB logo" loading="lazy" />
+              <div class="partner-desc">
+                <h5>JLCPCB</h5>
+                <p>PCB / PCBA Manufacturing</p>
+              </div>
+            </a>
+            <a class="partner-logo partner-logo-featured" data-partner="innospace" href="https://www.innospc.com" target="_blank" rel="noopener noreferrer" aria-label="INNOSPACE">
+              <img class="logo-innospace" src="../img/innospace_logo.png" alt="INNOSPACE logo" loading="lazy" />
+              <div class="partner-desc">
+                <h5>INNOSPACE</h5>
+                <p>Launch Service Partner</p>
+              </div>
+            </a>
+            <a class="partner-logo" href="https://easyeda.com/" target="_blank" rel="noopener noreferrer" aria-label="EasyEDA">
+              <img class="logo-easyeda" src="../img/Easy_eda_logo.png" alt="EasyEDA logo" loading="lazy" />
+              <div class="partner-desc">
+                <h5>EasyEDA</h5>
+                <p>Cloud EDA / PCB Design</p>
+              </div>
+            </a>
+          </div>
+          <div class="partner-logo-set" aria-hidden="true">
+            <a class="partner-logo" href="https://jlcpcb.com/" target="_blank" rel="noopener noreferrer" aria-label="JLCPCB" tabindex="-1">
+              <img class="logo-jlcpcb" src="../img/JLCPCB_logo.png" alt="" loading="lazy" />
+              <div class="partner-desc">
+                <h5>JLCPCB</h5>
+                <p>PCB / PCBA Manufacturing</p>
+              </div>
+            </a>
+            <a class="partner-logo partner-logo-featured" data-partner="innospace" href="https://www.innospc.com" target="_blank" rel="noopener noreferrer" aria-label="INNOSPACE" tabindex="-1">
+              <img class="logo-innospace" src="../img/innospace_logo.png" alt="" loading="lazy" />
+              <div class="partner-desc">
+                <h5>INNOSPACE</h5>
+                <p>Launch Service Partner</p>
+              </div>
+            </a>
+            <a class="partner-logo" href="https://easyeda.com/" target="_blank" rel="noopener noreferrer" aria-label="EasyEDA" tabindex="-1">
+              <img class="logo-easyeda" src="../img/Easy_eda_logo.png" alt="" loading="lazy" />
+              <div class="partner-desc">
+                <h5>EasyEDA</h5>
+                <p>Cloud EDA / PCB Design</p>
+              </div>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
-
   <footer class="site-footer">
     <div class="site-footer-inner">
       <div class="site-footer-divider"></div>
@@ -528,38 +840,28 @@
           <p>Address: 진주대로 501 | Founded Date: March 2021</p>
           <p>CONTACT | email : haechan031217@gnu.ac.kr / instagram : @ altis_official</p>
         </div>
-        <p class="site-footer-copy">© 2021-2026 ALTIS. All rights reserved.</p>
+        <p class="site-footer-copy">© 2021-2026 ALTIS-YBB. All rights reserved.</p>
       </div>
     </div>
   </footer>
 
   <script>
     (() => {
-      const nav = document.querySelector('.nav');
-      const menuBtn = document.querySelector('.menu-toggle');
-      if (!nav || !menuBtn) return;
+      const SHOW_INNOSPACE_LOGO = 1;
+      const innospacePartnerLogos = document.querySelectorAll("[data-partner='innospace']");
+      const partnerLogos = document.querySelector(".partner-logos");
 
-      const closeMenu = () => {
-        nav.classList.remove('is-open');
-        menuBtn.setAttribute('aria-expanded', 'false');
-      };
-
-      menuBtn.addEventListener('click', () => {
-        const isOpen = nav.classList.toggle('is-open');
-        menuBtn.setAttribute('aria-expanded', String(isOpen));
+      innospacePartnerLogos.forEach((logo) => {
+        logo.style.display = SHOW_INNOSPACE_LOGO === 1 ? "" : "none";
       });
 
-      nav.querySelectorAll('nav a').forEach((link) => {
-        link.addEventListener('click', closeMenu);
-      });
-
-      const mql = window.matchMedia('(max-width: 900px)');
-      const handleResize = () => {
-        if (!mql.matches) closeMenu();
-      };
-      if (mql.addEventListener) mql.addEventListener('change', handleResize);
-      else mql.addListener(handleResize);
+      if (partnerLogos) {
+        partnerLogos.classList.toggle("is-two-logos", SHOW_INNOSPACE_LOGO !== 1);
+      }
     })();
-  </script>
+
+    
+</script>
+  <script src="../common-layout.js"></script>
 </body>
 </html>
