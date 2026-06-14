@@ -910,7 +910,6 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="common-layout.css" />
 </head>
 <body>
   <div class="noise"></div>
@@ -922,21 +921,13 @@
         </a>
       </div>
       <nav id="primary-nav">
-        <a href="index.html#about" data-i18n="navAbout">About</a>
-        <a href="index.html#team" data-i18n="navTeams">Teams</a>
-        <div class="nav-tech-dropdown">
-          <a href="index.html#tech" class="nav-tech-link" data-i18n="navTech">Tech</a>
-          <ul class="nav-tech-dropdown-menu" aria-label="Tech sub menu">
-            <li><a href="tech/avionics.html">AVIONICS</a></li>
-            <li><a href="tech/program.html">PROGRAM</a></li>
-            <li><a href="tech/ejection system.html">EJECTION SYSTEM</a></li>
-            <li><a href="tech/motor.html">MOTOR</a></li>
-            <li><a href="tech/structure.html">STRUCTURE</a></li>
-          </ul>
-        </div>
-        <a href="index.html#media" data-i18n="navMedia">Media</a>
-        <a href="join.html" data-i18n="navJoin">Join</a>
-        <a href="sponsors.html" data-i18n="navsponsors">sponsors</a>
+        <a href="index.html#home">Home</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#team">Teams</a>
+        <a href="index.html#tech">Tech</a>
+        <a href="index.html#media">Media</a>
+        <a href="join.html">Join</a>
+        <a href="sponsors.html">sponsors</a>
         <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">
           <svg class="nav-social-icon" viewBox="0 0 24 24" aria-hidden="true">
             <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
@@ -984,7 +975,7 @@
           <p class="kicker">Partnership</p>
           <h1>Support ALTIS</h1>
           <p class="lead">
-            ALTIS는 경상국립대학교 항공우주공학부 학생들이 로켓을 직접 설계하고 제작하며 시험하는 팀입니다.
+            ALTIS는 경상국립대학교 항공우주공학부 학생들이 로켓을 처음부터 끝까지 직접 설계하고 제작하며 시험하는 팀입니다.
             다음 발사를 함께 완성할 스폰서와 협업 파트너를 찾고 있습니다.
           </p>
           <div class="hero-actions">
@@ -1029,7 +1020,7 @@
       <div class="container">
         <div class="section-head">
           <p class="kicker">Current Partners</p>
-          <h2>비상을 함께한 분들</h2>
+          <h2>함께하는 스폰서</h2>
         </div>
         <div class="partner-logos" aria-label="Partner logos">
           <div class="partner-logo-track">
@@ -1133,13 +1124,14 @@
       </div>
     </section>
   </main>
+
   <footer class="site-footer">
     <div class="site-footer-inner">
       <div class="site-footer-divider"></div>
       <div class="site-footer-grid">
         <div class="site-footer-col site-footer-contact">
           <p>Address: 진주대로 501 | Founded Date: March 2021</p>
-          <p>CONTACT | email : haechan031217@gnu.ac.kr / instagram : @ altis_official</p>
+          <p>CONTACT | email : haechan031217@gnu.ac.kr / instagram : @altis_official</p>
         </div>
         <p class="site-footer-copy">© 2021-2026 ALTIS-YBB. All rights reserved.</p>
       </div>
@@ -1147,7 +1139,37 @@
   </footer>
 
   <script>
-(() => {
+    (() => {
+      const nav = document.querySelector(".nav");
+      const menuBtn = document.querySelector(".menu-toggle");
+      if (!nav || !menuBtn) return;
+
+      const closeMenu = () => {
+        nav.classList.remove("is-open");
+        menuBtn.setAttribute("aria-expanded", "false");
+      };
+
+      menuBtn.addEventListener("click", () => {
+        const isOpen = nav.classList.toggle("is-open");
+        menuBtn.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      nav.querySelectorAll("nav a").forEach((link) => {
+        link.addEventListener("click", closeMenu);
+      });
+
+      const mql = window.matchMedia("(max-width: 900px)");
+      const handleResize = () => {
+        if (!mql.matches) closeMenu();
+      };
+      if (mql.addEventListener) {
+        mql.addEventListener("change", handleResize);
+      } else {
+        mql.addListener(handleResize);
+      }
+    })();
+
+    (() => {
       const SHOW_INNOSPACE_LOGO = 1;
       const innospacePartnerLogos = document.querySelectorAll("[data-partner='innospace']");
       const partnerLogos = document.querySelector(".partner-logos");
@@ -1178,6 +1200,5 @@
       proposalView.addEventListener("wheel", focusPdf, { passive: true });
     })();
   </script>
-  <script src="common-layout.js"></script>
 </body>
 </html>
