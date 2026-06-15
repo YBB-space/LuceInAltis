@@ -120,7 +120,54 @@
       -webkit-backdrop-filter: blur(3px);
     }
   </style>
-  <link rel="stylesheet" href="../common-layout.css" />
+  <link rel="stylesheet" href="../common-layout.css?v=20260615-comingsoon" />
+  <style>
+    body.altis-coming-page {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: stretch !important;
+      min-height: 100svh !important;
+      padding: 0 !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+    }
+
+    body.altis-coming-page header,
+    body.altis-coming-page .site-footer {
+      position: relative;
+      z-index: 2;
+      width: 100% !important;
+      flex: 0 0 auto !important;
+    }
+
+    body.altis-coming-page main.card {
+      position: relative;
+      z-index: 1;
+      flex: 1 0 auto !important;
+      width: 100% !important;
+      max-width: none !important;
+      min-height: calc(100svh - 73px) !important;
+      margin: 0 !important;
+      display: grid !important;
+      place-items: center !important;
+      align-content: center !important;
+      gap: 14px !important;
+      padding: clamp(96px, 12vh, 142px) 20px clamp(84px, 10vh, 120px) !important;
+    }
+
+    body.altis-coming-page main.card > * {
+      max-width: min(92vw, 640px) !important;
+    }
+
+    body.altis-coming-page main.card .logo {
+      width: 56px !important;
+      height: 56px !important;
+      max-width: 56px !important;
+      max-height: 56px !important;
+      object-fit: contain !important;
+      flex: 0 0 auto !important;
+    }
+  </style>
 </head>
 <body class="altis-coming-page">
   <header>
@@ -206,6 +253,6 @@
       </div>
     </div>
   </footer>
-  <script src="../common-layout.js"></script>
+  <script src="../common-layout.js?v=20260615-comingsoon"></script>
 </body>
 </html>
