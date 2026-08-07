@@ -19,10 +19,7 @@
     max-width: 100%;
   }
 
-  img,
-  video,
-  iframe,
-  canvas {
+  img {
     max-width: 100%;
   }
 
@@ -67,7 +64,7 @@
     position: static !important;
     min-width: 0;
     margin-left: auto !important;
-    padding-right: 54px;
+    padding-right: 0;
     gap: 6px !important;
     flex-wrap: nowrap !important;
   }
@@ -77,7 +74,8 @@
     position: absolute !important;
     top: 50% !important;
     right: 16px !important;
-    min-width: 46px;
+    width: 76px !important;
+    min-width: 76px !important;
     min-height: 38px;
     padding: 8px 10px !important;
     transform: translateY(-50%) !important;
@@ -85,13 +83,21 @@
 
   .altis-lang-toggle,
   .lang-toggle.nav-lang-toggle {
+    position: absolute !important;
+    top: 50% !important;
+    right: 98px !important;
     display: inline-flex !important;
-    width: auto !important;
-    min-width: 66px !important;
+    width: 78px !important;
+    min-width: 78px !important;
     min-height: 38px !important;
     padding: 8px 9px !important;
     opacity: 1 !important;
     visibility: visible !important;
+    transform: translateY(-50%) !important;
+  }
+
+  .lang-toggle.nav-lang-toggle .lang-option + .lang-option::before {
+    content: none !important;
   }
 
   nav {
@@ -162,6 +168,15 @@
     width: 100%;
     padding-left: 18px !important;
     padding-right: 18px !important;
+  }
+
+  #site-content .hero-video-bg video {
+    width: max(100vw, 177.78vh) !important;
+    height: max(56.25vw, 100vh) !important;
+    min-width: 100% !important;
+    min-height: 100% !important;
+    max-width: none !important;
+    object-fit: cover !important;
   }
 
   #site-content .hero h1 {
@@ -299,14 +314,18 @@
     padding-right: 16px !important;
   }
 
-  .nav-actions {
-    padding-right: 50px;
-  }
-
   .altis-lang-toggle,
   .lang-toggle.nav-lang-toggle {
-    min-width: 62px !important;
+    right: 92px !important;
+    width: 72px !important;
+    min-width: 72px !important;
     font-size: 10px !important;
+  }
+
+  .nav .menu-toggle,
+  .menu-toggle {
+    width: 70px !important;
+    min-width: 70px !important;
   }
 
   .site-footer-inner {
