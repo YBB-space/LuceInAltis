@@ -1,0 +1,355 @@
+/* Mobile-only polish. Desktop layout is intentionally untouched. */
+@media (max-width: 900px) {
+  html {
+    width: 100%;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    width: 100%;
+    min-width: 0 !important;
+    overflow-x: clip !important;
+  }
+
+  main,
+  section,
+  footer {
+    max-width: 100%;
+  }
+
+  img,
+  video,
+  iframe,
+  canvas {
+    max-width: 100%;
+  }
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .container,
+  .shell,
+  .page-shell,
+  .system-shell,
+  .wrap {
+    max-width: 100% !important;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+
+  header {
+    min-height: 64px;
+  }
+
+  .nav {
+    width: 100%;
+    min-height: 64px;
+    padding: 12px 16px !important;
+    gap: 8px !important;
+    align-items: center !important;
+  }
+
+  .brand {
+    min-width: 0;
+    margin-right: auto !important;
+  }
+
+  .brand-logo {
+    width: auto !important;
+    height: 34px !important;
+  }
+
+  .nav-actions {
+    position: static !important;
+    min-width: 0;
+    margin-left: auto !important;
+    padding-right: 54px;
+    gap: 6px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .nav .menu-toggle,
+  .menu-toggle {
+    position: absolute !important;
+    top: 50% !important;
+    right: 16px !important;
+    min-width: 46px;
+    min-height: 38px;
+    padding: 8px 10px !important;
+    transform: translateY(-50%) !important;
+  }
+
+  .altis-lang-toggle,
+  .lang-toggle.nav-lang-toggle {
+    display: inline-flex !important;
+    width: auto !important;
+    min-width: 66px !important;
+    min-height: 38px !important;
+    padding: 8px 9px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  nav {
+    max-height: calc(100svh - 64px);
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+  }
+
+  nav a,
+  .nav-tech-link {
+    min-height: 46px;
+    display: flex !important;
+    align-items: center;
+    padding: 13px 18px !important;
+    font-size: 13px !important;
+    line-height: 1.35;
+  }
+
+  .nav-tech-dropdown-menu a {
+    min-height: 44px;
+    padding: 13px 28px !important;
+    font-size: 11px !important;
+  }
+
+  .hero-actions,
+  .cta-actions,
+  .proposal-actions,
+  .recruiting-gate-actions {
+    gap: 10px !important;
+  }
+
+  .hero-actions a,
+  .hero-actions button,
+  .cta-actions a,
+  .proposal-actions a,
+  .recruiting-gate-actions a {
+    min-height: 44px;
+  }
+
+  .section-head h2,
+  .system-heading h2 {
+    overflow-wrap: anywhere;
+  }
+
+  .site-footer-inner {
+    width: 100% !important;
+    padding: 34px 18px 22px !important;
+  }
+
+  .site-footer-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .site-footer-contact,
+  .site-footer-contact p,
+  .site-footer-copy {
+    width: 100%;
+    max-width: 100%;
+    text-align: left !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+  }
+
+  /* Homepage */
+  #site-content .hero-inner {
+    width: 100%;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+
+  #site-content .hero h1 {
+    max-width: min(100%, 18ch);
+    font-size: clamp(34px, 10.5vw, 52px);
+  }
+
+  #site-content .section-head {
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+
+  #site-content .tech-stack-item,
+  #site-content .tech-subsection {
+    max-width: 100%;
+  }
+
+  #site-content .media-grid,
+  #site-content .team-grid,
+  #site-content .grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  /* Timeline / What We Do */
+  .history-hero {
+    min-height: 560px !important;
+  }
+
+  .history-hero .hero-inner {
+    padding-top: 124px !important;
+  }
+
+  .timeline-section,
+  .outreach-section {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .timeline-section .section-head,
+  .timeline-item,
+  .outreach-card {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .timeline-image,
+  .outreach-gallery img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* Join / Sponsors */
+  #about-join .info-list,
+  #tracks .track-list,
+  #support .support-list,
+  .process-layout,
+  .proposal-layout,
+  .contact-band,
+  .cta-band {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .process-copy,
+  .proposal-copy {
+    position: static !important;
+  }
+
+  .recruiting-gate-panel {
+    width: calc(100% - 28px);
+    max-height: calc(100svh - 28px);
+    padding: 30px 20px;
+    overflow-y: auto;
+  }
+
+  /* Leadership maintenance */
+  .maintenance-panel {
+    min-height: calc(100svh - 64px) !important;
+    padding: 96px 18px 64px !important;
+  }
+
+  .maintenance-content {
+    width: 100%;
+  }
+
+  /* Structure */
+  .process-head p,
+  .step-text,
+  .analysis-copy p,
+  .detail-card p {
+    font-size: 15px !important;
+    line-height: 1.75 !important;
+  }
+
+  .step-media,
+  .analysis-media,
+  .detail-image {
+    border-radius: 10px !important;
+  }
+
+  .analysis-media video {
+    object-fit: contain !important;
+  }
+
+  /* Avionics / Motor */
+  .hero-content,
+  .tech-details,
+  .system-copy,
+  .link-copy {
+    min-width: 0;
+    max-width: 100% !important;
+  }
+
+  .capability-grid,
+  .link-layout,
+  .tech-subsection,
+  .motor-overview-table {
+    max-width: 100%;
+  }
+
+  .motor-overview-row dt,
+  .motor-overview-row dd,
+  .tech-specs div,
+  .capability-card {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 560px) {
+  .container,
+  .shell,
+  .page-shell,
+  .system-shell,
+  .wrap {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .nav-actions {
+    padding-right: 50px;
+  }
+
+  .altis-lang-toggle,
+  .lang-toggle.nav-lang-toggle {
+    min-width: 62px !important;
+    font-size: 10px !important;
+  }
+
+  .site-footer-inner {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .site-footer-contact p,
+  .site-footer-copy {
+    font-size: 11px !important;
+    line-height: 1.65 !important;
+  }
+
+  .hero-actions,
+  .cta-actions,
+  .proposal-actions {
+    width: 100%;
+  }
+
+  .hero-actions a,
+  .cta-actions a,
+  .proposal-actions a {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .capability-list,
+  .motor-overview-table {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .motor-overview-row:nth-child(3) {
+    grid-column: auto !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (max-width: 900px) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
