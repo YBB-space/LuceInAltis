@@ -192,7 +192,7 @@
       "ASTM 규격 기반 복합재 물성 시험 및 데이터 처리": "ASTM-based composite property testing and data processing",
       "시험발사 데이터 기반 구조 설계 보정": "Structural design refinement using flight-test data",
       "동체부터 핀과 핀 지그까지.": "From body tubes to fins and fin jigs.",
-      "ALTIS의 구조는 ALTIS가 만듭니다.": "ALTIS builds every ALTIS structure."
+      "ALTIS가 만듭니다.": "Built by ALTIS."
     },
 
     "ejection system.html": {
