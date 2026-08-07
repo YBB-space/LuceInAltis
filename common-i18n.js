@@ -31,7 +31,10 @@
       "전자팀장": "Avionics Lead",
       "미션팀장": "Mission Lead",
       "동체팀장": "Airframe Lead",
-      "추진팀장": "Propulsion Lead"
+      "추진팀장": "Propulsion Lead",
+      "Leadership 페이지를 점검하고 있습니다.": "The Leadership page is currently under maintenance.",
+      "곧 다시 공개하겠습니다.": "It will be available again soon.",
+      "홈으로 돌아가기": "Back to Home"
     },
 
     "history.html": {
