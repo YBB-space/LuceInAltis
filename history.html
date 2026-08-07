@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="경상국립대학교 로켓동아리 ALTIS의 연혁과 주요 기록" />
+  <title>What We Do | ALTIS</title>
+  <link rel="icon" href="img/altis_logo.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500;600&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #050607;
+      --surface: #0a0c0f;
+      --text: #f5f7fa;
+      --muted: rgba(210, 220, 232, 0.58);
+      --muted-strong: rgba(224, 231, 240, 0.76);
+      --line: rgba(255, 255, 255, 0.16);
+      --line-soft: rgba(255, 255, 255, 0.09);
+      --font-sans: "Sora", "Noto Sans KR", sans-serif;
+      --font-mono: "IBM Plex Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-family: var(--font-sans);
+    }
+
+    .history-hero {
+      position: relative;
+      display: flex;
+      min-height: 68vh;
+      align-items: flex-end;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(5, 6, 7, 0.94) 0%, rgba(5, 6, 7, 0.55) 52%, rgba(5, 6, 7, 0.18) 100%),
+        url("img/hero_launch.png") center 43% / cover no-repeat;
+    }
+
+    .history-hero::after {
+      content: "";
+      position: absolute;
+      right: max(24px, calc((100vw - 1200px) / 2));
+      bottom: -0.08em;
+      color: rgba(255, 255, 255, 0.14);
+      font-family: var(--font-mono);
+      font-size: clamp(92px, 15vw, 230px);
+      line-height: 0.8;
+      white-space: nowrap;
+    }
+
+    .shell {
+      width: min(1200px, calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      padding: 150px 0 68px;
+    }
+
+    .eyebrow,
+    .timeline-year,
+    .timeline-index {
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+    }
+
+    .eyebrow {
+      margin: 0 0 20px;
+      color: var(--muted-strong);
+      font-size: 12px;
+      letter-spacing: 0.2em;
+    }
+
+    h1 {
+      max-width: 850px;
+      margin: 0;
+      font-size: clamp(64px, 10vw, 132px);
+      font-weight: 500;
+      line-height: 0.88;
+      letter-spacing: -0.075em;
+    }
+
+    .hero-copy {
+      max-width: 590px;
+      margin: 32px 0 0;
+      color: var(--muted-strong);
+      font-size: 16px;
+      line-height: 1.8;
+      word-break: keep-all;
+    }
+
+    .timeline-section { padding: 110px 0 130px; }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 28px;
+      margin-bottom: 64px;
+    }
+
+    .section-head span {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 500;
+      letter-spacing: -0.055em;
+    }
+
+    .timeline { border-top: 1px solid var(--line); }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr) minmax(260px, 0.72fr);
+      gap: 28px;
+      min-height: 220px;
+      padding: 34px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .timeline-year {
+      font-size: clamp(30px, 4vw, 52px);
+      letter-spacing: -0.055em;
+    }
+
+    .timeline-copy h3 {
+      margin: 4px 0 16px;
+      font-size: clamp(25px, 3vw, 38px);
+      font-weight: 500;
+      letter-spacing: -0.04em;
+    }
+
+    .timeline-copy p {
+      max-width: 600px;
+      margin: 0;
+      color: var(--muted-strong);
+      font-size: 15px;
+      line-height: 1.8;
+      word-break: keep-all;
+    }
+
+    .timeline-index {
+      align-self: start;
+      justify-self: end;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+    }
+
+    .timeline-image {
+      width: 100%;
+      margin-top: 26px;
+      aspect-ratio: 16 / 9;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+
+    .timeline-item-featured { min-height: 430px; }
+    .timeline-item-featured .timeline-index { grid-column: 3; }
+    .timeline-item-featured .timeline-image { grid-column: 2 / 4; }
+
+    .outreach-section {
+      padding: 0 0 130px;
+    }
+
+    .outreach-card {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 28px;
+      padding: 46px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .outreach-label {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .outreach-copy h2 {
+      margin: 0;
+      font-size: clamp(34px, 5vw, 60px);
+      font-weight: 500;
+      letter-spacing: -0.055em;
+    }
+
+    .outreach-copy p {
+      max-width: 760px;
+      margin: 22px 0 0;
+      color: var(--muted-strong);
+      font-size: 16px;
+      line-height: 1.9;
+      word-break: keep-all;
+    }
+
+    .outreach-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 36px;
+    }
+
+    .outreach-gallery img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+
+    .site-footer { padding: 52px 0 32px; }
+    .site-footer-inner { width: min(1200px, calc(100% - 48px)); margin: 0 auto; }
+    .site-footer-divider { height: 1px; margin-bottom: 24px; background: var(--line); }
+    .site-footer-grid { display: flex; align-items: flex-end; justify-content: space-between; gap: 36px; }
+    .site-footer p { margin: 5px 0; color: rgba(193, 204, 219, 0.65); font-size: 11px; line-height: 1.6; }
+    .site-footer-copy { text-align: right; white-space: nowrap; }
+
+    @media (max-width: 760px) {
+      .history-hero { min-height: 600px; background-position: 58% center; }
+      .history-hero::after { right: -28px; font-size: 28vw; }
+      .shell, .site-footer-inner { width: calc(100% - 32px); }
+      .hero-inner { padding: 145px 0 48px; }
+      h1 { font-size: clamp(58px, 19vw, 86px); }
+      .timeline-section { padding: 72px 0 90px; }
+      .section-head, .timeline-item { grid-template-columns: 1fr; gap: 14px; }
+      .section-head { margin-bottom: 38px; }
+      .timeline-item { min-height: 0; padding: 28px 0 34px; }
+      .timeline-index { grid-row: 1; justify-self: end; }
+      .timeline-year { grid-row: 1; }
+      .timeline-copy { grid-column: 1; }
+      .timeline-item-featured .timeline-index { grid-column: 1; }
+      .timeline-item-featured .timeline-image { grid-column: 1; margin-top: 12px; }
+      .outreach-section { padding-bottom: 90px; }
+      .outreach-card { grid-template-columns: 1fr; gap: 16px; padding: 34px 0; }
+      .outreach-gallery { grid-template-columns: 1fr; gap: 12px; margin-top: 28px; }
+      .site-footer-grid { display: grid; }
+      .site-footer-copy { text-align: left; white-space: normal; }
+    }
+  </style>
+  <link rel="stylesheet" href="common-layout.css" />
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <a href="index.html#home" aria-label="ALTIS 홈으로 이동"><img class="brand-logo" src="img/altis_logo.png" alt="ALTIS 로고" /></a>
+      </div>
+      <nav id="primary-nav">
+        <a href="index.html#about">About</a>
+        <a href="team.html">Leadership</a>
+        <a class="nav-current" href="history.html" aria-current="page">What We Do</a>
+        <div class="nav-tech-dropdown">
+          <a href="index.html#tech" class="nav-tech-link">Tech</a>
+          <ul class="nav-tech-dropdown-menu" aria-label="기술 분야 메뉴">
+            <li><a href="tech/avionics.html">AVIONICS + SOFTWARE</a></li>
+            <li><a href="tech/ejection system.html">EJECTION SYSTEM</a></li>
+            <li><a href="tech/motor.html">MOTOR</a></li>
+            <li><a href="tech/structure.html">STRUCTURE</a></li>
+          </ul>
+        </div>
+        <a href="index.html#media">Media</a>
+        <a href="join.html">Join</a>
+        <a href="sponsors.html">Sponsors</a>
+        <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">Instagram</a>
+        <a class="nav-instagram-link" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener">YouTube</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="nav-cta menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="history-hero">
+      <div class="shell hero-inner">
+        <p class="eyebrow">ALTIS · Since March 2021</p>
+        <h1>What<br />We Do</h1>
+        <p class="hero-copy">설계하고, 만들고, 시험하며 쌓아온 ALTIS의 시간입니다. 하나의 발사를 향한 도전은 매년 새로운 기록으로 이어집니다.</p>
+      </div>
+    </section>
+
+    <section class="timeline-section" aria-labelledby="history-title">
+      <div class="shell">
+        <div class="section-head">
+          <span>Timeline / 2021—2026</span>
+          <h2 id="history-title">연혁 및 수상 이력</h2>
+        </div>
+
+        <div class="timeline">
+          <article class="timeline-item">
+            <div class="timeline-year">2021</div>
+            <div class="timeline-copy">
+              <h3>ALTIS 창립</h3>
+              <p>2021년 3월, 경상국립대학교 항공우주공학부 학생 로켓 동아리 ALTIS가 첫걸음을 시작했습니다.</p>
+            </div>
+            <span class="timeline-index">01 / Foundation</span>
+          </article>
+
+          <article class="timeline-item timeline-item-featured">
+            <div class="timeline-year">2024</div>
+            <div class="timeline-copy">
+              <h3>NURA 전국대학교 로켓발사대회<br />한국항공우주연구원 원장상</h3>
+              <p>전국 대학 로켓팀이 함께한 NURA 로켓발사대회에서 한국항공우주연구원 원장상을 수상하며 ALTIS의 설계·제작·발사 역량을 입증했습니다.</p>
+            </div>
+            <span class="timeline-index">02 / Director's Award</span>
+            <img class="timeline-image" src="img/24nura.png" alt="2024 NURA 전국대학교 로켓발사대회에 참가한 ALTIS 구성원" loading="lazy" />
+          </article>
+
+          <article class="timeline-item">
+            <div class="timeline-year">2025</div>
+            <div class="timeline-copy">
+              <h3>NURA 로켓학술대회 현장</h3>
+              <p>프로젝트 결과와 기술 경험을 공유하며 다음 발사를 위한 설계와 시험 기록을 이어갔습니다.</p>
+            </div>
+            <span class="timeline-index">03 / Field Record</span>
+          </article>
+
+          <article class="timeline-item">
+            <div class="timeline-year">2026</div>
+            <div class="timeline-copy">
+              <h3>CSA 동아리 평가 A등급</h3>
+              <p>경상국립대학교 CSA 동아리 평가에서 A등급을 받았습니다.</p>
+            </div>
+            <span class="timeline-index">04 / Next Flight</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="outreach-section" aria-labelledby="bootcamp-title">
+      <div class="shell">
+        <div class="outreach-card">
+          <span class="outreach-label">Outreach / Bootcamp</span>
+          <div class="outreach-copy">
+            <h2 id="bootcamp-title">항공우주 부트캠프</h2>
+            <p>ALTIS는 고등학생들과 함께 항공우주 분야를 알아가는 교육 활동도 진행합니다. 수업을 통해 로켓의 기본 원리와 구조를 배우고, 참가 학생들이 직접 모델 로켓을 제작해 실제 발사까지 경험할 수 있도록 부트캠프를 운영합니다. 설계와 제작, 발사로 이어지는 과정을 통해 항공우주공학을 더 가까이 알리는 활동입니다.</p>
+            <div class="outreach-gallery">
+              <img src="img/bootcamp-class-mosaic.png" alt="고등학생들이 모델 로켓을 제작하는 ALTIS 항공우주 부트캠프 수업" loading="lazy" />
+              <img src="img/bootcamp-build-mosaic.png" alt="모델 로켓과 낙하산을 조립하는 항공우주 부트캠프 참가 학생들" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="site-footer-divider"></div>
+      <div class="site-footer-grid">
+        <div>
+          <p>Address: 진주대로 501 | Founded Date: March 2021</p>
+          <p>CONTACT | email : ybb1833@naver.com / instagram : @ altis_official</p>
+        </div>
+        <p class="site-footer-copy">© 2021-2026 ALTIS. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  <script src="common-i18n.js"></script>
+  <script src="common-layout.js"></script>
+</body>
+</html>

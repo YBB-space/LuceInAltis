@@ -37,7 +37,8 @@
       overflow-x: hidden;
     }
 
-    body.recruiting-closed main {
+    body.recruiting-closed main,
+    body.recruiting-closed .site-footer {
       display: none;
       pointer-events: none;
       user-select: none;
@@ -1130,7 +1131,6 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="common-layout.css" />
 </head>
 <body>
   <div class="noise"></div>
@@ -1142,21 +1142,22 @@
         </a>
       </div>
       <nav id="primary-nav">
-        <a href="index.html#about" data-i18n="navAbout">About</a>
-        <a href="index.html#team" data-i18n="navTeams">Teams</a>
+        <a href="index.html#home">Home</a>
+        <a href="index.html#about">About</a>
+        <a href="team.html">Leadership</a>
+        <a href="history.html">What We Do</a>
         <div class="nav-tech-dropdown">
-          <a href="index.html#tech" class="nav-tech-link" data-i18n="navTech">Tech</a>
+          <a href="index.html#tech" class="nav-tech-link">Tech</a>
           <ul class="nav-tech-dropdown-menu" aria-label="Tech sub menu">
-            <li><a href="tech/avionics.html">AVIONICS</a></li>
-            <li><a href="tech/program.html">PROGRAM</a></li>
+            <li><a href="tech/avionics.html">AVIONICS + SOFTWARE</a></li>
             <li><a href="tech/ejection system.html">EJECTION SYSTEM</a></li>
             <li><a href="tech/motor.html">MOTOR</a></li>
             <li><a href="tech/structure.html">STRUCTURE</a></li>
           </ul>
         </div>
-        <a href="index.html#media" data-i18n="navMedia">Media</a>
-        <a href="join.html" data-i18n="navJoin">Join</a>
-        <a href="sponsors.html" data-i18n="navsponsors">sponsors</a>
+        <a href="index.html#media">Media</a>
+        <a href="join.html">Join</a>
+        <a href="sponsors.html">sponsors</a>
         <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">
           <svg class="nav-social-icon" viewBox="0 0 24 24" aria-hidden="true">
             <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
@@ -1323,7 +1324,7 @@
         <div class="contact-lines">
           <div class="contact-line">
             <span>Email</span>
-            <a href="mailto:haechan031217@gnu.ac.kr">haechan031217@gnu.ac.kr</a>
+            <a href="mailto:ybb1833@naver.com">ybb1833@naver.com</a>
           </div>
           <div class="contact-line">
             <span>Instagram</span>
@@ -1337,7 +1338,7 @@
       <div class="container">
         <div class="section-head">
           <p class="kicker">Current Partners</p>
-          <h2>비상을 함께한 분들</h2>
+          <h2>함께하는 스폰서</h2>
           <a class="partner-invite-link" href="sponsors.html">다음 발사를 함께 만들고 싶으신가요? 파트너로 참여해 주세요.</a>
         </div>
         <div class="partner-logos" aria-label="Partner logos">
@@ -1393,15 +1394,16 @@
       </div>
     </section>
   </main>
+
   <footer class="site-footer">
     <div class="site-footer-inner">
       <div class="site-footer-divider"></div>
       <div class="site-footer-grid">
         <div class="site-footer-col site-footer-contact">
           <p>Address: 진주대로 501 | Founded Date: March 2021</p>
-          <p>CONTACT | email : haechan031217@gnu.ac.kr / instagram : @ altis_official</p>
+          <p>CONTACT | email : ybb1833@naver.com / instagram : @ altis_official</p>
         </div>
-        <p class="site-footer-copy">© 2021-2026 ALTIS-YBB. All rights reserved.</p>
+        <p class="site-footer-copy">© 2021-2026 ALTIS. All rights reserved.</p>
       </div>
     </div>
   </footer>
@@ -1421,7 +1423,7 @@
   </div>
 
   <script>
-    const RECRUITING_OPEN = 0; // 0: 모집 닫힘, 1: 모집 중
+    const RECRUITING_OPEN = 1; // 0: 모집 닫힘, 1: 모집 중
 
     (() => {
       const isOpen = RECRUITING_OPEN === 1;
@@ -1433,8 +1435,52 @@
       }
     })();
 
-    
-(() => {
+    (() => {
+      const nav = document.querySelector(".nav");
+      const menuBtn = document.querySelector(".menu-toggle");
+      const techDropdown = nav?.querySelector(".nav-tech-dropdown");
+      const techLink = nav?.querySelector(".nav-tech-link");
+      if (!nav || !menuBtn) return;
+
+      const closeMenu = () => {
+        nav.classList.remove("is-open");
+        techDropdown?.classList.remove("is-open");
+        menuBtn.setAttribute("aria-expanded", "false");
+      };
+
+      menuBtn.addEventListener("click", () => {
+        const isOpen = nav.classList.toggle("is-open");
+        menuBtn.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      nav.querySelectorAll("nav a").forEach((link) => {
+        link.addEventListener("click", () => {
+          if (link.classList.contains("nav-tech-link")) return;
+          closeMenu();
+        });
+      });
+
+      techLink?.addEventListener("click", (event) => {
+        if (!window.matchMedia("(max-width: 900px)").matches) return;
+        event.preventDefault();
+        techDropdown?.classList.toggle("is-open");
+      });
+
+      const mql = window.matchMedia("(max-width: 900px)");
+      const handleResize = () => {
+        if (!mql.matches) {
+          closeMenu();
+          techDropdown?.classList.remove("is-open");
+        }
+      };
+      if (mql.addEventListener) {
+        mql.addEventListener("change", handleResize);
+      } else {
+        mql.addListener(handleResize);
+      }
+    })();
+
+    (() => {
       const SHOW_INNOSPACE_LOGO = 1;
       const innospacePartnerLogos = document.querySelectorAll("[data-partner='innospace']");
       const partnerLogos = document.querySelector(".partner-logos");
@@ -1456,6 +1502,6 @@
       });
     })();
   </script>
-  <script src="common-layout.js"></script>
+  <script src="common-i18n.js"></script>
 </body>
 </html>

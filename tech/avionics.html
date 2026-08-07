@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ALTIS Avionics</title>
+  <title>ALTIS Avionics &amp; Software</title>
   <link rel="icon" href="../img/altis_logo.png" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -62,7 +62,12 @@
       margin-right: auto;
     }
     .brand a { display: inline-flex; align-items: center; text-decoration: none; }
-    .brand-logo { height: 40px; width: auto; display: block; filter: brightness(0) invert(1); }
+    .brand-logo {
+      height: 40px;
+      width: auto;
+      display: block;
+      filter: brightness(0) invert(1);
+    }
 
     nav {
       margin-left: auto;
@@ -357,6 +362,136 @@
     }
 
     .section { padding: 28px 0 84px; }
+    .avionics-model-section {
+      position: relative;
+      overflow: visible;
+      min-height: clamp(1180px, 245svh, 2040px);
+      padding-bottom: clamp(190px, 32vh, 340px);
+    }
+    .avionics-model-section::before {
+      content: "";
+      position: absolute;
+      inset: 22% -18% auto;
+      height: 66%;
+      background:
+        radial-gradient(circle at 68% 42%, rgba(104, 151, 212, 0.16), transparent 38%),
+        radial-gradient(circle at 28% 58%, rgba(255, 120, 78, 0.08), transparent 34%);
+      filter: blur(30px);
+      pointer-events: none;
+    }
+    .avionics-model-layout {
+      position: sticky;
+      top: 74px;
+      z-index: 1;
+      min-height: calc(100svh - 74px);
+      display: grid;
+      grid-template-columns: minmax(280px, 0.74fr) minmax(420px, 1.26fr);
+      align-items: center;
+      gap: clamp(28px, 4vw, 64px);
+    }
+    .avionics-model-copy {
+      display: grid;
+      gap: 14px;
+      max-width: 470px;
+    }
+    .avionics-model-copy h2 {
+      margin: 0;
+      font-size: clamp(2.2rem, 5.4vw, 5.6rem);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: rgba(245, 248, 252, 0.96);
+    }
+    .avionics-model-copy p {
+      margin: 0;
+      color: rgba(230, 236, 245, 0.76);
+      font-size: clamp(14px, 1.4vw, 17px);
+      line-height: 1.78;
+      letter-spacing: 0;
+      word-break: keep-all;
+    }
+    .avionics-model-meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .avionics-model-meta span {
+      min-height: 48px;
+      display: grid;
+      place-items: center;
+      padding: 10px 8px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.035);
+      color: rgba(245, 248, 252, 0.86);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .avionics-3d-stage {
+      --stage-bleed: clamp(120px, 12vw, 240px);
+      --stage-push: clamp(34px, 5vw, 96px);
+      position: relative;
+      width: calc(100% + var(--stage-bleed));
+      margin-left: var(--stage-push);
+      margin-right: calc(var(--stage-bleed) * -1);
+      min-height: clamp(480px, 62vh, 760px);
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      isolation: isolate;
+      -webkit-mask-image: radial-gradient(ellipse at 54% 50%, #000 0 54%, rgba(0, 0, 0, 0.9) 64%, rgba(0, 0, 0, 0.35) 78%, transparent 96%);
+      mask-image: radial-gradient(ellipse at 54% 50%, #000 0 54%, rgba(0, 0, 0, 0.9) 64%, rgba(0, 0, 0, 0.35) 78%, transparent 96%);
+    }
+    .avionics-3d-stage::before {
+      content: "";
+      position: absolute;
+      inset: 4% -4% 0;
+      z-index: 0;
+      background: radial-gradient(circle at 50% 48%, rgba(114, 160, 220, 0.14), rgba(60, 88, 124, 0.06) 38%, transparent 72%);
+      filter: blur(28px);
+      pointer-events: none;
+    }
+    .avionics-3d-stage::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 7%;
+      z-index: 0;
+      width: min(82%, 620px);
+      height: clamp(120px, 24%, 220px);
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse at center, rgba(144, 186, 236, 0.12), rgba(86, 124, 174, 0.06) 42%, transparent 76%);
+      filter: blur(20px);
+      pointer-events: none;
+    }
+    .avionics-3d-stage canvas {
+      position: relative;
+      z-index: 1;
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+      cursor: grab;
+      touch-action: pan-y;
+    }
+    .avionics-3d-stage.is-dragging canvas {
+      cursor: grabbing;
+    }
+    .avionics-3d-fallback {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+    }
+    .avionics-3d-fallback img {
+      width: min(520px, 86%);
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 20px 44px rgba(0, 0, 0, 0.34));
+    }
     .section-head {
       max-width: 1200px;
       margin: 0 auto 20px;
@@ -579,6 +714,50 @@
         padding-top: 122px;
         background: linear-gradient(180deg, rgba(5, 6, 7, 0) 0%, rgba(5, 6, 7, 0.46) 42%, #050607 100%);
       }
+      .avionics-model-section {
+        min-height: 220svh;
+        padding-bottom: 120px;
+      }
+      .avionics-model-layout {
+        position: sticky;
+        top: 66px;
+        min-height: calc(100svh - 66px);
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .avionics-model-copy {
+        max-width: none;
+        text-align: center;
+        justify-items: center;
+        order: 1;
+      }
+      .avionics-model-copy h2 {
+        font-size: clamp(2.2rem, 12vw, 3.9rem);
+      }
+      .avionics-model-copy p {
+        max-width: 31ch;
+        font-size: 14px;
+      }
+      .avionics-model-meta {
+        width: 100%;
+        max-width: 360px;
+        grid-template-columns: 1fr;
+      }
+      .avionics-3d-stage {
+        --stage-bleed: 0px;
+        --stage-push: 0px;
+        order: 0;
+        width: min(100%, 390px);
+        margin-left: 0;
+        margin-right: 0;
+        min-height: 0;
+        height: clamp(300px, 88vw, 430px);
+        aspect-ratio: 1 / 1;
+        justify-self: center;
+        overflow: hidden;
+        -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 0 58%, rgba(0, 0, 0, 0.82) 72%, transparent 96%);
+        mask-image: radial-gradient(ellipse at 50% 50%, #000 0 58%, rgba(0, 0, 0, 0.82) 72%, transparent 96%);
+      }
       .section-head {
         gap: 8px;
         margin-bottom: 16px;
@@ -691,8 +870,9 @@
     }
   </style>
   <link rel="stylesheet" href="../common-layout.css" />
+  <link rel="stylesheet" href="./avionics-integrated.css" />
 </head>
-<body>
+<body class="avionics-integrated">
   <header>
     <div class="nav">
       <div class="brand">
@@ -702,12 +882,12 @@
       </div>
       <nav id="primary-nav">
         <a href="../index.html#about" data-i18n="navAbout">About</a>
-        <a href="../index.html#team" data-i18n="navTeams">Teams</a>
+        <a href="../team.html" data-i18n="navTeams">Leadership</a>
+        <a href="../history.html">What We Do</a>
         <div class="nav-tech-dropdown">
           <a href="../index.html#tech" class="nav-tech-link" data-i18n="navTech">Tech</a>
           <ul class="nav-tech-dropdown-menu" aria-label="Tech sub menu">
-            <li><a href="./avionics.html">AVIONICS</a></li>
-            <li><a href="./program.html">PROGRAM</a></li>
+            <li><a href="./avionics.html">AVIONICS + SOFTWARE</a></li>
             <li><a href="./ejection system.html">EJECTION SYSTEM</a></li>
             <li><a href="./motor.html">MOTOR</a></li>
             <li><a href="./structure.html">STRUCTURE</a></li>
@@ -759,19 +939,205 @@
     </div>
     <div class="hero-copy">
       <div class="hero-content">
-        <p class="hero-kicker">ALTIS Avionics Lab</p>
-        <h1>AVIONICS</h1>
+        <p class="hero-kicker">ALTIS Integrated Flight System</p>
+        <h1>AVIONICS<br /><span>× SOFTWARE</span></h1>
         <p class="hero-lead">
-          ALTIS는 비행 데이터를 계측하고, 점화·전원·통신을 안정적으로 제어하는 미션 전자 시스템을 직접 설계합니다.
+          센서에서 지상국까지. ALTIS는 비행 데이터를 계측하고 기록하며,
+          통신·점화·전원 제어와 운영 소프트웨어를 하나의 시스템으로 직접 설계합니다.
         </p>
         <div class="hero-systems" aria-label="Avionics systems">
-          <span class="hero-system">Flight Computer</span>
-          <span class="hero-system">Telemetry</span>
-          <span class="hero-system">Power Control</span>
+          <span class="hero-system">FLASH6</span>
+          <span class="hero-system">A.I LINK</span>
+          <span class="hero-system">Flight Data</span>
+          <span class="hero-system">Ground Software</span>
         </div>
       </div>
     </div>
   </main>
+
+  <section class="system-section" id="overview">
+    <div class="system-shell">
+      <div class="system-heading">
+        <p class="system-eyebrow">01 / System Overview</p>
+        <h2>비행의 모든 신호를<br />하나의 흐름으로</h2>
+        <p class="system-heading-copy">
+          ALTIS의 에비오닉스는 보드 한 장으로 끝나지 않습니다. 센서 계측, 실시간 상태 판단,
+          비행 기록, 무선 통신, 지상국 시각화가 하나의 데이터 규격으로 이어집니다.
+          하드웨어와 소프트웨어를 함께 설계해 지연과 변환 손실을 줄이고, 비행 전 과정의 데이터를 일관되게 유지합니다.
+        </p>
+      </div>
+
+      <div class="architecture-flow" aria-label="ALTIS avionics data flow">
+        <article class="architecture-node">
+          <span class="architecture-index">INPUT / 01</span>
+          <strong>Flight Sensors</strong>
+          <p>IMU, 기압·고도, 위치와 전원 상태를 비행 중 연속 계측합니다.</p>
+        </article>
+        <article class="architecture-node">
+          <span class="architecture-index">COMPUTE / 02</span>
+          <strong>FLASH6</strong>
+          <p>상태 판단, 이벤트 시퀀스, 파이로·서보 제어와 비행 기록을 수행합니다.</p>
+        </article>
+        <article class="architecture-node">
+          <span class="architecture-index">LINK / 03</span>
+          <strong>A.I LINK</strong>
+          <p>기체 간 중계와 지상국 링크를 관리하고 텔레메트리와 명령을 전달합니다.</p>
+        </article>
+        <article class="architecture-node">
+          <span class="architecture-index">GROUND / 04</span>
+          <strong>Mission Software</strong>
+          <p>HUD, 자세·궤적, 지도, 이벤트와 저장 기록을 하나의 화면에서 운영합니다.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="system-section" id="software">
+    <div class="system-shell">
+      <div class="system-heading">
+        <p class="system-eyebrow">02 / Hardware + Software</p>
+        <h2>같이 설계하고,<br />같이 검증합니다</h2>
+        <p class="system-heading-copy">
+          펌웨어와 운영 소프트웨어는 동일한 이벤트·텔레메트리 정의를 공유합니다.
+          보드에서 생성된 데이터가 화면과 보고서까지 같은 의미로 유지되도록 인터페이스를 설계합니다.
+        </p>
+      </div>
+
+      <div class="technology-split">
+        <article class="technology-panel">
+          <span class="technology-label">Flight Hardware</span>
+          <h3>FLASH6<br />Flight Computer</h3>
+          <p>
+            비행 센서, 통신, 저장장치와 안전 출력부를 통합한 ALTIS의 비행 컴퓨터입니다.
+            실시간 루프를 방해하지 않도록 계측·기록·통신 작업을 분리하고, 비행 이벤트를 결정론적으로 처리합니다.
+          </p>
+          <figure class="technology-visual hardware" data-caption="ALTIS flight computer">
+            <img src="../img/altis_pcb.png" alt="ALTIS FLASH6 flight computer board" loading="lazy" />
+          </figure>
+          <ul class="technology-list">
+            <li><b>Acquisition</b><span>IMU·기압·고도·위치·전원 텔레메트리 계측</span></li>
+            <li><b>Control</b><span>파이로 채널, 서보, 안전 모드와 비행 시퀀스 관리</span></li>
+            <li><b>Storage</b><span>온보드 SPI Flash 비행 기록 및 지상국 다운로드</span></li>
+            <li><b>Runtime</b><span>통신과 기록이 센서 루프를 막지 않는 비동기 처리 구조</span></li>
+          </ul>
+        </article>
+
+        <article class="technology-panel">
+          <span class="technology-label">Mission Software</span>
+          <h3>FLASH6<br />Ground Console</h3>
+          <p>
+            발사 전 점검부터 비행 중 모니터링, 회수 후 데이터 분석까지 이어지는 지상국 소프트웨어입니다.
+            실시간 표시와 제어 명령을 분리해 반응성을 확보하고, 저장 기록과 보고서를 같은 비행 데이터로 생성합니다.
+          </p>
+          <figure class="technology-visual software" data-caption="Realtime mission interface">
+            <img src="../img/altis_flash.png" alt="FLASH6 ground control software interface" loading="lazy" />
+          </figure>
+          <ul class="technology-list">
+            <li><b>Telemetry</b><span>고도·속도·가속도 차트와 단계별 상태 모니터링</span></li>
+            <li><b>Attitude</b><span>IMU 기반 3D 자세 프리뷰, 궤적과 지도 시각화</span></li>
+            <li><b>Operations</b><span>ARM, 안전 모드, 점화·서보 제어와 이벤트 알림</span></li>
+            <li><b>Data</b><span>비행 기록 다운로드, 재생, 차트와 보고서 내보내기</span></li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="system-section link-section" id="ai-link">
+    <div class="system-shell link-layout">
+      <div class="link-copy">
+        <p class="system-eyebrow">03 / Intelligent Telemetry</p>
+        <h2>A.I LINK</h2>
+        <p>
+          비행 단계와 링크 상태에 따라 데이터를 전달하는 ALTIS의 통신 계층입니다.
+          2단은 1단 중계를 우선 사용하고, 중계가 끊기면 지상국 직통 경로로 전환할 수 있도록 설계합니다.
+          지상국은 어느 경로로 들어온 데이터든 같은 텔레메트리로 처리합니다.
+        </p>
+        <div class="link-facts" aria-label="A.I LINK key characteristics">
+          <div class="link-fact"><b>100 Hz</b><span>Stage 1 telemetry</span></div>
+          <div class="link-fact"><b>Relay</b><span>Primary path</span></div>
+          <div class="link-fact"><b>Direct</b><span>Fallback path</span></div>
+        </div>
+      </div>
+
+      <div class="link-topology" aria-label="A.I LINK relay topology diagram">
+        <span class="topology-line stage" aria-hidden="true"></span>
+        <span class="topology-line relay" aria-hidden="true"></span>
+        <span class="topology-line client" aria-hidden="true"></span>
+        <div class="topology-node stage2"><b>STAGE 2</b><span>Vehicle node</span></div>
+        <div class="topology-node stage1"><b>STAGE 1</b><span>Relay node</span></div>
+        <div class="topology-node ground"><b>GROUND</b><span>Gateway</span></div>
+        <div class="topology-node client"><b>CONSOLE</b><span>Web / USB</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="system-section" id="capabilities">
+    <div class="system-shell">
+      <div class="system-heading">
+        <p class="system-eyebrow">04 / Flight Capabilities</p>
+        <h2>발사 전부터<br />비행 후까지</h2>
+        <p class="system-heading-copy">
+          단순한 실시간 화면을 넘어, 준비·비행·회수·분석의 전 과정을 하나의 시스템에서 연결합니다.
+        </p>
+      </div>
+      <div class="capability-grid">
+        <article class="capability">
+          <span class="capability-index">01 / PRE-FLIGHT</span>
+          <h3>상태 점검</h3>
+          <p>센서, 저장공간, 통신률, 전원과 안전 상태를 발사 전에 한 화면에서 확인합니다.</p>
+        </article>
+        <article class="capability">
+          <span class="capability-index">02 / REALTIME</span>
+          <h3>비행 텔레메트리</h3>
+          <p>단계별 고도·속도·가속도와 자세, 이벤트를 지연을 줄인 실시간 스트림으로 표시합니다.</p>
+        </article>
+        <article class="capability">
+          <span class="capability-index">03 / CONTROL</span>
+          <h3>안전 제어</h3>
+          <p>ARM과 안전 모드, 점화·서보 명령을 상태 확인과 함께 수행해 오동작 가능성을 낮춥니다.</p>
+        </article>
+        <article class="capability">
+          <span class="capability-index">04 / RECORD</span>
+          <h3>온보드 기록</h3>
+          <p>무선 링크와 별개로 비행 데이터를 플래시에 보존하여 통신 음영 구간의 데이터도 남깁니다.</p>
+        </article>
+        <article class="capability">
+          <span class="capability-index">05 / REPLAY</span>
+          <h3>비행 재생</h3>
+          <p>기록된 센서·이벤트를 시간축에 맞춰 다시 재생해 비행 상태와 시퀀스를 검토합니다.</p>
+        </article>
+        <article class="capability">
+          <span class="capability-index">06 / REPORT</span>
+          <h3>데이터 분석</h3>
+          <p>고도·가속도·궤적 차트와 주요 이벤트를 보고서 형식으로 정리해 다음 설계에 반영합니다.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section avionics-model-section" id="intellignet-3d" aria-label="ALTIS INTELLIGNET3 3D model">
+    <div class="container avionics-model-layout">
+      <div class="avionics-model-copy">
+        <p class="kicker">05 / Flight Computer Mockup</p>
+        <h2>ALTIS INTELLIGENT 3</h2>
+        <p>
+          비행 컴퓨터 하우징과 전자 시스템 배치를 3D 목업으로 확인합니다.
+          회로와 고정 구조, 커넥터 접근성, 조립성을 함께 검토하며 실제 비행 환경에 맞춰 반복 개선합니다.
+        </p>
+        <div class="avionics-model-meta" aria-label="ALTIS INTELLIGNET3 system roles">
+          <span>Flight Data</span>
+          <span>Ignition Logic</span>
+          <span>Power Bus</span>
+        </div>
+      </div>
+      <div class="avionics-3d-stage" id="avionics-3d-stage" aria-label="ALTIS INTELLIGNET3 3D model viewer">
+        <div class="avionics-3d-fallback">
+          <img src="../img/altis_pcb.png" alt="ALTIS avionics board preview" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section class="section" id="partner">
     <div class="section-head">
@@ -838,9 +1204,9 @@
       <div class="site-footer-grid">
         <div class="site-footer-col site-footer-contact">
           <p>Address: 진주대로 501 | Founded Date: March 2021</p>
-          <p>CONTACT | email : haechan031217@gnu.ac.kr / instagram : @ altis_official</p>
+          <p>CONTACT | email : ybb1833@naver.com / instagram : @ altis_official</p>
         </div>
-        <p class="site-footer-copy">© 2021-2026 ALTIS-YBB. All rights reserved.</p>
+        <p class="site-footer-copy">© 2021-2026 ALTIS. All rights reserved.</p>
       </div>
     </div>
   </footer>
@@ -862,6 +1228,397 @@
 
     
 </script>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+    import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+    import { ThreeMFLoader } from "three/addons/loaders/3MFLoader.js";
+
+    const stage = document.getElementById("avionics-3d-stage");
+
+    if (stage) {
+      stage.setAttribute("aria-label", "Scroll-controlled ALTIS INTELLIGNET3 cover reveal view");
+
+      const fallback = stage.querySelector(".avionics-3d-fallback");
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 0.72;
+      stage.appendChild(renderer.domElement);
+
+      const scene = new THREE.Scene();
+      const pmremGenerator = new THREE.PMREMGenerator(renderer);
+      scene.environment = pmremGenerator.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+      pmremGenerator.dispose();
+
+      const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 5000);
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.enablePan = false;
+      controls.enableZoom = false;
+      controls.enableRotate = false;
+      controls.autoRotate = false;
+      controls.minDistance = 60;
+      controls.maxDistance = 800;
+
+      scene.add(new THREE.AmbientLight(0xffffff, 0.48));
+      const keyLight = new THREE.DirectionalLight(0xffffff, 0.58);
+      keyLight.position.set(120, 190, 180);
+      scene.add(keyLight);
+      const fillLight = new THREE.DirectionalLight(0x9fc1ff, 0.24);
+      fillLight.position.set(-180, 90, -120);
+      scene.add(fillLight);
+      const rimLight = new THREE.DirectionalLight(0xffffff, 0.28);
+      rimLight.position.set(-160, 170, 220);
+      scene.add(rimLight);
+
+      const loader = new ThreeMFLoader();
+      const modelConfigs = [
+        {
+          id: "mockup",
+          path: "3d/ALTIS%20INTELLIGNET3b3%20Mockup.3mf",
+          scale: 240,
+          cameraTilt: 0.18
+        }
+      ];
+      const initialRotation = new THREE.Euler(
+        THREE.MathUtils.degToRad(-18),
+        THREE.MathUtils.degToRad(0),
+        0
+      );
+      const modelCache = new Map();
+      const clock = new THREE.Clock();
+      const models = [null];
+      const cameraFits = [null];
+      const section = stage.closest(".avionics-model-section");
+      let targetScrollProgress = 0;
+      let currentScrollProgress = 0;
+      let userYaw = 0;
+      let userPitch = 0;
+      let isDraggingModel = false;
+      let lastPointerX = 0;
+      let lastPointerY = 0;
+
+      const toBoardMaterial = (mat) => {
+        if (!mat || !mat.isMaterial) return mat;
+        const color = mat.color ? mat.color.clone() : new THREE.Color(0x2b3640);
+        const material = new THREE.MeshPhysicalMaterial({
+          color,
+          map: mat.map || null,
+          normalMap: mat.normalMap || null,
+          aoMap: mat.aoMap || null,
+          emissive: mat.emissive ? mat.emissive.clone() : new THREE.Color(0x000000),
+          emissiveMap: mat.emissiveMap || null,
+          emissiveIntensity: mat.emissiveIntensity ?? 1,
+          transparent: true,
+          opacity: mat.opacity ?? 1,
+          alphaMap: mat.alphaMap || null,
+          side: mat.side ?? THREE.FrontSide,
+          vertexColors: mat.vertexColors === true,
+          flatShading: mat.flatShading ?? false,
+          metalness: 0.12,
+          roughness: 0.62,
+          clearcoat: 0.12,
+          clearcoatRoughness: 0.56,
+          envMapIntensity: 0.62
+        });
+        material.userData.baseOpacity = material.opacity;
+        return material;
+      };
+
+      const setMaterialOpacity = (node, opacity) => {
+        if (!node.isMesh || !node.material) return;
+        const materials = Array.isArray(node.material) ? node.material : [node.material];
+        materials.forEach((mat) => {
+          if (!mat || !mat.isMaterial) return;
+          mat.transparent = true;
+          mat.opacity = (mat.userData.baseOpacity ?? 1) * opacity;
+          mat.depthWrite = opacity > 0.995;
+          mat.needsUpdate = true;
+        });
+      };
+
+      const setModelOpacity = (object, opacity) => {
+        object.traverse((node) => {
+          setMaterialOpacity(node, opacity);
+        });
+      };
+
+      const markCoverMeshes = (group) => {
+        const coverRoots = new Set();
+        group.children.slice(0, 4).forEach((child) => coverRoots.add(child));
+        group.traverse((node) => {
+          const name = (node.name || "").toUpperCase();
+          if (name === "DOWN" || name === "UP" || name.includes("COVER")) coverRoots.add(node);
+        });
+
+        const coverMeshes = new Set();
+        coverRoots.forEach((root) => {
+          root.traverse((node) => {
+            if (node.isMesh) coverMeshes.add(node);
+          });
+        });
+        const modelBox = new THREE.Box3().setFromObject(group);
+        const modelCenter = modelBox.getCenter(new THREE.Vector3());
+        const coverParts = Array.from(coverRoots).map((root, index) => {
+          const name = (root.name || "").toUpperCase();
+          const box = new THREE.Box3().setFromObject(root);
+          const center = box.getCenter(new THREE.Vector3());
+          const outward = center.clone().sub(modelCenter);
+          let slide;
+          let twistDirection = index % 2 === 0 ? 1 : -1;
+
+          if (name === "UP") {
+            slide = new THREE.Vector3(-54, 8, 92);
+            twistDirection = 1;
+          } else if (name === "DOWN") {
+            slide = new THREE.Vector3(54, -8, -82);
+            twistDirection = -1;
+          } else {
+            if (outward.lengthSq() < 0.0001) outward.set(index % 2 === 0 ? -1 : 1, index < 2 ? 1 : -1, 0);
+            outward.z = 0;
+            if (outward.lengthSq() < 0.0001) outward.set(index % 2 === 0 ? -1 : 1, index < 2 ? 1 : -1, 0);
+            outward.normalize();
+            const lift = new THREE.Vector3(0, 0, index % 2 === 0 ? 42 : 34);
+            slide = outward.multiplyScalar(index % 2 === 0 ? 92 : 76).add(lift);
+          }
+
+          return {
+            root,
+            basePosition: root.position.clone(),
+            baseRotation: root.rotation.clone(),
+            slide,
+            twist: twistDirection * THREE.MathUtils.degToRad(9 + index * 2),
+            delay: name === "UP" ? 0 : name === "DOWN" ? 0.06 : Math.min(0.14, index * 0.035)
+          };
+        });
+
+        coverMeshes.forEach((node) => setMaterialOpacity(node, 1));
+        group.userData.coverParts = coverParts;
+        group.userData.coverMeshes = Array.from(coverMeshes);
+      };
+
+      const moveCoverParts = (object, reveal) => {
+        const coverParts = object?.userData?.coverParts || [];
+        const eased = clamp01(reveal);
+        coverParts.forEach((part) => {
+          const partProgress = smootherStep(clamp01((eased - part.delay) / Math.max(0.001, 1 - part.delay)));
+          part.root.visible = partProgress < 0.998;
+          part.root.position.copy(part.basePosition).addScaledVector(part.slide, partProgress);
+          part.root.rotation.set(
+            part.baseRotation.x + part.twist * partProgress * 0.45,
+            part.baseRotation.y + part.twist * partProgress,
+            part.baseRotation.z + part.twist * partProgress * 0.35
+          );
+        });
+      };
+
+      const prepareModel = (group, config) => {
+        const box = new THREE.Box3().setFromObject(group);
+        const size = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+        const maxSize = Math.max(size.x, size.y, size.z) || 1;
+        const baseScale = config.scale / maxSize;
+
+        group.position.sub(center);
+        group.scale.setScalar(baseScale);
+        group.rotation.copy(initialRotation);
+        group.visible = false;
+        group.userData.baseScale = baseScale;
+        group.userData.config = config;
+        group.traverse((node) => {
+          if (!node.isMesh || !node.material) return;
+          if (Array.isArray(node.material)) node.material = node.material.map((mat) => toBoardMaterial(mat));
+          else node.material = toBoardMaterial(node.material);
+        });
+        markCoverMeshes(group);
+        setModelOpacity(group, 1);
+        return group;
+      };
+
+      const loadModel = (index) => {
+        const safeIndex = (index + modelConfigs.length) % modelConfigs.length;
+        const config = modelConfigs[safeIndex];
+        if (modelCache.has(config.id)) return Promise.resolve(modelCache.get(config.id));
+
+        return new Promise((resolve, reject) => {
+          loader.load(
+            config.path,
+            (group) => {
+              const prepared = prepareModel(group, config);
+              modelCache.set(config.id, prepared);
+              resolve(prepared);
+            },
+            undefined,
+            reject
+          );
+        });
+      };
+
+      const getCameraFit = (object, config = object.userData.config || modelConfigs[0]) => {
+        object.updateWorldMatrix(true, true);
+        const box = new THREE.Box3().setFromObject(object);
+        const sphere = box.getBoundingSphere(new THREE.Sphere());
+        const radius = sphere.radius || 1;
+        const vFov = THREE.MathUtils.degToRad(camera.fov);
+        const hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
+        const fitHeightDistance = radius / Math.tan(vFov / 2);
+        const fitWidthDistance = radius / Math.tan(hFov / 2);
+        const fitOffset = window.matchMedia("(max-width: 900px)").matches ? 1.4 : 1.22;
+        const distance = Math.max(fitHeightDistance, fitWidthDistance) * fitOffset;
+        return {
+          target: sphere.center.clone(),
+          position: new THREE.Vector3(
+            sphere.center.x + distance * 0.08,
+            sphere.center.y + distance * (config.cameraTilt ?? 0.18),
+            sphere.center.z + distance
+          ),
+          distance
+        };
+      };
+
+      const applyCameraFit = (fit) => {
+        controls.target.copy(fit.target);
+        camera.position.copy(fit.position);
+        camera.near = Math.max(0.1, fit.distance / 200);
+        camera.far = fit.distance * 20;
+        camera.updateProjectionMatrix();
+        controls.update();
+      };
+
+      const clamp01 = (value) => Math.min(1, Math.max(0, value));
+      const smootherStep = (t) => t * t * t * (t * (t * 6 - 15) + 10);
+
+      const refreshCameraFits = () => {
+        models.forEach((model, index) => {
+          if (!model) return;
+          cameraFits[index] = getCameraFit(model, modelConfigs[0]);
+        });
+      };
+
+      const getSectionProgress = () => {
+        if (!section) return 0;
+        const rect = section.getBoundingClientRect();
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 1;
+        const scrollRange = Math.max(1, rect.height - viewportHeight);
+        return clamp01((-rect.top + viewportHeight * 0.08) / scrollRange);
+      };
+
+      const updateScrollScene = (progress) => {
+        const reveal = clamp01((progress - 0.3) / 0.5);
+        const now = performance.now();
+        const autoYaw = now * 0.00024;
+        const orbitDrift = Math.sin(now * 0.00045) * 0.008;
+        const dragPitch = userPitch;
+        const dragYaw = userYaw;
+
+        if (models[0]) {
+          models[0].visible = true;
+          moveCoverParts(models[0], reveal);
+          models[0].scale.setScalar(models[0].userData.baseScale);
+          models[0].rotation.set(
+            initialRotation.x + dragPitch + THREE.MathUtils.degToRad(reveal * 2),
+            initialRotation.y + autoYaw + orbitDrift + dragYaw + THREE.MathUtils.degToRad(reveal * -4),
+            initialRotation.z
+          );
+        }
+
+        if (cameraFits[0]) {
+          applyCameraFit(cameraFits[0]);
+        }
+      };
+
+      const showModels = async () => {
+        try {
+          models[0] = await loadModel(0);
+        } catch {
+          renderer.domElement.remove();
+          return;
+        }
+
+        scene.add(models[0]);
+        models[0].visible = true;
+        setModelOpacity(models[0], 1);
+        fallback?.remove();
+        targetScrollProgress = getSectionProgress();
+        currentScrollProgress = targetScrollProgress;
+        refreshCameraFits();
+        updateScrollScene(currentScrollProgress);
+      };
+
+      const resize = () => {
+        const width = Math.max(1, stage.clientWidth);
+        const height = Math.max(1, stage.clientHeight);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height, false);
+        refreshCameraFits();
+        updateScrollScene(currentScrollProgress);
+      };
+
+      stage.addEventListener("pointerdown", (event) => {
+        if (event.pointerType === "touch") return;
+        if (event.button !== 0) return;
+        isDraggingModel = true;
+        lastPointerX = event.clientX;
+        lastPointerY = event.clientY;
+        stage.classList.add("is-dragging");
+        stage.setPointerCapture?.(event.pointerId);
+      });
+
+      stage.addEventListener("pointermove", (event) => {
+        if (!isDraggingModel) return;
+        if (event.buttons === 0) {
+          endModelDrag(event);
+          return;
+        }
+        event.preventDefault();
+        const dx = event.clientX - lastPointerX;
+        const dy = event.clientY - lastPointerY;
+        lastPointerX = event.clientX;
+        lastPointerY = event.clientY;
+        userYaw += dx * 0.006;
+        userPitch = THREE.MathUtils.clamp(userPitch + dy * 0.004, -0.42, 0.42);
+      });
+
+      const endModelDrag = (event) => {
+        if (!isDraggingModel) return;
+        isDraggingModel = false;
+        stage.classList.remove("is-dragging");
+        if (event?.pointerId !== undefined) stage.releasePointerCapture?.(event.pointerId);
+      };
+
+      stage.addEventListener("pointerup", endModelDrag);
+      stage.addEventListener("pointercancel", endModelDrag);
+      stage.addEventListener("lostpointercapture", endModelDrag);
+
+      resize();
+      window.addEventListener("resize", resize);
+      showModels();
+
+      const tick = () => {
+        const dt = Math.min(0.05, clock.getDelta());
+        targetScrollProgress = getSectionProgress();
+        currentScrollProgress += (targetScrollProgress - currentScrollProgress) * Math.min(1, dt * 5.2);
+        updateScrollScene(currentScrollProgress);
+        controls.update();
+        renderer.render(scene, camera);
+        window.requestAnimationFrame(tick);
+      };
+
+      tick();
+    }
+  </script>
+  <script src="../common-i18n.js"></script>
   <script src="../common-layout.js"></script>
 </body>
 </html>

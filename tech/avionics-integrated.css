@@ -1,0 +1,767 @@
+/* ALTIS integrated avionics + software technology page */
+:root {
+  --av-bg: #07090b;
+  --av-surface: #0d1116;
+  --av-surface-light: #131922;
+  --av-line: rgba(223, 233, 246, 0.14);
+  --av-line-strong: rgba(223, 233, 246, 0.28);
+  --av-text: #f2f5f8;
+  --av-muted: rgba(222, 229, 238, 0.66);
+  --av-blue: #6ca9ff;
+  --av-green: #58d68d;
+  --av-orange: #ff7a52;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.avionics-integrated {
+  color: var(--av-text);
+  background:
+    radial-gradient(circle at 88% 24%, rgba(57, 102, 164, 0.12), transparent 32%),
+    var(--av-bg);
+}
+
+body.avionics-integrated .hero {
+  min-height: calc(100svh - 73px);
+}
+
+body.avionics-integrated .hero-copy {
+  width: min(1180px, calc(100vw - 48px));
+  justify-items: start;
+  text-align: left;
+}
+
+body.avionics-integrated .hero-content {
+  width: min(780px, 100%);
+  justify-items: start;
+}
+
+body.avionics-integrated .hero-copy h1 {
+  max-width: none;
+  font-size: clamp(58px, 8.4vw, 122px);
+  line-height: 0.82;
+  letter-spacing: -0.055em;
+}
+
+body.avionics-integrated .hero-copy h1 span {
+  color: rgba(242, 245, 248, 0.56);
+  font-size: 0.58em;
+  letter-spacing: -0.035em;
+}
+
+body.avionics-integrated .hero-kicker {
+  color: rgba(242, 245, 248, 0.78);
+  letter-spacing: 0.16em;
+}
+
+body.avionics-integrated .hero-lead {
+  max-width: 56ch;
+  font-size: clamp(15px, 1.55vw, 19px);
+  text-align: left;
+}
+
+body.avionics-integrated .hero-systems {
+  justify-content: flex-start;
+}
+
+body.avionics-integrated .hero-system {
+  border-radius: 999px;
+  background: rgba(7, 9, 11, 0.42);
+}
+
+.system-section {
+  position: relative;
+  padding: 116px 0;
+  border-top: 1px solid var(--av-line);
+}
+
+.system-shell {
+  width: min(1200px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.system-heading {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 48px;
+  align-items: start;
+  margin-bottom: 68px;
+}
+
+.system-eyebrow {
+  margin: 9px 0 0;
+  color: rgba(222, 229, 238, 0.5);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.system-heading h2 {
+  max-width: 920px;
+  margin: 0;
+  color: var(--av-text);
+  font-size: clamp(44px, 6vw, 82px);
+  font-weight: 500;
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.system-heading-copy {
+  grid-column: 2;
+  max-width: 760px;
+  margin: -36px 0 0;
+  color: var(--av-muted);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.85;
+  word-break: keep-all;
+}
+
+.architecture-flow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--av-line-strong);
+  border-bottom: 1px solid var(--av-line-strong);
+}
+
+.architecture-node {
+  position: relative;
+  min-height: 220px;
+  padding: 30px 28px;
+  border-left: 1px solid var(--av-line);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.018), transparent 58%);
+}
+
+.architecture-node:first-child {
+  border-left: 0;
+}
+
+.architecture-node:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  top: 50%;
+  right: -17px;
+  z-index: 2;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  color: var(--av-blue);
+  background: var(--av-bg);
+  border: 1px solid var(--av-line-strong);
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.architecture-index {
+  display: block;
+  margin-bottom: 46px;
+  color: rgba(222, 229, 238, 0.38);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+
+.architecture-node strong {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--av-text);
+  font-size: 21px;
+  font-weight: 500;
+}
+
+.architecture-node p {
+  margin: 0;
+  color: var(--av-muted);
+  font-size: 13px;
+  line-height: 1.7;
+  word-break: keep-all;
+}
+
+.technology-split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--av-line);
+  border-bottom: 1px solid var(--av-line);
+}
+
+.technology-panel {
+  min-width: 0;
+  padding: 62px 48px 56px;
+}
+
+.technology-panel + .technology-panel {
+  border-left: 1px solid var(--av-line);
+}
+
+.technology-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 42px;
+  color: rgba(222, 229, 238, 0.56);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+.technology-label::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--av-blue);
+  box-shadow: 0 0 16px rgba(108, 169, 255, 0.7);
+}
+
+.technology-panel:nth-child(2) .technology-label::before {
+  background: var(--av-green);
+  box-shadow: 0 0 16px rgba(88, 214, 141, 0.6);
+}
+
+.technology-panel h3 {
+  margin: 0 0 20px;
+  font-size: clamp(34px, 4.2vw, 58px);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.technology-panel > p {
+  min-height: 88px;
+  margin: 0;
+  color: var(--av-muted);
+  font-size: 14px;
+  line-height: 1.8;
+  word-break: keep-all;
+}
+
+.technology-visual {
+  position: relative;
+  height: 440px;
+  margin: 48px -48px 46px;
+  overflow: hidden;
+  background: #0a0c0f;
+  border-top: 1px solid var(--av-line);
+  border-bottom: 1px solid var(--av-line);
+}
+
+.technology-visual img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.technology-visual.hardware img {
+  object-fit: contain;
+  padding: 38px 14%;
+  filter: drop-shadow(0 28px 48px rgba(0, 0, 0, 0.38));
+}
+
+.technology-visual.software img {
+  filter: saturate(0.75) brightness(0.78) contrast(1.08);
+}
+
+.technology-visual::after {
+  content: attr(data-caption);
+  position: absolute;
+  right: 18px;
+  bottom: 16px;
+  padding: 8px 10px;
+  color: rgba(242, 245, 248, 0.72);
+  background: rgba(5, 7, 9, 0.72);
+  border: 1px solid var(--av-line);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+
+.technology-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--av-line);
+}
+
+.technology-list li {
+  display: grid;
+  grid-template-columns: 116px 1fr;
+  gap: 22px;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--av-line);
+}
+
+.technology-list b {
+  color: rgba(222, 229, 238, 0.48);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.technology-list span {
+  color: rgba(242, 245, 248, 0.88);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.link-section {
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(31, 51, 75, 0.42), rgba(11, 14, 18, 0.16) 46%),
+    var(--av-surface);
+}
+
+.link-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(520px, 1.18fr);
+  gap: 72px;
+  align-items: center;
+}
+
+.link-copy .system-eyebrow {
+  margin-bottom: 24px;
+}
+
+.link-copy h2 {
+  margin: 0 0 28px;
+  font-size: clamp(52px, 7vw, 96px);
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+}
+
+.link-copy > p {
+  max-width: 54ch;
+  margin: 0;
+  color: var(--av-muted);
+  font-size: 15px;
+  line-height: 1.85;
+  word-break: keep-all;
+}
+
+.link-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 38px;
+  border-top: 1px solid var(--av-line);
+}
+
+.link-fact {
+  padding: 20px 18px 0 0;
+}
+
+.link-fact b {
+  display: block;
+  color: var(--av-text);
+  font-family: var(--font-mono);
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.link-fact span {
+  display: block;
+  margin-top: 5px;
+  color: rgba(222, 229, 238, 0.48);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.link-topology {
+  position: relative;
+  min-height: 480px;
+  border: 1px solid var(--av-line-strong);
+  background:
+    linear-gradient(var(--av-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--av-line) 1px, transparent 1px),
+    rgba(6, 9, 12, 0.58);
+  background-size: 52px 52px;
+}
+
+.topology-line {
+  position: absolute;
+  height: 1px;
+  background: var(--av-blue);
+  transform-origin: 0 50%;
+  opacity: 0.65;
+}
+
+.topology-line::after {
+  content: "";
+  position: absolute;
+  inset: -3px 0;
+  border-top: 1px dashed rgba(108, 169, 255, 0.42);
+}
+
+.topology-line.stage {
+  top: 38%;
+  left: 23%;
+  width: 170px;
+  transform: rotate(90deg);
+}
+
+.topology-line.relay {
+  top: 62%;
+  left: 25%;
+  width: 48%;
+  transform: rotate(-5deg);
+}
+
+.topology-line.client {
+  top: 63%;
+  left: 64%;
+  width: 25%;
+}
+
+.topology-node {
+  position: absolute;
+  min-width: 132px;
+  padding: 18px 16px;
+  color: var(--av-text);
+  background: rgba(12, 17, 23, 0.94);
+  border: 1px solid var(--av-line-strong);
+  text-align: left;
+}
+
+.topology-node::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--av-green);
+  box-shadow: 0 0 14px rgba(88, 214, 141, 0.62);
+}
+
+.topology-node b {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.topology-node span {
+  display: block;
+  margin: 8px 0 0 15px;
+  color: rgba(222, 229, 238, 0.48);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.topology-node.stage2 {
+  top: 13%;
+  left: 10%;
+}
+
+.topology-node.stage1 {
+  bottom: 13%;
+  left: 10%;
+}
+
+.topology-node.ground {
+  right: 24%;
+  bottom: 20%;
+  border-color: rgba(108, 169, 255, 0.52);
+}
+
+.topology-node.client {
+  right: 5%;
+  bottom: 20%;
+}
+
+.capability-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--av-line-strong);
+}
+
+.capability {
+  min-height: 270px;
+  padding: 34px 30px;
+  border-right: 1px solid var(--av-line);
+  border-bottom: 1px solid var(--av-line);
+}
+
+.capability:nth-child(3n) {
+  border-right: 0;
+}
+
+.capability-index {
+  color: rgba(222, 229, 238, 0.36);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+}
+
+.capability h3 {
+  margin: 58px 0 16px;
+  font-size: 23px;
+  font-weight: 500;
+}
+
+.capability p {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--av-muted);
+  font-size: 13px;
+  line-height: 1.72;
+  word-break: keep-all;
+}
+
+body.avionics-integrated .avionics-model-section {
+  min-height: clamp(980px, 178svh, 1500px);
+  border-top: 1px solid var(--av-line);
+  background: #07090b;
+}
+
+body.avionics-integrated .avionics-model-copy h2 {
+  font-size: clamp(2.6rem, 5.8vw, 5.9rem);
+  letter-spacing: -0.04em;
+}
+
+body.avionics-integrated #partner {
+  border-top: 1px solid var(--av-line);
+  padding-top: 92px;
+}
+
+@media (max-width: 1000px) {
+  .technology-panel {
+    padding-right: 32px;
+    padding-left: 32px;
+  }
+
+  .technology-visual {
+    margin-right: -32px;
+    margin-left: -32px;
+  }
+
+  .link-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .link-topology {
+    min-height: 440px;
+  }
+}
+
+@media (max-width: 760px) {
+  body.avionics-integrated .hero-copy {
+    width: calc(100vw - 32px);
+    justify-items: center;
+    text-align: center;
+  }
+
+  body.avionics-integrated .hero-content {
+    width: min(100%, 520px);
+    justify-items: center;
+  }
+
+  body.avionics-integrated .hero-copy h1 {
+    font-size: clamp(47px, 15vw, 74px);
+    text-align: center;
+  }
+
+  body.avionics-integrated .hero-lead {
+    max-width: 34ch;
+    text-align: center;
+  }
+
+  body.avionics-integrated .hero-systems {
+    display: flex;
+    justify-content: center;
+  }
+
+  body.avionics-integrated .hero-system {
+    width: auto;
+    min-height: 34px;
+    padding: 7px 11px;
+  }
+
+  .system-section {
+    padding: 78px 0;
+  }
+
+  .system-shell {
+    width: min(100% - 32px, 1200px);
+  }
+
+  .system-heading {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-bottom: 42px;
+  }
+
+  .system-eyebrow {
+    margin-top: 0;
+  }
+
+  .system-heading h2 {
+    font-size: clamp(38px, 11.6vw, 58px);
+  }
+
+  .system-heading-copy {
+    grid-column: 1;
+    margin-top: 0;
+    font-size: 14px;
+  }
+
+  .architecture-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .architecture-node {
+    min-height: 0;
+    padding: 26px 22px;
+    border-top: 1px solid var(--av-line);
+    border-left: 0;
+  }
+
+  .architecture-node:first-child {
+    border-top: 0;
+  }
+
+  .architecture-node:not(:last-child)::after {
+    top: auto;
+    right: 24px;
+    bottom: -17px;
+    transform: rotate(90deg);
+  }
+
+  .architecture-index {
+    margin-bottom: 28px;
+  }
+
+  .technology-split {
+    grid-template-columns: 1fr;
+  }
+
+  .technology-panel {
+    padding: 48px 24px;
+  }
+
+  .technology-panel + .technology-panel {
+    border-top: 1px solid var(--av-line);
+    border-left: 0;
+  }
+
+  .technology-panel > p {
+    min-height: 0;
+  }
+
+  .technology-visual {
+    height: 330px;
+    margin: 36px -24px;
+  }
+
+  .technology-visual.hardware img {
+    padding: 26px 20%;
+  }
+
+  .technology-list li {
+    grid-template-columns: 90px 1fr;
+    gap: 14px;
+  }
+
+  .link-layout {
+    gap: 48px;
+  }
+
+  .link-copy h2 {
+    font-size: clamp(48px, 15vw, 74px);
+  }
+
+  .link-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .link-fact {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--av-line);
+  }
+
+  .link-topology {
+    min-height: 520px;
+  }
+
+  .topology-line.stage {
+    top: 31%;
+    left: 26%;
+    width: 130px;
+  }
+
+  .topology-line.relay {
+    top: 59%;
+    left: 22%;
+    width: 54%;
+    transform: rotate(18deg);
+  }
+
+  .topology-line.client {
+    top: 76%;
+    left: 51%;
+    width: 34%;
+    transform: rotate(39deg);
+  }
+
+  .topology-node {
+    min-width: 124px;
+  }
+
+  .topology-node.stage2 {
+    top: 8%;
+    left: 7%;
+  }
+
+  .topology-node.stage1 {
+    bottom: 43%;
+    left: 7%;
+  }
+
+  .topology-node.ground {
+    right: 7%;
+    bottom: 23%;
+  }
+
+  .topology-node.client {
+    right: 7%;
+    bottom: 5%;
+  }
+
+  .capability-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .capability,
+  .capability:nth-child(3n) {
+    min-height: 220px;
+    border-right: 0;
+  }
+
+  .capability h3 {
+    margin-top: 40px;
+  }
+
+  body.avionics-integrated .avionics-model-section {
+    min-height: 185svh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
