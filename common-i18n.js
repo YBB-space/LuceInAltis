@@ -165,8 +165,25 @@
     },
 
     "structure.html": {
-      "STRUCTURE 페이지를 준비 중입니다.": "The STRUCTURE page is under construction.",
-      "곧 업데이트됩니다.": "Coming soon."
+      "ALTIS는 로켓의 뼈대를 구매해 조립하는 데 그치지 않습니다. 동체부터 핀, 핀 지그까지 CFRP로 직접 설계하고 제작합니다.": "ALTIS goes beyond assembling off-the-shelf rocket structures. We design and fabricate our CFRP body tubes, fins, and fin jigs in-house.",
+      "비행을 견디는 구조를": "Structures built to withstand flight,",
+      "우리의 손으로.": "made by our own hands.",
+      "형상을 정하고, 탄소섬유를 적층하고, 수지를 함침해 하나의 비행 구조물로 완성합니다. 직접 만드는 과정에서 축적한 제작 경험을 다음 설계와 시험에 다시 반영합니다.": "We define the geometry, lay up carbon fiber, and impregnate it with resin to create flight-ready structures. Experience gained through hands-on fabrication feeds directly into our next design and test cycle.",
+      "동체 제작": "Body Tube Fabrication",
+      "탄소섬유 원단에서 비행 동체까지": "From carbon fabric to a flight-ready airframe",
+      "원통형 몰드 위에 CFRP 원단을 직접 적층하고 수지를 고르게 함침합니다. 로켓의 주요 하중을 전달하는 동체를 제작 단계부터 직접 다룹니다.": "We lay CFRP fabric directly onto a cylindrical mold and evenly impregnate it with resin. Every stage of the load-bearing body tube is handled in-house.",
+      "하나의 동체로": "Becoming an Airframe",
+      "적층, 경화, 가공을 거쳐 완성": "Completed through layup, curing, and machining",
+      "제작된 CFRP 튜브는 비행체의 크기와 구성에 맞춰 가공됩니다. 반복 제작을 통해 표면 품질과 형상, 조립성을 확인하며 완성도를 높입니다.": "The completed CFRP tubes are machined to suit the vehicle's dimensions and configuration. Repeated fabrication lets us refine surface quality, geometry, and assembly fit.",
+      "CFRP 핀": "CFRP Fins",
+      "안정적인 비행을 만드는 구조": "Structures that stabilize flight",
+      "비행 안정성을 결정하는 핀 역시 CFRP로 직접 제작합니다. 동체와 핀이 하나의 구조로 정확하게 결합되도록 형상과 조립 과정을 함께 검토합니다.": "We also fabricate the flight-stabilizing fins directly from CFRP. Geometry and assembly are reviewed together so the fins integrate precisely with the body tube.",
+      "적층의 밀도를 만들다": "Precision in Every Layer",
+      "탄소섬유 원단에 수지가 고르게 스며들도록 손으로 작업하며, 제작 과정의 작은 차이까지 직접 확인합니다.": "We work by hand to distribute resin evenly through the carbon fabric and inspect the small details that shape the finished part.",
+      "지그까지 CFRP로": "CFRP, Down to the Jig",
+      "핀만 만드는 것이 아닙니다. 핀의 형상과 정렬을 반복해서 구현하기 위한 지그도 CFRP로 직접 제작해 조립 정확도와 작업 재현성을 높입니다.": "We make more than the fins themselves. CFRP jigs reproduce fin geometry and alignment, improving assembly accuracy and repeatability.",
+      "동체에서 핀 지그까지.": "From body tubes to fin jigs.",
+      "ALTIS의 구조는 ALTIS가 만듭니다.": "ALTIS builds every ALTIS structure."
     },
 
     "ejection system.html": {

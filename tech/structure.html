@@ -3,180 +3,106 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ALTIS STRUCTURE - Coming Soon</title>
+  <title>ALTIS Structure | CFRP Fabrication</title>
+  <meta name="description" content="ALTIS가 직접 설계하고 제작하는 CFRP 동체, 핀, 핀 지그를 소개합니다." />
   <link rel="icon" href="../img/altis_logo.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --text: #f3f6fb;
-      --muted: rgba(243, 246, 251, 0.74);
-      --line: rgba(255, 255, 255, 0.2);
+      --bg: #050606;
+      --panel: #0b0d0d;
+      --text: #f1f3f1;
+      --muted: #9ba09e;
+      --line: rgba(255, 255, 255, .15);
+      --lime: #b9df48;
+      --sans: "Noto Sans KR", "Pretendard", sans-serif;
+      --display: "Sora", var(--sans);
+      --mono: "IBM Plex Mono", monospace;
     }
-
     * { box-sizing: border-box; }
-    html, body { min-height: 100%; }
-    body {
-      margin: 0;
-      font-family: "Noto Sans KR", "Pretendard", "SUIT", sans-serif;
-      color: var(--text);
-      display: flex;
-      flex-direction: column;
-      min-height: 100svh;
-      padding: 0;
-      overflow-x: hidden;
-      overflow-y: auto;
-      background: #040507;
-    }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; overflow-x: hidden; color: var(--text); background: var(--bg); font-family: var(--sans); }
+    img { display: block; width: 100%; }
+    a { color: inherit; }
+    .wrap { width: min(1640px, calc(100% - 80px)); margin: 0 auto; }
 
-    header,
-    .site-footer {
-      width: 100%;
-      flex: 0 0 auto;
-    }
+    .hero { position: relative; min-height: 92svh; display: flex; align-items: flex-end; isolation: isolate; border-bottom: 1px solid var(--line); overflow: hidden; }
+    .hero-media { position: absolute; inset: 0; z-index: -2; }
+    .hero-media img { height: 100%; object-fit: cover; object-position: center 47%; filter: grayscale(.1) contrast(1.05); }
+    .hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(2,3,3,.94) 0%, rgba(2,3,3,.74) 40%, rgba(2,3,3,.18) 75%), linear-gradient(0deg, rgba(2,3,3,.78), transparent 50%); }
+    .hero-copy { padding: 180px 0 80px; max-width: 950px; }
+    .eyebrow { margin: 0 0 28px; color: var(--lime); font: 500 13px/1.4 var(--mono); letter-spacing: .2em; text-transform: uppercase; }
+    .hero h1 { margin: 0; font: 500 clamp(62px, 10vw, 168px)/.84 var(--display); letter-spacing: -.075em; }
+    .hero h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.72); }
+    .hero-lead { max-width: 650px; margin: 45px 0 0; color: rgba(255,255,255,.8); font-size: clamp(17px, 1.45vw, 23px); line-height: 1.75; word-break: keep-all; }
 
-    .bg-video {
-      position: fixed;
-      inset: 0;
-      z-index: -2;
-      overflow: hidden;
-    }
+    .statement { padding: 130px 0; border-bottom: 1px solid var(--line); }
+    .statement-grid { display: grid; grid-template-columns: 1fr 2.1fr; gap: 60px; }
+    .section-label { color: var(--muted); font: 500 12px/1.5 var(--mono); letter-spacing: .18em; text-transform: uppercase; }
+    .statement h2 { max-width: 1100px; margin: 0; font-size: clamp(38px, 5vw, 78px); line-height: 1.15; letter-spacing: -.045em; font-weight: 500; word-break: keep-all; }
+    .statement h2 em { color: var(--lime); font-style: normal; }
 
-    .bg-video video {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: max(100vw, 177.78vh);
-      height: max(56.25vw, 100vh);
-      min-width: 100%;
-      min-height: 100%;
-      transform: translate(-50%, -50%) scale(1.08);
-      object-fit: cover;
-      filter: blur(6px) brightness(0.5) contrast(1.05);
-      pointer-events: none;
-    }
+    .process { border-bottom: 1px solid var(--line); }
+    .process-head { display: grid; grid-template-columns: 1fr 2.1fr; gap: 60px; padding: 90px 0 55px; }
+    .process-head p { max-width: 720px; margin: 0; color: var(--muted); font-size: 18px; line-height: 1.9; word-break: keep-all; }
+    .step { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(360px, .75fr); min-height: 760px; border-top: 1px solid var(--line); }
+    .step.reverse { grid-template-columns: minmax(360px, .75fr) minmax(0, 1.45fr); }
+    .step-media { min-height: 620px; overflow: hidden; background: #111; }
+    .step-media img { height: 100%; object-fit: cover; transition: transform .7s ease; }
+    .step:hover .step-media img { transform: scale(1.015); }
+    .step-body { display: flex; flex-direction: column; justify-content: space-between; padding: clamp(42px, 5vw, 86px); border-left: 1px solid var(--line); }
+    .step.reverse .step-body { order: -1; border-left: 0; border-right: 1px solid var(--line); }
+    .step-no { color: var(--lime); font: 500 12px/1 var(--mono); letter-spacing: .16em; }
+    .step-title { margin: auto 0 22px; font: 500 clamp(42px, 5vw, 76px)/1 var(--display); letter-spacing: -.055em; }
+    .step-kicker { margin: 0 0 16px; color: #d6d9d6; font-size: 18px; font-weight: 500; }
+    .step-text { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.9; word-break: keep-all; }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.58) 100%);
-    }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--line); }
+    .detail-card { padding: 110px max(40px, 6vw); min-height: 680px; display: flex; flex-direction: column; justify-content: flex-end; border-right: 1px solid var(--line); }
+    .detail-card:last-child { border-right: 0; }
+    .detail-image { flex: 1; min-height: 340px; margin-bottom: 50px; overflow: hidden; background: #151616; }
+    .detail-image img { height: 100%; object-fit: cover; }
+    .detail-card:first-child img { object-position: center 45%; }
+    .detail-card:last-child img { object-position: center; }
+    .detail-card h3 { margin: 0 0 16px; font-size: clamp(32px, 3.2vw, 54px); font-weight: 500; letter-spacing: -.04em; }
+    .detail-card p { margin: 0; max-width: 620px; color: var(--muted); font-size: 16px; line-height: 1.85; word-break: keep-all; }
 
-    .card {
-      flex: 1 0 auto;
-      width: 100%;
-      max-width: none;
-      min-height: calc(100svh - 73px);
-      display: grid;
-      place-items: center;
-      align-content: center;
-      gap: 14px;
-      text-align: center;
-      padding: clamp(96px, 12vh, 142px) 20px clamp(84px, 10vh, 120px);
-      border: 0;
-      background: transparent;
-      border-radius: 0;
-    }
+    .closing { padding: 145px 0; }
+    .closing-inner { display: grid; grid-template-columns: 1fr 2.1fr; gap: 60px; }
+    .closing h2 { margin: 0; max-width: 1050px; font-size: clamp(40px, 6vw, 92px); line-height: 1.08; letter-spacing: -.06em; font-weight: 500; word-break: keep-all; }
+    .closing h2 span { color: var(--lime); }
 
-    .card > * {
-      max-width: min(92vw, 640px);
+    @media (max-width: 900px) {
+      .wrap { width: min(100% - 36px, 1640px); }
+      .hero { min-height: 780px; }
+      .hero::after { background: linear-gradient(0deg, rgba(2,3,3,.94) 0%, rgba(2,3,3,.55) 65%, rgba(2,3,3,.25)); }
+      .hero-copy { padding: 140px 0 60px; }
+      .statement, .closing { padding: 82px 0; }
+      .statement-grid, .process-head, .closing-inner { grid-template-columns: 1fr; gap: 30px; }
+      .process-head { padding: 72px 0 42px; }
+      .step, .step.reverse { display: flex; flex-direction: column; min-height: 0; }
+      .step-media { min-height: 0; aspect-ratio: 4 / 3; }
+      .step-body, .step.reverse .step-body { order: initial; min-height: 430px; padding: 38px 24px 48px; border: 0; border-top: 1px solid var(--line); }
+      .detail-grid { grid-template-columns: 1fr; }
+      .detail-card { min-height: 0; padding: 70px 18px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .detail-card:last-child { border-bottom: 0; }
+      .detail-image { min-height: 0; aspect-ratio: 4 / 3; margin-bottom: 34px; }
     }
-
-    .logo {
-      width: 56px;
-      height: 56px;
-      object-fit: contain;
-      filter: brightness(0) invert(1);
-      margin-bottom: 0;
-      border-radius: 50%;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(28px, 5vw, 44px);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-weight: 600;
-    }
-
-    p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.75;
-      font-size: clamp(14px, 2.8vw, 16px);
-    }
-
-    .home {
-      display: inline-block;
-      margin-top: 6px;
-      text-decoration: none;
-      color: #fff;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      padding: 9px 14px;
-      font-size: 13px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(3px);
-      -webkit-backdrop-filter: blur(3px);
+    @media (max-width: 520px) {
+      .hero { min-height: 700px; }
+      .hero h1 { font-size: 56px; }
+      .hero-lead { margin-top: 32px; font-size: 16px; }
+      .step-body { min-height: 390px; }
     }
   </style>
-  <link rel="stylesheet" href="../common-layout.css?v=20260615-comingsoon" />
-  <style>
-    body.altis-coming-page {
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: stretch !important;
-      min-height: 100svh !important;
-      padding: 0 !important;
-      overflow-x: hidden !important;
-      overflow-y: auto !important;
-    }
-
-    body.altis-coming-page header,
-    body.altis-coming-page .site-footer {
-      position: relative;
-      z-index: 2;
-      width: 100% !important;
-      flex: 0 0 auto !important;
-    }
-
-    body.altis-coming-page main.card {
-      position: relative;
-      z-index: 1;
-      flex: 1 0 auto !important;
-      width: 100% !important;
-      max-width: none !important;
-      min-height: calc(100svh - 73px) !important;
-      margin: 0 !important;
-      display: grid !important;
-      place-items: center !important;
-      align-content: center !important;
-      gap: 14px !important;
-      padding: clamp(96px, 12vh, 142px) 20px clamp(84px, 10vh, 120px) !important;
-    }
-
-    body.altis-coming-page main.card > * {
-      max-width: min(92vw, 640px) !important;
-    }
-
-    body.altis-coming-page main.card .logo {
-      width: 56px !important;
-      height: 56px !important;
-      max-width: 56px !important;
-      max-height: 56px !important;
-      object-fit: contain !important;
-      flex: 0 0 auto !important;
-    }
-  </style>
+  <link rel="stylesheet" href="../common-layout.css?v=20260807-structure" />
 </head>
-<body class="altis-coming-page">
+<body>
   <header>
     <div class="nav">
-      <div class="brand">
-        <a href="../index.html#home" aria-label="Go to home">
-          <img class="brand-logo" src="../img/altis_logo.png" alt="ALTIS logo" />
-        </a>
-      </div>
+      <div class="brand"><a href="../index.html#home" aria-label="Go to home"><img class="brand-logo" src="../img/altis_logo.png" alt="ALTIS logo" /></a></div>
       <nav id="primary-nav">
         <a href="../index.html#about" data-i18n="navAbout">About</a>
         <a href="../team.html" data-i18n="navTeams">Leadership</a>
@@ -184,76 +110,90 @@
         <div class="nav-tech-dropdown">
           <a href="../index.html#tech" class="nav-tech-link" data-i18n="navTech">Tech</a>
           <ul class="nav-tech-dropdown-menu" aria-label="Tech sub menu">
-            <li><a href="./avionics.html">AVIONICS + SOFTWARE</a></li>
-            <li><a href="./ejection system.html">EJECTION SYSTEM</a></li>
-            <li><a href="./motor.html">MOTOR</a></li>
-            <li><a href="./structure.html">STRUCTURE</a></li>
+            <li><a href="./avionics.html">AVIONICS + SOFTWARE</a></li><li><a href="./ejection system.html">EJECTION SYSTEM</a></li><li><a href="./motor.html">MOTOR</a></li><li><a href="./structure.html">STRUCTURE</a></li>
           </ul>
         </div>
-        <a href="../index.html#media" data-i18n="navMedia">Media</a>
-        <a href="../join.html" data-i18n="navJoin">Join</a>
-        <a href="../sponsors.html" data-i18n="navsponsors">sponsors</a>
-        <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">
-          <svg class="nav-social-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
-            <circle cx="12" cy="12" r="4.2"></circle>
-            <circle class="nav-social-icon-fill" cx="17.4" cy="6.6" r="1.1"></circle>
-          </svg>
-          Instagram
-        </a>
-        <a class="nav-instagram-link" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener">
-          <svg class="nav-social-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3" y="6.5" width="18" height="11" rx="3.2"></rect>
-            <path class="nav-social-icon-fill" d="M10 9.5 15.6 12 10 14.5Z"></path>
-          </svg>
-          YouTube
-        </a>
+        <a href="../index.html#media" data-i18n="navMedia">Media</a><a href="../join.html" data-i18n="navJoin">Join</a><a href="../sponsors.html" data-i18n="navsponsors">sponsors</a>
+        <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">Instagram</a>
+        <a class="nav-instagram-link" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener">YouTube</a>
       </nav>
       <div class="nav-actions">
         <button class="nav-cta menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
-        <a class="nav-cta instagram-link social-cta" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener" aria-label="Instagram">
-          <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
-            <circle cx="12" cy="12" r="4.2"></circle>
-            <circle class="social-icon fill" cx="17.4" cy="6.6" r="1.1"></circle>
-          </svg>
-          <span class="social-label">Instagram</span>
-        </a>
-        <a class="nav-cta instagram-link social-cta" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener" aria-label="YouTube">
-          <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3" y="6.5" width="18" height="11" rx="3.2"></rect>
-            <path class="social-icon fill" d="M10 9.5 15.6 12 10 14.5Z"></path>
-          </svg>
-          <span class="social-label">YouTube</span>
-        </a>
+        <a class="nav-cta instagram-link social-cta" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect><circle cx="12" cy="12" r="4.2"></circle><circle class="social-icon fill" cx="17.4" cy="6.6" r="1.1"></circle></svg><span class="social-label">Instagram</span></a>
+        <a class="nav-cta instagram-link social-cta" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener" aria-label="YouTube"><svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6.5" width="18" height="11" rx="3.2"></rect><path class="social-icon fill" d="M10 9.5 15.6 12 10 14.5Z"></path></svg><span class="social-label">YouTube</span></a>
       </div>
     </div>
   </header>
-  <div class="bg-video" aria-hidden="true">
-    <video autoplay muted loop playsinline preload="auto">
-      <source src="../vid/sponsors_land_vid.mp4" type="video/mp4" />
-    </video>
-  </div>
 
-  <main class="card" aria-live="polite">
-    <img class="logo" src="../img/altis_logo.png" alt="ALTIS logo" />
-    <h1>Coming Soon</h1>
-    <p>STRUCTURE 페이지를 준비 중입니다.<br />곧 업데이트됩니다.</p>
-    <a class="home" href="../index.html">Back to Home</a>
-  </main>
-  <footer class="site-footer">
-    <div class="site-footer-inner">
-      <div class="site-footer-divider"></div>
-      <div class="site-footer-grid">
-        <div class="site-footer-col site-footer-contact">
-          <p>Address: 진주대로 501 | Founded Date: March 2021</p>
-          <p>CONTACT | email : ybb1833@naver.com / instagram : @ altis_official</p>
-        </div>
-        <p class="site-footer-copy">© 2021-2026 ALTIS. All rights reserved.</p>
+  <main>
+    <section class="hero">
+      <div class="hero-media"><img src="../img/strucures/KakaoTalk_Photo_2026-08-07-22-58-19%20004.jpeg" alt="ALTIS가 직접 제작한 CFRP 동체와 핀" /></div>
+      <div class="wrap hero-copy">
+        <p class="eyebrow">ALTIS / STRUCTURE</p>
+        <h1>CFRP<span>BUILT HERE.</span></h1>
+        <p class="hero-lead">ALTIS는 로켓의 뼈대를 구매해 조립하는 데 그치지 않습니다. 동체부터 핀, 핀 지그까지 CFRP로 직접 설계하고 제작합니다.</p>
       </div>
-    </div>
-  </footer>
-  <script src="../common-i18n.js"></script>
-  <script src="../common-layout.js?v=20260615-comingsoon"></script>
+    </section>
+
+    <section class="statement">
+      <div class="wrap statement-grid">
+        <div class="section-label">01 / OUR APPROACH</div>
+        <h2>비행을 견디는 구조를<br /><em>우리의 손으로.</em></h2>
+      </div>
+    </section>
+
+    <section class="process">
+      <div class="wrap process-head">
+        <div class="section-label">IN-HOUSE CFRP PROCESS</div>
+        <p>형상을 정하고, 탄소섬유를 적층하고, 수지를 함침해 하나의 비행 구조물로 완성합니다. 직접 만드는 과정에서 축적한 제작 경험을 다음 설계와 시험에 다시 반영합니다.</p>
+      </div>
+
+      <article class="step">
+        <div class="step-media"><img src="../img/strucures/KakaoTalk_Photo_2026-08-07-22-58-19%20001.jpeg" alt="원통형 몰드 위에 CFRP를 적층하는 ALTIS 부원" loading="lazy" /></div>
+        <div class="step-body">
+          <span class="step-no">01 / BODY TUBE</span>
+          <div><h2 class="step-title">동체 제작</h2><p class="step-kicker">탄소섬유 원단에서 비행 동체까지</p><p class="step-text">원통형 몰드 위에 CFRP 원단을 직접 적층하고 수지를 고르게 함침합니다. 로켓의 주요 하중을 전달하는 동체를 제작 단계부터 직접 다룹니다.</p></div>
+        </div>
+      </article>
+
+      <article class="step reverse">
+        <div class="step-media"><img src="../img/strucures/KakaoTalk_Photo_2026-08-07-22-58-19%20003.jpeg" alt="ALTIS가 제작한 여러 CFRP 동체" loading="lazy" /></div>
+        <div class="step-body">
+          <span class="step-no">02 / AIRFRAME</span>
+          <div><h2 class="step-title">하나의 동체로</h2><p class="step-kicker">적층, 경화, 가공을 거쳐 완성</p><p class="step-text">제작된 CFRP 튜브는 비행체의 크기와 구성에 맞춰 가공됩니다. 반복 제작을 통해 표면 품질과 형상, 조립성을 확인하며 완성도를 높입니다.</p></div>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-media"><img src="../img/strucures/KakaoTalk_Photo_2026-08-07-22-58-19%20004.jpeg" alt="CFRP 핀이 조립된 ALTIS 로켓 후방 동체" loading="lazy" /></div>
+        <div class="step-body">
+          <span class="step-no">03 / FIN</span>
+          <div><h2 class="step-title">CFRP 핀</h2><p class="step-kicker">안정적인 비행을 만드는 구조</p><p class="step-text">비행 안정성을 결정하는 핀 역시 CFRP로 직접 제작합니다. 동체와 핀이 하나의 구조로 정확하게 결합되도록 형상과 조립 과정을 함께 검토합니다.</p></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="detail-grid">
+      <article class="detail-card">
+        <div class="detail-image"><img src="../img/strucures/KakaoTalk_Photo_2026-08-07-22-58-19%20002.jpeg" alt="CFRP 원단에 수지를 함침하는 작업" loading="lazy" /></div>
+        <span class="section-label">LAMINATION DETAIL</span><h3>적층의 밀도를 만들다</h3><p>탄소섬유 원단에 수지가 고르게 스며들도록 손으로 작업하며, 제작 과정의 작은 차이까지 직접 확인합니다.</p>
+      </article>
+      <article class="detail-card">
+        <div class="detail-image"><img src="../img/strucures/KakaoTalk_Photo_2026-08-07-22-58-19%20005.jpeg" alt="ALTIS가 직접 제작한 CFRP 핀 지그" loading="lazy" /></div>
+        <span class="section-label">FIN JIG</span><h3>지그까지 CFRP로</h3><p>핀만 만드는 것이 아닙니다. 핀의 형상과 정렬을 반복해서 구현하기 위한 지그도 CFRP로 직접 제작해 조립 정확도와 작업 재현성을 높입니다.</p>
+      </article>
+    </section>
+
+    <section class="closing">
+      <div class="wrap closing-inner">
+        <div class="section-label">DESIGN / BUILD / FLY</div>
+        <h2>동체에서 핀 지그까지.<br /><span>ALTIS의 구조는 ALTIS가 만듭니다.</span></h2>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="site-footer-inner"><div class="site-footer-divider"></div><div class="site-footer-grid"><div class="site-footer-col site-footer-contact"><p>Address: 진주대로 501 | Founded Date: March 2021</p><p>CONTACT | email : ybb1833@naver.com / instagram : @ altis_official</p></div><p class="site-footer-copy">© 2021-2026 ALTIS. All rights reserved.</p></div></div></footer>
+  <script src="../common-i18n.js?v=20260807-structure"></script>
+  <script src="../common-layout.js?v=20260807-structure"></script>
 </body>
 </html>
