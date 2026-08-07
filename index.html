@@ -3317,6 +3317,31 @@
         align-self: center;
       }
     }
+
+    .lang-toggle.nav-lang-toggle,
+    .lang-toggle.nav-lang-toggle:hover,
+    .lang-toggle.nav-lang-toggle:focus-visible {
+      position: static;
+      right: auto;
+      bottom: auto;
+      width: auto;
+      min-width: 76px;
+      min-height: 42px;
+      padding: 10px 12px;
+      opacity: 1;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .lang-toggle.nav-lang-toggle .lang-option {
+      max-width: 2.4em;
+      opacity: 1;
+      transform: none;
+    }
+
+    .lang-toggle.nav-lang-toggle .lang-option + .lang-option::before {
+      opacity: 1;
+    }
   </style>
   <link rel="stylesheet" href="common-layout.css" />
 </head>
@@ -3381,6 +3406,9 @@
       </nav>
       <div class="nav-actions">
         <button class="nav-cta menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+        <button class="nav-cta lang-toggle nav-lang-toggle" type="button" data-i18n-html="langToggle" aria-label="Language toggle">
+          <span class="lang-option lang-kr">KR</span> / <span class="lang-option lang-en">EN</span>
+        </button>
         <a class="nav-cta instagram-link social-cta" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener" aria-label="Instagram">
           <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
             <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
@@ -3399,11 +3427,6 @@
       </div>
     </div>
   </header>
-  <span class="lang-float-label">Select Language</span>
-  <button class="nav-cta lang-toggle" type="button" data-i18n-html="langToggle" aria-label="Language toggle">
-    <span class="lang-option lang-kr">KR</span> / <span class="lang-option lang-en">EN</span>
-  </button>
-
   <section class="hero" id="home">
     <div class="hero-video-bg" aria-hidden="true">
       <video autoplay muted loop playsinline preload="auto">
@@ -4127,7 +4150,7 @@
           heroTagline: "경상국립대학교 로켓동아리 ALTIS",
           heroCtaSupport: "Support for ALTIS",
           heroCtaMedia: "YouTube 영상 보기",
-          heroCtaAbout: "About ALTIS",  
+          heroCtaAbout: "About ALTIS",
           aboutKicker: "Luce in ALTIS",
           aboutTitle: "높은 곳에서 빛나라",
           aboutBody1:
@@ -4203,7 +4226,7 @@
             "To shine at higher altitudes, ALTIS is a club where aerospace engineering students at Gyeongsang National University design, build, and test rockets themselves. We learn by doing, steadily building understanding and technical skill across the entire rocket system.",
           aboutBody2:
             "To launch that light into the sky, we cover the full process—from solid motor design and fabrication to thrust and pressure measurement, avionics and structural design, and ground and launch testing.",
-          coreKicker: "Core Value", 
+          coreKicker: "Core Value",
           coreTitle: "Design · Build · Test",
           coreBody1:
             "Every project goes beyond theory and is validated through real hardware builds and repeated tests. Analyzing issues and improving through the design–build–test cycle is the core value of ALTIS projects.",
@@ -4225,7 +4248,7 @@
           teamIntro:
             "Propulsion, mission, airframe, and avionics teams collaborate to cover the full process from design to testing.",
           teamPropulsionTitle: "Propulsion Team",
-          teamPropulsionBody: 
+          teamPropulsionBody:
             "Responsible for solid motor design and fabrication, thrust measurement, and propulsion system verification.",
           teamMissionTitle: "Mission Team",
           teamMissionBody:
@@ -4431,23 +4454,6 @@
     })();
 
     (() => {
-      const toggle = document.querySelector(".lang-toggle");
-      const label = document.querySelector(".lang-float-label");
-      if (!toggle && !label) return;
-
-      const topThreshold = 120;
-      const syncLangUiVisibility = () => {
-        const shouldShow = window.scrollY <= topThreshold;
-        if (toggle) toggle.classList.toggle("is-hidden", !shouldShow);
-        if (label) label.classList.toggle("is-hidden", !shouldShow);
-      };
-
-      syncLangUiVisibility();
-      window.addEventListener("scroll", syncLangUiVisibility, { passive: true });
-      window.addEventListener("resize", syncLangUiVisibility);
-    })();
-
-    (() => {
       const coreTitle = document.querySelector(".about-footer-title[data-i18n='coreTitle']");
       if (!coreTitle) return;
 
@@ -4600,7 +4606,7 @@
       }
     })();
 
-    
+
 (() => {
       const track = document.querySelector(".tech-scroll-track");
       const stack = document.querySelector(".tech-stack");
