@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500;700&family=Sora:wght@400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;600&family=Sora:wght@400;500;600&display=swap"
     rel="stylesheet"
   />
   <style>
@@ -459,11 +459,11 @@
     }
 
     .track-list {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      border-left: 1px solid var(--line-dark);
     }
 
-    .info-item,
-    .track-item {
+    .info-item {
       min-height: 178px;
       padding: 24px 24px 26px;
       border-bottom: 1px solid var(--line-dark);
@@ -472,9 +472,46 @@
       gap: 14px;
     }
 
-    .info-item + .info-item,
-    .track-item + .track-item {
+    .info-item + .info-item {
       border-left: 1px solid var(--line-dark);
+    }
+
+    .track-item {
+      position: relative;
+      min-height: 270px;
+      padding: clamp(28px, 3vw, 38px);
+      border-right: 1px solid var(--line-dark);
+      border-bottom: 1px solid var(--line-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      background: transparent;
+      transition: background 0.2s ease;
+    }
+
+    .track-item:hover {
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .track-item::after {
+      content: "RECRUITING";
+      position: absolute;
+      top: clamp(28px, 3vw, 38px);
+      right: clamp(28px, 3vw, 38px);
+      color: #ff8f6c;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      line-height: 1.4;
+      letter-spacing: 0.1em;
+    }
+
+    .track-item:first-child {
+      background: rgba(255, 255, 255, 0.012);
+    }
+
+    .track-item:first-child::after {
+      content: "CLOSED";
+      color: var(--text-muted);
     }
 
     .info-item span,
@@ -489,7 +526,14 @@
 
     .info-item h3,
     .track-item h3 {
-      font-size: clamp(20px, 2vw, 26px);
+      font-size: clamp(28px, 3vw, 40px);
+    }
+
+    body.page-join .track-item h3 {
+      margin-top: auto;
+      padding-top: 54px;
+      font-size: clamp(28px, 2.5vw, 34px);
+      letter-spacing: -0.045em;
     }
 
     .info-item p,
@@ -501,6 +545,15 @@
       line-height: 1.66;
       font-size: 14px;
       word-break: keep-all;
+    }
+
+    .track-item p {
+      width: 100%;
+      max-width: 46ch;
+      margin-top: 22px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      line-height: 1.75;
     }
 
     .process {
@@ -1004,6 +1057,14 @@
         border-left: 0;
       }
 
+      .track-list {
+        border-left: 0;
+      }
+
+      .track-item {
+        min-height: 240px;
+      }
+
       .process-layout,
       .cta-band {
         grid-template-columns: 1fr;
@@ -1131,26 +1192,27 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="common-layout.css?v=20260909" />
   <link rel="stylesheet" href="mobile-overrides.css?v=20260807" />
+  <link rel="stylesheet" href="design-system.css?v=20260908" />
 </head>
-<body>
+<body class="page-join">
   <div class="noise"></div>
   <header>
     <div class="nav">
       <div class="brand">
-        <a href="index.html#home" aria-label="Go to home">
-          <img class="brand-logo" src="img/altis_logo.png" alt="ALTIS logo" />
+        <a href="index.html#home" aria-label="ALTIS 홈으로 이동">
+          <img class="brand-logo" src="img/altis_logo.png" alt="ALTIS 로고" />
         </a>
       </div>
       <nav id="primary-nav">
-        <a href="index.html#home">Home</a>
         <a href="index.html#about">About</a>
         <a href="team.html">Leadership</a>
         <a href="history.html">What We Do</a>
         <div class="nav-tech-dropdown">
           <a href="index.html#tech" class="nav-tech-link">Tech</a>
-          <ul class="nav-tech-dropdown-menu" aria-label="Tech sub menu">
-            <li><a href="tech/avionics.html">AVIONICS + SOFTWARE</a></li>
+          <ul class="nav-tech-dropdown-menu" aria-label="기술 분야 메뉴">
+            <li><a href="tech/avionics.html">AVIONICS</a></li>
             <li><a href="tech/ejection system.html">EJECTION SYSTEM</a></li>
             <li><a href="tech/motor.html">MOTOR</a></li>
             <li><a href="tech/structure.html">STRUCTURE</a></li>
@@ -1158,22 +1220,9 @@
         </div>
         <a href="index.html#media">Media</a>
         <a href="join.html">Join</a>
-        <a href="sponsors.html">sponsors</a>
-        <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">
-          <svg class="nav-social-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
-            <circle cx="12" cy="12" r="4.2"></circle>
-            <circle class="nav-social-icon-fill" cx="17.4" cy="6.6" r="1.1"></circle>
-          </svg>
-          Instagram
-        </a>
-        <a class="nav-instagram-link" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener">
-          <svg class="nav-social-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3" y="6.5" width="18" height="11" rx="3.2"></rect>
-            <path class="nav-social-icon-fill" d="M10 9.5 15.6 12 10 14.5Z"></path>
-          </svg>
-          YouTube
-        </a>
+        <a href="sponsors.html">Sponsors</a>
+        <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">Instagram</a>
+        <a class="nav-instagram-link" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener">YouTube</a>
       </nav>
       <div class="nav-actions">
         <button class="nav-cta menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
@@ -1258,23 +1307,23 @@
         <div class="track-list" aria-label="ALTIS recruiting tracks">
           <article class="track-item">
             <span>Propulsion</span>
-            <h3>추진</h3>
+            <h3>추진 - 0명</h3>
             <p>고체 로켓 모터 설계, 제작, 추력 시험과 추진 시스템 검증</p>
           </article>
           <article class="track-item">
             <span>Avionics</span>
-            <h3>전자</h3>
-            <p>센서, DAQ, 점화 제어, 통신 모듈과 비행 데이터 계측</p>
+            <h3>전자 - 5명</h3>
+            <p>에비오닉스 설계, 제작</p>
           </article>
           <article class="track-item">
             <span>Airframe</span>
-            <h3>동체</h3>
-            <p>구조 설계, 하우징 제작, 조립 공정과 탑재체 보호 구조</p>
+            <h3>동체 - 5명</h3>
+            <p>구조 설계, 해석 CFRP동체 제작</p>
           </article>
           <article class="track-item">
             <span>Mission</span>
-            <h3>미션</h3>
-            <p>비행 시퀀스, 시험 계획, 현장 운영과 프로젝트 관리</p>
+            <h3>미션 - 6명</h3>
+            <p>사출 및 미션 장치 설계, 제작</p>
           </article>
         </div>
       </div>
@@ -1284,10 +1333,7 @@
       <div class="container process-layout">
         <div class="process-copy">
           <p class="kicker">How To Join</p>
-          <h2>지원 흐름</h2>
-          <p>
-            구글폼 연결 전까지는 버튼만 준비해두었습니다. 모집이 열리면 같은 위치에 지원 폼 링크를 연결할 수 있습니다.
-          </p>
+          <h2>지원서 제출</h2>
           <div class="cta-actions">
             <a class="btn primary is-disabled" href="#" aria-disabled="true">지원하기</a>
             <a class="btn" href="#contact">문의하기</a>
@@ -1301,12 +1347,12 @@
           </article>
           <article class="process-step">
             <span>Step 02</span>
-            <h3>팀 미팅</h3>
-            <p>지원 동기와 관심 분야를 확인하고, 현재 진행 중인 프로젝트를 소개합니다.</p>
+            <h3>면접</h3>
+            <p>지원 동기와 관심 분야를 확인하고, ALTIS의 활동과 지원 분야에 관해 이야기합니다.</p>
           </article>
           <article class="process-step">
             <span>Step 03</span>
-            <h3>프로젝트 합류</h3>
+            <h3>팀 합류</h3>
             <p>기초 안전 교육과 온보딩을 거친 뒤 실제 제작·시험 업무에 참여합니다.</p>
           </article>
         </div>
@@ -1325,7 +1371,7 @@
         <div class="contact-lines">
           <div class="contact-line">
             <span>Email</span>
-            <a href="mailto:ybb1833@naver.com">ybb1833@naver.com</a>
+            <a href="mailto:ybb1833@naver.com"></a>
           </div>
           <div class="contact-line">
             <span>Instagram</span>
@@ -1436,50 +1482,6 @@
       }
     })();
 
-    (() => {
-      const nav = document.querySelector(".nav");
-      const menuBtn = document.querySelector(".menu-toggle");
-      const techDropdown = nav?.querySelector(".nav-tech-dropdown");
-      const techLink = nav?.querySelector(".nav-tech-link");
-      if (!nav || !menuBtn) return;
-
-      const closeMenu = () => {
-        nav.classList.remove("is-open");
-        techDropdown?.classList.remove("is-open");
-        menuBtn.setAttribute("aria-expanded", "false");
-      };
-
-      menuBtn.addEventListener("click", () => {
-        const isOpen = nav.classList.toggle("is-open");
-        menuBtn.setAttribute("aria-expanded", String(isOpen));
-      });
-
-      nav.querySelectorAll("nav a").forEach((link) => {
-        link.addEventListener("click", () => {
-          if (link.classList.contains("nav-tech-link")) return;
-          closeMenu();
-        });
-      });
-
-      techLink?.addEventListener("click", (event) => {
-        if (!window.matchMedia("(max-width: 900px)").matches) return;
-        event.preventDefault();
-        techDropdown?.classList.toggle("is-open");
-      });
-
-      const mql = window.matchMedia("(max-width: 900px)");
-      const handleResize = () => {
-        if (!mql.matches) {
-          closeMenu();
-          techDropdown?.classList.remove("is-open");
-        }
-      };
-      if (mql.addEventListener) {
-        mql.addEventListener("change", handleResize);
-      } else {
-        mql.addListener(handleResize);
-      }
-    })();
 
     (() => {
       const SHOW_INNOSPACE_LOGO = 1;
@@ -1503,6 +1505,7 @@
       });
     })();
   </script>
+  <script src="common-layout.js?v=20260909"></script>
   <script src="common-i18n.js"></script>
 </body>
 </html>

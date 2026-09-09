@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Sora:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;600&family=Sora:wght@400;500;600&display=swap"
     rel="stylesheet"
   />
   <style>
@@ -557,67 +557,11 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="common-layout.css" />
+  <link rel="stylesheet" href="common-layout.css?v=20260909" />
   <link rel="stylesheet" href="mobile-overrides.css?v=20260807" />
-  <style>
-    body.leadership-maintenance > main { display: none; }
-    .maintenance-panel {
-      position: relative;
-      display: grid;
-      min-height: calc(100vh - 74px);
-      place-items: center;
-      overflow: hidden;
-      padding: 96px 24px;
-      text-align: center;
-      border-bottom: 1px solid var(--line);
-      background:
-        linear-gradient(rgba(5, 6, 7, 0.76), rgba(5, 6, 7, 0.94)),
-        url("img/L.S_img.jpeg") center / cover no-repeat;
-    }
-    .maintenance-panel::after {
-      content: "07";
-      position: absolute;
-      right: -0.04em;
-      bottom: -0.22em;
-      color: rgba(255, 255, 255, 0.06);
-      font-family: var(--font-mono);
-      font-size: min(52vw, 620px);
-      line-height: 1;
-      pointer-events: none;
-    }
-    .maintenance-content { position: relative; z-index: 1; max-width: 720px; }
-    .maintenance-kicker {
-      margin: 0 0 20px;
-      color: var(--muted);
-      font-family: var(--font-mono);
-      font-size: 12px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-    }
-    .maintenance-content h1 {
-      margin: 0;
-      font-size: clamp(52px, 9vw, 112px);
-      font-weight: 500;
-      line-height: 0.92;
-      letter-spacing: -0.07em;
-    }
-    .maintenance-copy {
-      margin: 28px 0 0;
-      color: var(--muted-strong);
-      font-size: 16px;
-      line-height: 1.8;
-    }
-    .maintenance-home {
-      display: inline-flex;
-      margin-top: 36px;
-      padding: 12px 20px;
-      border: 1px solid var(--line);
-      border-radius: 4px;
-      text-decoration: none;
-    }
-  </style>
+  <link rel="stylesheet" href="design-system.css?v=20260908" />
 </head>
-<body class="leadership-maintenance">
+<body class="page-team">
   <header>
     <div class="nav">
       <div class="brand">
@@ -627,12 +571,12 @@
       </div>
       <nav id="primary-nav">
         <a href="index.html#about">About</a>
-        <a class="nav-current" href="team.html" aria-current="page">Leadership</a>
+        <a href="team.html">Leadership</a>
         <a href="history.html">What We Do</a>
         <div class="nav-tech-dropdown">
           <a href="index.html#tech" class="nav-tech-link">Tech</a>
           <ul class="nav-tech-dropdown-menu" aria-label="기술 분야 메뉴">
-            <li><a href="tech/avionics.html">AVIONICS + SOFTWARE</a></li>
+            <li><a href="tech/avionics.html">AVIONICS</a></li>
             <li><a href="tech/ejection system.html">EJECTION SYSTEM</a></li>
             <li><a href="tech/motor.html">MOTOR</a></li>
             <li><a href="tech/structure.html">STRUCTURE</a></li>
@@ -664,15 +608,6 @@
       </div>
     </div>
   </header>
-
-  <section class="maintenance-panel" aria-labelledby="maintenance-title">
-    <div class="maintenance-content">
-      <p class="maintenance-kicker">Leadership / Maintenance</p>
-      <h1 id="maintenance-title">Coming<br />Soon</h1>
-      <p class="maintenance-copy">Leadership 페이지를 점검하고 있습니다.<br />곧 다시 공개하겠습니다.</p>
-      <a class="maintenance-home" href="index.html">홈으로 돌아가기</a>
-    </div>
-  </section>
 
   <main>
     <section class="team-hero">
@@ -825,6 +760,6 @@
   </footer>
 
   <script src="common-i18n.js"></script>
-  <script src="common-layout.js"></script>
+  <script src="common-layout.js?v=20260909"></script>
 </body>
 </html>

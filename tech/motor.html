@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500;700&family=Sora:wght@400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;600&family=Sora:wght@400;500;600&display=swap"
     rel="stylesheet"
   />
   <style>
@@ -1305,48 +1305,37 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="../common-layout.css" />
+  <link rel="stylesheet" href="../common-layout.css?v=20260909" />
   <link rel="stylesheet" href="../mobile-overrides.css?v=20260807" />
+  <link rel="stylesheet" href="../design-system.css?v=20260908" />
+  <link rel="stylesheet" href="./motor-additions.css?v=20260909" />
 </head>
-<body>
+<body class="page-motor">
   <header>
     <div class="nav">
       <div class="brand">
-        <a href="../index.html#home" aria-label="Go to home">
-          <img class="brand-logo" src="../img/altis_logo.png" alt="ALTIS logo" />
+        <a href="../index.html#home" aria-label="ALTIS 홈으로 이동">
+          <img class="brand-logo" src="../img/altis_logo.png" alt="ALTIS 로고" />
         </a>
       </div>
       <nav id="primary-nav">
-        <a href="../index.html#about" data-i18n="navAbout">About</a>
-        <a href="../team.html" data-i18n="navTeams">Leadership</a>
+        <a href="../index.html#about">About</a>
+        <a href="../team.html">Leadership</a>
         <a href="../history.html">What We Do</a>
         <div class="nav-tech-dropdown">
-          <a href="../index.html#tech" class="nav-tech-link" data-i18n="navTech">Tech</a>
-          <ul class="nav-tech-dropdown-menu" aria-label="Tech sub menu">
-            <li><a href="./avionics.html">AVIONICS + SOFTWARE</a></li>
-            <li><a href="./ejection system.html">EJECTION SYSTEM</a></li>
-            <li><a href="./motor.html">MOTOR</a></li>
-            <li><a href="./structure.html">STRUCTURE</a></li>
+          <a href="../index.html#tech" class="nav-tech-link">Tech</a>
+          <ul class="nav-tech-dropdown-menu" aria-label="기술 분야 메뉴">
+            <li><a href="../tech/avionics.html">AVIONICS</a></li>
+            <li><a href="../tech/ejection system.html">EJECTION SYSTEM</a></li>
+            <li><a href="../tech/motor.html">MOTOR</a></li>
+            <li><a href="../tech/structure.html">STRUCTURE</a></li>
           </ul>
         </div>
-        <a href="../index.html#media" data-i18n="navMedia">Media</a>
-        <a href="../join.html" data-i18n="navJoin">Join</a>
-        <a href="../sponsors.html" data-i18n="navsponsors">sponsors</a>
-        <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">
-          <svg class="nav-social-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
-            <circle cx="12" cy="12" r="4.2"></circle>
-            <circle class="nav-social-icon-fill" cx="17.4" cy="6.6" r="1.1"></circle>
-          </svg>
-          Instagram
-        </a>
-        <a class="nav-instagram-link" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener">
-          <svg class="nav-social-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3" y="6.5" width="18" height="11" rx="3.2"></rect>
-            <path class="nav-social-icon-fill" d="M10 9.5 15.6 12 10 14.5Z"></path>
-          </svg>
-          YouTube
-        </a>
+        <a href="../index.html#media">Media</a>
+        <a href="../join.html">Join</a>
+        <a href="../sponsors.html">Sponsors</a>
+        <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">Instagram</a>
+        <a class="nav-instagram-link" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener">YouTube</a>
       </nav>
       <div class="nav-actions">
         <button class="nav-cta menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
@@ -1388,19 +1377,60 @@
           ALTIS는 고체 로켓 모터를 직접 설계·제작하고, 반복 시험으로 신뢰도를 쌓아갑니다.
         </p>
         <div class="hero-actions">
-          <a class="hero-btn primary" href="#motor-1st">1stg Motor</a>
-          <a class="hero-btn" href="#motor-2st">2stg Motor</a>
+          <a class="hero-btn primary" href="#motor-1st">1단 모터</a>
+          <a class="hero-btn" href="#motor-2st">2단 모터</a>
         </div>
       </div>
     </div>
 
   </main>
 
+  <section class="motor-content-section" id="propulsion-work">
+    <div class="motor-content-shell">
+      <div class="motor-content-heading">
+        <p class="motor-section-kicker">01 / Propulsion Team</p>
+        <div>
+          <h2>설계하고, 만들고, 시험합니다</h2>
+          <p>
+            추진팀은 목표 추력과 연소 시간에 맞춰 고체 로켓 모터를 설계합니다.
+            추진제 제작, 부품 가공과 조립, 지상 연소 시험까지 팀에서 직접 진행합니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="motor-work-grid">
+        <article class="motor-work-item">
+          <span>01 / DESIGN</span>
+          <h3>성능 설계</h3>
+          <p>로켓의 질량과 비행 목표를 바탕으로 필요한 추력, 연소 시간과 추진제 형상을 정합니다.</p>
+        </article>
+        <article class="motor-work-item">
+          <span>02 / ANALYSIS</span>
+          <h3>내탄도 해석</h3>
+          <p>연소 중 챔버 압력과 추력 변화를 계산하고 노즐과 연소관의 설계 조건을 확인합니다.</p>
+        </article>
+        <article class="motor-work-item">
+          <span>03 / BUILD</span>
+          <h3>제작과 조립</h3>
+          <p>KNSB 추진제를 정해진 공정으로 만들고 그레인, 노즐, 연소관을 조립합니다.</p>
+        </article>
+        <article class="motor-work-item">
+          <span>04 / TEST</span>
+          <h3>지상 연소 시험</h3>
+          <p>시험대에서 추력과 연소 시간을 측정하고 결과를 다음 설계와 제작 공정에 반영합니다.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <section class="motor-overview-page" id="motor-1st" aria-label="Motor overview page section">
     <div class="tech-subsection tech-subsection-motor tech-stack-item" style="--delay: 200ms;">
       <section class="tech-details" aria-label="Motor overview">
-        <span class="tech-kicker motor-kicker">1stg Motor</span>
+        <span class="tech-kicker motor-kicker">02 / 1st Stage Motor</span>
         <h3 class="motor-overview-title">OVERVIEW</h3>
+        <p class="motor-overview-copy">
+          1단 모터는 KNSB 추진제를 사용합니다. 현재 제원은 설계값과 지상 연소 시험 결과를 기준으로 정리했습니다.
+        </p>
         <dl class="motor-overview-table" aria-label="Motor specification overview">
           <div class="motor-overview-row"><dt>Type</dt><dd>Solid Rocket Motor</dd></div>
           <div class="motor-overview-row"><dt>Propellant</dt><dd>KNSB</dd></div>
@@ -1419,8 +1449,11 @@
   <section class="motor-overview-page" id="motor-2st" aria-label="2stg motor overview page section">
     <div class="tech-subsection tech-subsection-motor tech-stack-item" style="--delay: 220ms;">
       <section class="tech-details" aria-label="2stg motor overview">
-        <span class="tech-kicker motor-kicker">2stg Motor</span>
+        <span class="tech-kicker motor-kicker">03 / 2nd Stage Motor</span>
         <h3 class="motor-overview-title">OVERVIEW</h3>
+        <p class="motor-overview-copy">
+          2단 모터는 2단 비행 조건에 맞춰 개발하고 있습니다. 확정되지 않은 제원은 설계와 시험이 끝난 뒤 반영합니다.
+        </p>
         <dl class="motor-overview-table" aria-label="2nd stage motor specification overview">
           <div class="motor-overview-row"><dt>Type</dt><dd>Solid Rocket Motor</dd></div>
           <div class="motor-overview-row"><dt>Propellant</dt><dd>KNSB</dd></div>
@@ -1433,6 +1466,42 @@
         <div class="motor-3d-stage" id="motor-3d-stage-2" aria-label="ALTIS 2nd stage motor 3D model viewer">
         </div>
       </figure>
+    </div>
+  </section>
+
+  <section class="motor-content-section motor-test-section" id="static-fire-test">
+    <div class="motor-content-shell">
+      <div class="motor-content-heading">
+        <p class="motor-section-kicker">04 / Static Fire Test</p>
+        <div>
+          <h2>연소 시험으로 확인합니다</h2>
+          <p>
+            계산한 성능이 실제 모터에서도 나오는지 지상 연소 시험으로 확인합니다.
+            계측 결과와 시험 영상을 함께 보고 이상 연소나 부품 손상 여부를 점검합니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="motor-test-layout">
+        <figure class="motor-test-photo">
+          <img src="../img/stg1_motor_tms.jpg" alt="ALTIS 1단 고체 로켓 모터 지상 연소 시험" loading="lazy" />
+          <figcaption>1단 모터 지상 연소 시험</figcaption>
+        </figure>
+        <dl class="motor-test-list">
+          <div>
+            <dt>시험 준비</dt>
+            <dd>시험체와 점화 회로, 시험대 고정 상태와 안전 거리를 확인합니다.</dd>
+          </div>
+          <div>
+            <dt>계측</dt>
+            <dd>로드셀로 추력을 측정하고 영상과 시간 기록을 함께 남깁니다.</dd>
+          </div>
+          <div>
+            <dt>결과 검토</dt>
+            <dd>최대 추력, 평균 추력과 연소 시간을 설계값과 비교합니다.</dd>
+          </div>
+        </dl>
+      </div>
     </div>
   </section>
 
@@ -1950,6 +2019,6 @@
 
   
   <script src="../common-i18n.js"></script>
-  <script src="../common-layout.js"></script>
+  <script src="../common-layout.js?v=20260909"></script>
 </body>
 </html>

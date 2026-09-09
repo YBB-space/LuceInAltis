@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500;700&family=Sora:wght@400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;600&family=Sora:wght@400;500;600&display=swap"
     rel="stylesheet"
   />
   <style>
@@ -911,41 +911,37 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="common-layout.css?v=20260909" />
   <link rel="stylesheet" href="mobile-overrides.css?v=20260807" />
+  <link rel="stylesheet" href="design-system.css?v=20260908" />
 </head>
-<body>
+<body class="page-sponsors">
   <div class="noise"></div>
   <header>
     <div class="nav">
       <div class="brand">
-        <a href="index.html#home" aria-label="Go to home">
-          <img class="brand-logo" src="img/altis_logo.png" alt="ALTIS logo" />
+        <a href="index.html#home" aria-label="ALTIS 홈으로 이동">
+          <img class="brand-logo" src="img/altis_logo.png" alt="ALTIS 로고" />
         </a>
       </div>
       <nav id="primary-nav">
-        <a href="index.html#home">Home</a>
         <a href="index.html#about">About</a>
         <a href="team.html">Leadership</a>
         <a href="history.html">What We Do</a>
-        <a href="index.html#tech">Tech</a>
+        <div class="nav-tech-dropdown">
+          <a href="index.html#tech" class="nav-tech-link">Tech</a>
+          <ul class="nav-tech-dropdown-menu" aria-label="기술 분야 메뉴">
+            <li><a href="tech/avionics.html">AVIONICS</a></li>
+            <li><a href="tech/ejection system.html">EJECTION SYSTEM</a></li>
+            <li><a href="tech/motor.html">MOTOR</a></li>
+            <li><a href="tech/structure.html">STRUCTURE</a></li>
+          </ul>
+        </div>
         <a href="index.html#media">Media</a>
         <a href="join.html">Join</a>
-        <a href="sponsors.html">sponsors</a>
-        <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">
-          <svg class="nav-social-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
-            <circle cx="12" cy="12" r="4.2"></circle>
-            <circle class="nav-social-icon-fill" cx="17.4" cy="6.6" r="1.1"></circle>
-          </svg>
-          Instagram
-        </a>
-        <a class="nav-instagram-link" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener">
-          <svg class="nav-social-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3" y="6.5" width="18" height="11" rx="3.2"></rect>
-            <path class="nav-social-icon-fill" d="M10 9.5 15.6 12 10 14.5Z"></path>
-          </svg>
-          YouTube
-        </a>
+        <a href="sponsors.html">Sponsors</a>
+        <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">Instagram</a>
+        <a class="nav-instagram-link" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener">YouTube</a>
       </nav>
       <div class="nav-actions">
         <button class="nav-cta menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
@@ -1142,35 +1138,6 @@
   </footer>
 
   <script>
-    (() => {
-      const nav = document.querySelector(".nav");
-      const menuBtn = document.querySelector(".menu-toggle");
-      if (!nav || !menuBtn) return;
-
-      const closeMenu = () => {
-        nav.classList.remove("is-open");
-        menuBtn.setAttribute("aria-expanded", "false");
-      };
-
-      menuBtn.addEventListener("click", () => {
-        const isOpen = nav.classList.toggle("is-open");
-        menuBtn.setAttribute("aria-expanded", String(isOpen));
-      });
-
-      nav.querySelectorAll("nav a").forEach((link) => {
-        link.addEventListener("click", closeMenu);
-      });
-
-      const mql = window.matchMedia("(max-width: 900px)");
-      const handleResize = () => {
-        if (!mql.matches) closeMenu();
-      };
-      if (mql.addEventListener) {
-        mql.addEventListener("change", handleResize);
-      } else {
-        mql.addListener(handleResize);
-      }
-    })();
 
     (() => {
       const SHOW_INNOSPACE_LOGO = 1;
@@ -1203,6 +1170,7 @@
       proposalView.addEventListener("wheel", focusPdf, { passive: true });
     })();
   </script>
+  <script src="common-layout.js?v=20260909"></script>
   <script src="common-i18n.js"></script>
 </body>
 </html>
