@@ -821,6 +821,7 @@
       inset: 0;
       z-index: 60;
       display: none;
+      grid-template-columns: minmax(0, 1fr);
       place-items: center;
       padding: 24px;
       background:
@@ -853,7 +854,9 @@
     }
 
     .recruiting-gate-panel {
-      width: min(100%, 520px);
+      width: min(520px, calc(100vw - 48px));
+      max-width: none;
+      min-width: 0;
       padding: 0;
       border: 0;
       border-radius: 0;
@@ -875,11 +878,13 @@
     }
 
     .recruiting-gate-panel p {
+      width: 100%;
       margin: 0;
       color: var(--text-secondary);
       font-size: 15px;
       line-height: 1.75;
       word-break: keep-all;
+      overflow-wrap: break-word;
     }
 
     .recruiting-gate-status {
@@ -1470,7 +1475,7 @@
   </div>
 
   <script>
-    const RECRUITING_OPEN = 1; // 0: 모집 닫힘, 1: 모집 중
+    const RECRUITING_OPEN = 0; // 0: 모집 닫힘, 1: 모집 중
 
     (() => {
       const isOpen = RECRUITING_OPEN === 1;
