@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PIONEER-I | ALTIS</title>
+  <link rel="icon" href="img/altis_logo.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=Noto+Sans+KR:wght@400;500;600&amp;family=Sora:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="common-layout.css?v=20261025-vehicles1" />
+  <link rel="stylesheet" href="mobile-overrides.css?v=20260807" />
+  <link rel="stylesheet" href="design-system.css?v=20261025-airframe-zoom1" />
+  <link rel="stylesheet" href="vehicles.css?v=20261025-airframe1" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body class="page-pioneer">
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <a href="index.html#home" aria-label="ALTIS 홈으로 이동">
+          <img class="brand-logo" src="img/altis_logo.png" alt="ALTIS 로고" />
+        </a>
+      </div>
+      <nav id="primary-nav">
+        <a href="index.html#about">About</a>
+        <a href="team.html">Leadership</a>
+        <a href="history.html">History</a>
+        <div class="nav-tech-dropdown">
+          <a href="#" class="nav-tech-link">Tech</a>
+          <ul class="nav-tech-dropdown-menu" aria-label="Technology menu">
+            <li><a href="tech/avionics.html">Avionics</a></li>
+            <li><a href="tech/motor.html">Propulsion</a></li>
+            <li><a href="tech/ejection system.html">Mission</a></li>
+            <li><a href="tech/structure.html">Airframe</a></li>
+          </ul>
+        </div>
+                <div class="nav-tech-dropdown nav-vehicle-dropdown">
+          <a href="vehicles.html" class="nav-tech-link nav-vehicle-link">Vehicle</a>
+          <ul class="nav-tech-dropdown-menu" aria-label="Vehicle menu">
+            <li><a href="vehicles.html#frontier-i">Frontier-I</a></li>
+            <li><a href="vehicles.html#frontier-ii">Frontier-II</a></li>
+            <li><a href="vehicles.html#frontier-iii">Frontier-III</a></li>
+            <li><a href="vehicles.html#frontier-iv">Frontier-IV</a></li>
+            <li><a href="pioneer.html">Pioneer-I</a></li>
+            <li><a href="vehicles.html#araea-i">Araea-I</a></li>
+          </ul>
+        </div>
+<a href="index.html#media">Media</a>
+        <a href="join.html">Join</a>
+        <a href="sponsors.html">Sponsors</a>
+        <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">Instagram</a>
+        <a class="nav-instagram-link" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener">YouTube</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="nav-cta menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+        <a class="nav-cta instagram-link social-cta" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <circle class="social-icon fill" cx="17.4" cy="6.6" r="1.1"></circle>
+          </svg>
+          <span class="social-label">Instagram</span>
+        </a>
+        <a class="nav-cta instagram-link social-cta" href="https://www.youtube.com/@Luce_1n_ALTIS" target="_blank" rel="noopener" aria-label="YouTube">
+          <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="6.5" width="18" height="11" rx="3.2"></rect>
+            <path class="social-icon fill" d="M10 9.5 15.6 12 10 14.5Z"></path>
+          </svg>
+          <span class="social-label">YouTube</span>
+        </a>
+      </div>
+    </div>
+  </header>
+  <main id="pioneer-content">
+    <article class="about-technology pioneer-hero" id="two-stage-technology" aria-labelledby="two-stage-title">
+      <div class="pioneer-launch-video" aria-hidden="true">
+        <video data-focus-video muted playsinline preload="metadata" width="2560" height="1440" tabindex="-1">
+          <source src="vid/p1_launchVid.mov" type="video/mp4" />
+        </video>
+      </div>
+      <div class="container pioneer-hero__inner">
+        <div class="about-technology__content reveal-slide">
+          <span class="about-technology__label" data-i18n="twoStageLabel">우리의 기술</span>
+          <h1 id="two-stage-title" data-i18n="twoStageTitle">PIONEER-I</h1>
+          <p class="about-technology__subtitle" data-i18n="twoStageSubtitle">기계식 2단 분리 로켓</p>
+          <p data-i18n="twoStageBody">PIONEER-I는 기계식 단분리와 2단 내부 점화, 각 단의 독립 회수를 적용한 2단 고체로켓입니다. 단분리부터 점화·회수까지 이어지는 과정을 직접 설계하고, 지상 시험과 발사시험으로 확인했습니다.</p>
+        </div>
+
+      </div>
+    </article>
+    <div class="container">
+      <div class="pioneer-flow" data-pioneer-flow>
+        <section class="pioneer-conops pioneer-flow__panel" id="pioneer-conops" aria-labelledby="conops-title">
+          <div class="pioneer-conops__heading">
+            <span class="pioneer-conops__label">MISSION PROFILE</span>
+            <h2 id="conops-title">PIONEER-I CONOPS</h2>
+            <p>기계식 단분리와 내부 점화, 단별 독립 회수로 이어지는 PIONEER-I의 운용 개념입니다.</p>
+          </div>
+          <figure class="pioneer-conops__figure">
+            <div class="pioneer-conops__viewport" tabindex="0" role="region" aria-label="PIONEER-I 비행 시퀀스 도식">
+              <img src="img/pioneer-conops.svg" width="1440" height="700" alt="발사 준비, 1단 점화와 연소 종료, 기계식 단분리, 1단 낙하산 회수, 2단 점화와 연소 종료, 최고점 도달, 2단 낙하산 회수와 데이터 회수로 이어지는 PIONEER-I 운용 개념도" loading="lazy" />
+            </div>
+            <figcaption>Figure 26 CONOPS · PIONEER-I 비행 시퀀스 개념도</figcaption>
+          </figure>
+        </section>
+
+        <section class="pioneer-overview pioneer-flow__panel" id="pioneer-overview" aria-labelledby="overview-title">
+          <div class="pioneer-model-visual pioneer-inline-model" data-pioneer-model data-model-src="3d/p1_assembly.3mf">
+            <img class="pioneer-teaser__poster" src="img/pioneer-i-assembly.png" alt="PIONEER-I 로켓 조립 모델" loading="lazy" />
+          </div>
+          <div class="pioneer-overview__copy">
+            <span class="pioneer-overview__label">PIONEER-I / OVERVIEW</span>
+            <h2 id="overview-title">설계 개요</h2>
+            <p>CFRP 동체와 핀으로 구조 질량을 줄이고, 각 단에 추진·전자·회수장치를 독립적으로 배치했습니다. 서보모터로 결합을 해제한 뒤 홀 센서로 분리 상태를 확인합니다.</p>
+            <dl class="pioneer-overview__specs">
+              <div><dt>1단 동체 길이</dt><dd>883 <span>mm</span></dd></div>
+              <div><dt>2단 동체 길이</dt><dd>780 <span>mm</span></dd></div>
+              <div><dt>동체 내경</dt><dd>98 <span>mm</span></dd></div>
+              <div><dt>동체·핀 재질</dt><dd>CFRP</dd></div>
+            </dl>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="tech-scroll" data-tech-scroll>
+        <div class="tech-scroll__viewport">
+          <section class="about-technology-topic" id="pioneer-propulsion" aria-labelledby="pioneer-propulsion-title">
+            <h2 id="pioneer-propulsion-title" data-i18n="twoStagePropulsionTitle">추진 시스템</h2>
+            <div class="pioneer-propulsion-layout">
+            <div class="about-technology-topic__copy">
+              <p data-i18n="twoStagePropulsionBody">OpenMotor로 1·2단 모터의 내탄도 성능을 해석하고, 지상 연소시험에서 추력·연소 시간·연소실 압력을 계측했습니다. 실측 추력 곡선과 총 충격량을 해석값과 비교해 추진 성능을 평가했습니다.</p>
+              <p data-i18n="twoStagePropulsionResult">지상 시험 최대 압력은 1단 1.73 MPa, 2단 1.89 MPa로 설계 제한 2.0 MPa 이내였습니다. 총 충격량은 해석값 대비 각각 90.8%, 95.5%로 측정됐습니다.</p>
+              <a class="about-technology-topic__link" href="tech/motor.html"><span data-i18n="twoStageMotorLink">추진 기술</span><span aria-hidden="true"> ↗</span></a>
+            </div>
+            <video class="pioneer-propulsion-video" data-section-video muted playsinline preload="metadata" aria-label="추진 시스템 지상 연소시험 영상">
+              <source src="vid/tms_vid.mov" />
+            </video>
+            </div>
+          </section>
+
+          <section class="about-technology-topic" id="pioneer-avionics" aria-labelledby="pioneer-avionics-title">
+            <h2 id="pioneer-avionics-title" data-i18n="twoStageAvionicsTitle">에비오닉스</h2>
+            <div class="about-avionics-layout">
+              <div class="about-technology-topic__copy">
+                <p data-i18n="twoStageAvionicsBody">IMU의 수직 가속도와 기압계 고도를 1차원 칼만필터로 융합해 고도와 수직 속도를 추정합니다. ESP32-S3와 FreeRTOS 기반 듀얼코어 구조에서 센서 수집·상태 추정과 비행 시퀀스·로그 저장 태스크를 분리했습니다. 유한 상태 기계(FSM)로 비행 단계를 판단하고 점화·사출 출력을 제어합니다.</p>
+                <p data-i18n="twoStageAvionicsResult">1단은 데이터 저장과 FLASH6 지상국 통신을, 2단은 자율 비행 시퀀스를 담당합니다. 100 m 거리에서 60초간 수행한 지상 통신 시험에서는 평균 수신 주파수 49.68 Hz, 패킷 손실률 0%를 기록했습니다.</p>
+                <a class="about-technology-topic__link" href="tech/avionics.html"><span data-i18n="twoStageAvionicsLink">에비오닉스 기술</span><span aria-hidden="true"> ↗</span></a>
+              </div>
+              <div class="avionics-deck" data-stacked-gallery role="region" aria-labelledby="pioneer-avionics-title">
+                <button class="avionics-deck__stage" type="button" data-stack-turn aria-label="다음 사진 보기">
+                  <span class="avionics-deck__card is-front" data-stack-card>
+                    <img src="img/Altis%20Intellignet3.png" alt="ALTIS Intelligent 3 비행 전자장치 보드" data-alt-en="ALTIS Intelligent 3 avionics board" loading="lazy" decoding="async" draggable="false" />
+                  </span>
+                  <span class="avionics-deck__card" data-stack-card aria-hidden="true">
+                    <img src="img/pcb_land.png" alt="ALTIS 비행 전자장치 PCB 설계" data-alt-en="ALTIS avionics PCB design" loading="lazy" decoding="async" draggable="false" />
+                  </span>
+                  <span class="avionics-deck__card" data-stack-card aria-hidden="true" hidden>
+                    <img class="avionics-deck__screen" src="img/flash6_use_img.png" alt="FLASH6 지상국의 비행 상태 표시 화면" data-alt-en="FLASH6 ground station flight-status display" loading="lazy" decoding="async" draggable="false" />
+                  </span>
+                </button>
+                <div class="avionics-deck__footer">
+                  <div class="avionics-deck__controls">
+                    <span class="avionics-deck__counter" data-stack-counter role="status" aria-live="polite" aria-atomic="true">1 / 3</span>
+                    <button type="button" data-stack-prev aria-label="이전 사진">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg>
+                    </button>
+                    <button type="button" data-stack-next aria-label="다음 사진">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="about-technology-topic" id="pioneer-separation" aria-labelledby="pioneer-separation-title">
+            <h2 id="pioneer-separation-title" data-i18n="twoStageSeparationTitle">기계식 단분리/사출</h2>
+            <div class="pioneer-separation-layout">
+            <div class="about-technology-topic__copy">
+              <p data-i18n="twoStageSeparationBody">상·하단 커플러가 결합 상태에서 추력과 축·횡방향 하중을 지지하고, 서보모터 구동으로 구속을 해제하는 기계식 단분리 구조입니다. 홀 센서와 자석의 상대 위치 변화로 분리 완료를 검출하며, 분리 확인 신호를 2단 점화 허가 조건과 연동했습니다.</p>
+              <p data-i18n="twoStageSeparationResult">분리가 확인되지 않으면 점화를 차단하고 회수 모드로 전환하는 Fail-safe를 적용했습니다. 1단은 단분리 후, 2단은 최고점 판단 후 낙하산을 전개하도록 설계했으며, CFRP 동체에 장착한 상태에서 분리와 사출 작동을 확인했습니다.</p>
+              <a class="about-technology-topic__link" href="tech/ejection%20system.html#mission-details"><span data-i18n="twoStageSeparationLink">단분리·사출 기술</span><span aria-hidden="true"> ↗</span></a>
+            </div>
+            <div class="pioneer-model-visual pioneer-separation-model" data-pioneer-model data-model-kind="separation" data-model-src="3d/S.S.3mf">
+            </div>
+            </div>
+          </section>
+
+          <section class="about-technology-topic" id="pioneer-airframe" aria-labelledby="pioneer-airframe-title">
+            <h2 id="pioneer-airframe-title" data-i18n="twoStageAirframeTitle">동체</h2>
+            <div class="pioneer-airframe-layout">
+              <div class="about-technology-topic__copy">
+                <p data-i18n="twoStageAirframeBody">PIONEER-I의 동체와 핀은 CFRP로 제작했습니다. 동체 내경은 98 mm이며, 1단 동체 길이는 883 mm, 2단은 780 mm입니다. 복합재 구조로 기체의 질량과 강성을 함께 고려했습니다.</p>
+                <p data-i18n="twoStageAirframeDetail">추진부·에비오닉스·단분리 및 회수 장치의 배치에 맞춰 내부 체결 구조를 설계했습니다. 동체와 핀의 결합, 장치 간 간섭을 확인하고 각 단을 조립해 발사시험 기체에 통합했습니다.</p>
+                <a class="about-technology-topic__link" href="tech/structure.html"><span data-i18n="twoStageAirframeLink">동체 기술</span><span aria-hidden="true"> ↗</span></a>
+              </div>
+              <div class="avionics-deck pioneer-airframe-gallery" data-stacked-gallery role="region" aria-labelledby="pioneer-airframe-title">
+                <button class="avionics-deck__stage" type="button" data-stack-turn aria-label="다음 사진 보기">
+                  <span class="avionics-deck__card is-front" data-stack-card>
+                    <img class="avionics-deck__screen" src="img/air2.png" alt="로켓 동체와 핀의 구조 해석 결과" data-alt-en="Structural analysis of the rocket airframe and fins" loading="lazy" decoding="async" draggable="false" />
+                  </span>
+                  <span class="avionics-deck__card" data-stack-card aria-hidden="true">
+                    <img class="avionics-deck__screen" src="img/air3.png" alt="CFRP 시편의 하중·변위 및 변형률 시험 결과" data-alt-en="CFRP specimen load, displacement, and strain test results" loading="lazy" decoding="async" draggable="false" />
+                  </span>
+                </button>
+                <div class="avionics-deck__footer">
+                  <div class="avionics-deck__controls">
+                    <span class="avionics-deck__counter" data-stack-counter role="status" aria-live="polite" aria-atomic="true">1 / 2</span>
+                    <button type="button" data-stack-prev aria-label="이전 사진">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg>
+                    </button>
+                    <button type="button" data-stack-next aria-label="다음 사진">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="about-technology-topic" id="pioneer-testing" aria-labelledby="pioneer-testing-title">
+            <h2 id="pioneer-testing-title" data-i18n="twoStageTestingTitle">지상 시험</h2>
+            <div class="about-technology-topic__copy">
+              <p data-i18n="twoStageTestingBody">단품 기능시험에서 에비오닉스 연동·동체 통합시험으로 검증 범위를 확장했습니다. OpenRocket의 시간·고도·속도 데이터를 입력한 비행 시퀀스 모사시험으로 단분리·점화·사출 명령의 출력 순서와 상태 전이를 확인했습니다.</p>
+              <p data-i18n="twoStageTestingResult">발사시험의 최고 고도는 133.349 m로, OpenRocket 예측값 555.573 m와 차이를 보였습니다. 비행 데이터에서 단분리 후 점화 지연에 따른 자세 변화를 분석하고, 그 결과를 반영해 점화 시퀀스를 수정했습니다.</p>
+              <a class="about-technology-topic__link" href="tech/motor.html#static-fire-test"><span data-i18n="twoStageTestingLink">지상 시험</span><span aria-hidden="true"> ↗</span></a>
+            </div>
+          </section>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="site-footer-divider"></div>
+      <div class="site-footer-grid">
+        <div>
+          <p>Address: 진주대로 501 | Founded Date: 2019</p>
+          <p>CONTACT | email : ybb1833@naver.com / instagram : @ altis_official</p>
+        </div>
+        <p class="site-footer-copy">© 2019-2026 ALTIS. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  <script src="common-i18n.js?v=20261025-default-en1"></script>
+  <script type="module" src="pioneer-model.js?v=20261025-separation-gray3"></script>
+  <script src="scroll-reveal.js?v=20261025-1"></script>
+  <script src="stacked-gallery.js?v=20261025-3"></script>
+  <script src="focus-video.js?v=20261025-1"></script>
+  <script src="pioneer-flow.js?v=20261025-1"></script>
+  <script src="tech-scroll.js?v=20261025-five-sections1"></script>
+  <script src="common-layout.js?v=20261025-vehicles1"></script>
+</body>
+</html>

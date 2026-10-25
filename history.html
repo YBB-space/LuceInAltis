@@ -4,11 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="경상국립대학교 로켓동아리 ALTIS의 연혁과 주요 기록" />
-  <title>What We Do | ALTIS</title>
+  <title>History | ALTIS</title>
   <link rel="icon" href="img/altis_logo.png" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;600&family=Sora:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="common-layout.css?v=20261024-tech1" />
+  <link rel="stylesheet" href="mobile-overrides.css?v=20260807" />
   <style>
     :root {
       --bg: #050607;
@@ -40,7 +42,7 @@
       border-bottom: 1px solid var(--line);
       background:
         linear-gradient(90deg, rgba(5, 6, 7, 0.94) 0%, rgba(5, 6, 7, 0.55) 52%, rgba(5, 6, 7, 0.18) 100%),
-        url("img/hero_launch.png") center 43% / cover no-repeat;
+        url("img/History_img.png") center 43% / cover no-repeat;
     }
 
     .history-hero::after {
@@ -233,10 +235,134 @@
     .site-footer p { margin: 5px 0; color: rgba(193, 204, 219, 0.65); font-size: 11px; line-height: 1.6; }
     .site-footer-copy { text-align: right; white-space: nowrap; }
 
+    /* Match the deployed History page while using the local shared header. */
+    body.page-history { background: #07090b; color: #f2f5f8; font-family: var(--font-sans); font-size: 16px; line-height: 1.7; letter-spacing: -.015em; }
+    body.page-history .nav { min-height: 80px; }
+    body.page-history .shell { padding-inline: 24px; }
+    body.page-history .history-hero { min-height: clamp(560px, 76svh, 820px); align-items: center; }
+    body.page-history .history-hero h1 { max-width: 16ch; font-size: clamp(40px, 6.5vw, 88px); font-weight: 500; line-height: 1.12; letter-spacing: -.045em; }
+    body.page-history .hero-inner { padding: 96px 24px; }
+    body.page-history .timeline-section { padding: clamp(64px, 8vw, 104px) 0; }
+    body.page-history .section-head { grid-template-columns: 170px minmax(0,1fr); gap: 32px; margin-bottom: 48px; }
+    body.page-history .section-head h2 { font-size: clamp(30px, 3.6vw, 48px); line-height: 1.3; }
+    body.page-history .timeline-item { grid-template-columns: 170px minmax(0,1fr) minmax(260px,.72fr); gap: 28px; }
+    body.page-history .timeline-copy h3 { font-size: clamp(22px,2.2vw,28px); line-height: 1.4; }
+    body.page-history .timeline-item-featured { min-height: 430px; }
+    body.page-history .timeline-item-featured .timeline-index { grid-column: 3; }
+    body.page-history .timeline-item-featured .timeline-image { grid-column: 2 / 4; }
+    body.page-history .outreach-section { padding-bottom: clamp(64px,8vw,104px); }
+    body.page-history .outreach-card { grid-template-columns: 170px minmax(0,1fr); gap: 32px; background: transparent; }
+    body.page-history .outreach-gallery { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+    body.page-history .site-footer { padding: 52px 0 32px; background: transparent; border: 0; box-shadow: none; }
+    body.page-history .site-footer-inner { max-width: 1200px; padding-inline: 24px; }
+    body.page-history nav a[aria-current="page"] { color: #f2f5f8; text-decoration: underline; text-decoration-color: #ff7a52; text-underline-offset: 8px; text-decoration-thickness: 2px; }
+
+    body.page-history .timeline-item-group {
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 32px;
+    }
+    .timeline-records { min-width: 0; }
+    .timeline-record {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) clamp(240px, 32vw, 460px);
+      align-items: start;
+      gap: 28px;
+    }
+    .timeline-record + .timeline-record {
+      margin-top: 32px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+    }
+    .timeline-record--text { grid-template-columns: minmax(0, 1fr); }
+    .timeline-record-kind {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font: 400 11px/1.5 var(--font-mono);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .timeline-record-image {
+      display: block;
+      width: 100%;
+      max-width: 460px;
+      height: auto;
+      aspect-ratio: 3 / 2;
+      object-fit: cover;
+      background: #0c1013;
+      border-radius: 6px;
+      justify-self: end;
+    }
+
+    .timeline-gallery { width: 100%; max-width: 460px; min-width: 0; justify-self: end; }
+    .timeline-gallery__frame {
+      position: relative;
+      aspect-ratio: 3 / 2;
+      overflow: hidden;
+      border-radius: 6px;
+      background: #0c1013;
+      touch-action: pan-y pinch-zoom;
+    }
+    .timeline-gallery__image {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .timeline-gallery__image[hidden] { display: none; }
+    .timeline-gallery__arrow {
+      position: absolute;
+      top: 50%;
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 50%;
+      background: rgba(5,6,7,.65);
+      color: #fff;
+      cursor: pointer;
+      transform: translateY(-50%);
+    }
+    .timeline-gallery__arrow:hover { background: rgba(5,6,7,.9); }
+    .timeline-gallery__arrow--prev { left: 10px; }
+    .timeline-gallery__arrow--next { right: 10px; }
+    .timeline-gallery__arrow svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; }
+    .timeline-gallery__counter {
+      position: absolute;
+      right: 12px;
+      bottom: 10px;
+      padding: 3px 8px;
+      border-radius: 3px;
+      background: rgba(5,6,7,.65);
+      color: #fff;
+      font: 400 11px/1.6 var(--font-mono);
+      pointer-events: none;
+    }
+    .timeline-gallery__dots { display: flex; justify-content: center; margin-top: 8px; }
+    .timeline-gallery__dot {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+    .timeline-gallery__dot span { width: 6px; height: 6px; border-radius: 4px; background: #626b75; }
+    .timeline-gallery__dot[aria-current="true"] span { width: 16px; background: #f2f5f8; }
+    .timeline-gallery:focus-visible,
+    .timeline-gallery button:focus-visible { outline: 2px solid var(--accent, #e98a63); outline-offset: 4px; }
+
     @media (max-width: 760px) {
       .history-hero { min-height: 600px; background-position: 58% center; }
       .history-hero::after { right: -28px; font-size: 28vw; }
       .shell, .site-footer-inner { width: calc(100% - 32px); }
+      body.page-history .shell { padding-inline: 16px; }
       .hero-inner { padding: 145px 0 48px; }
       h1 { font-size: clamp(58px, 19vw, 86px); }
       .timeline-section { padding: 72px 0 90px; }
@@ -253,11 +379,43 @@
       .outreach-gallery { grid-template-columns: 1fr; gap: 12px; margin-top: 28px; }
       .site-footer-grid { display: grid; }
       .site-footer-copy { text-align: left; white-space: normal; }
+      body.page-history .history-hero { min-height: 600px; }
+      body.page-history .history-hero h1 { font-size: clamp(58px,19vw,86px); }
+      body.page-history .timeline-section { padding: 72px 0 90px; }
+      body.page-history .timeline-section .section-head,
+      body.page-history .timeline-item { grid-template-columns: 1fr; gap: 14px; }
+      body.page-history .timeline-section .section-head { margin-bottom: 38px; }
+      body.page-history .timeline-item { min-height: 0; padding: 28px 0 34px; }
+      body.page-history .timeline-item-featured .timeline-index,
+      body.page-history .timeline-item-featured .timeline-image { grid-column: 1; }
+      body.page-history .timeline-item-featured .timeline-image { margin-top: 12px; }
+      body.page-history .outreach-card { grid-template-columns: 1fr; gap: 16px; padding: 34px 0; }
+      body.page-history .outreach-gallery { grid-template-columns: 1fr; gap: 12px; margin-top: 28px; }
+      body.page-history .site-footer { padding: 36px 0 24px; }
+      body.page-history .history-hero { min-height: 560px; }
+      body.page-history .nav { min-height: 72px; }
+      body.page-history .hero-inner { padding: 80px 16px !important; }
+      body.page-history .section-head { grid-template-columns: 1fr; gap: 16px; margin-bottom: 32px; }
+      body.page-history .timeline-item { grid-template-columns: 1fr; gap: 14px; }
+      body.page-history .timeline-index { grid-row: 1; justify-self: end; }
+      body.page-history .timeline-year { grid-row: 1; }
+      body.page-history .timeline-copy { grid-column: 1; }
+      body.page-history .timeline-item-featured .timeline-index,
+      body.page-history .timeline-item-featured .timeline-image { grid-column: 1; }
+      body.page-history .timeline-item-featured .timeline-image { margin-top: 12px; }
+      body.page-history .outreach-card { grid-template-columns: 1fr; gap: 16px; }
+      body.page-history .outreach-gallery { grid-template-columns: 1fr; gap: 12px; margin-top: 28px; }
+    }
+    @media (max-width: 560px) {
+      body.page-history .nav { min-height: 68px; }
+    }
+    @media (max-width: 760px) {
+      body.page-history .timeline-item-group { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+    }
+    @media (max-width: 560px) {
+      .timeline-record { grid-template-columns: minmax(0, 1fr); gap: 20px; }
     }
   </style>
-  <link rel="stylesheet" href="common-layout.css?v=20260909" />
-  <link rel="stylesheet" href="mobile-overrides.css?v=20260807" />
-  <link rel="stylesheet" href="design-system.css?v=20260908" />
 </head>
 <body class="page-history">
   <header>
@@ -270,17 +428,28 @@
       <nav id="primary-nav">
         <a href="index.html#about">About</a>
         <a href="team.html">Leadership</a>
-        <a href="history.html">What We Do</a>
+        <a href="history.html">History</a>
         <div class="nav-tech-dropdown">
-          <a href="index.html#tech" class="nav-tech-link">Tech</a>
-          <ul class="nav-tech-dropdown-menu" aria-label="기술 분야 메뉴">
-            <li><a href="tech/avionics.html">AVIONICS</a></li>
-            <li><a href="tech/ejection system.html">EJECTION SYSTEM</a></li>
-            <li><a href="tech/motor.html">MOTOR</a></li>
-            <li><a href="tech/structure.html">STRUCTURE</a></li>
+          <a href="#" class="nav-tech-link">Tech</a>
+          <ul class="nav-tech-dropdown-menu" aria-label="Technology menu">
+            <li><a href="tech/avionics.html">Avionics</a></li>
+            <li><a href="tech/motor.html">Propulsion</a></li>
+            <li><a href="tech/ejection system.html">Mission</a></li>
+            <li><a href="tech/structure.html">Airframe</a></li>
           </ul>
         </div>
-        <a href="index.html#media">Media</a>
+                <div class="nav-tech-dropdown nav-vehicle-dropdown">
+          <a href="vehicles.html" class="nav-tech-link nav-vehicle-link">Vehicle</a>
+          <ul class="nav-tech-dropdown-menu" aria-label="Vehicle menu">
+            <li><a href="vehicles.html#frontier-i">Frontier-I</a></li>
+            <li><a href="vehicles.html#frontier-ii">Frontier-II</a></li>
+            <li><a href="vehicles.html#frontier-iii">Frontier-III</a></li>
+            <li><a href="vehicles.html#frontier-iv">Frontier-IV</a></li>
+            <li><a href="pioneer.html">Pioneer-I</a></li>
+            <li><a href="vehicles.html#araea-i">Araea-I</a></li>
+          </ul>
+        </div>
+<a href="index.html#media">Media</a>
         <a href="join.html">Join</a>
         <a href="sponsors.html">Sponsors</a>
         <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">Instagram</a>
@@ -310,75 +479,146 @@
   <main>
     <section class="history-hero">
       <div class="shell hero-inner">
-        <p class="eyebrow">ALTIS · Since March 2021</p>
-        <h1>What<br />We Do</h1>
-        <p class="hero-copy">설계하고, 만들고, 시험하며 쌓아온 ALTIS의 시간입니다. 하나의 발사를 향한 도전은 매년 새로운 기록으로 이어집니다.</p>
+        <p class="eyebrow">경상국립대학교 로켓동아리 · 2019년 창립</p>
+        <h1>History</h1>
+        <p class="hero-copy">2019년 창립한 ALTIS는 로켓을 직접 설계하고 제작합니다. 시험과 대회에서 얻은 결과를 다음 프로젝트에 반영합니다.</p>
       </div>
     </section>
 
-    <section class="timeline-section" aria-labelledby="history-title">
+    <section class="timeline-section" aria-label="ALTIS 연혁">
       <div class="shell">
-        <div class="section-head">
-          <span>Timeline / 2021—2026</span>
-          <h2 id="history-title">연혁 및 수상 이력</h2>
-        </div>
-
         <div class="timeline">
-          <article class="timeline-item">
-            <div class="timeline-year">2021</div>
-            <div class="timeline-copy">
-              <h3>ALTIS 창립</h3>
-              <p>2021년 3월, 경상국립대학교 항공우주공학부 학생 로켓 동아리 ALTIS가 첫걸음을 시작했습니다.</p>
+          <article class="timeline-item timeline-item-group" id="history-2019">
+            <div class="timeline-year">2019</div>
+            <div class="timeline-records">
+              <div class="timeline-record">
+                <div class="timeline-copy">
+                  <h3>ALTIS 창립</h3>
+                  <p>2019년, 로켓 동아리 ALTIS가 창립되었습니다.</p>
+                </div>
+                <img class="timeline-record-image" src="img/19altis.png" alt="ALTIS 창립 초기 활동 모습" loading="lazy" />
+              </div>
             </div>
-            <span class="timeline-index">01 / Foundation</span>
           </article>
 
-          <article class="timeline-item timeline-item-featured">
-            <div class="timeline-year">2024</div>
-            <div class="timeline-copy">
-              <h3>NURA 전국대학교 로켓발사대회<br />한국항공우주연구원 원장상</h3>
-              <p>전국 대학 로켓팀이 함께한 NURA 로켓발사대회에서 한국항공우주연구원 원장상을 수상하며 ALTIS의 설계·제작·발사 역량을 입증했습니다.</p>
+          <article class="timeline-item timeline-item-group" id="history-2021">
+            <div class="timeline-year">2021</div>
+            <div class="timeline-records">
+              <div class="timeline-record">
+                <div class="timeline-copy">
+                  <span class="timeline-record-kind">대회 수상</span>
+                  <h3 id="nura-2021-title">NURA 전국대학교 로켓발사대회<br />금상 수상</h3>
+                  <p>NURA 전국대학교 로켓발사대회에서 금상을 수상했습니다.</p>
+                </div>
+                <div class="timeline-gallery" data-photo-gallery role="region" aria-roledescription="사진 갤러리" aria-labelledby="nura-2021-title" tabindex="0">
+                  <div class="timeline-gallery__frame" data-gallery-frame>
+                    <img class="timeline-gallery__image" data-gallery-image src="img/21nura.png" alt="2021 NURA 전국대학교 로켓발사대회 ALTIS 활동 사진" data-alt-en="ALTIS members at the 2021 NURA National University Rocket Launch Competition" loading="lazy" decoding="async" draggable="false" />
+                    <img class="timeline-gallery__image" data-gallery-image src="img/21nura_2.png" alt="2021 NURA 전국대학교 로켓발사대회 ALTIS 활동 사진 2" data-alt-en="ALTIS at the 2021 NURA National University Rocket Launch Competition, photo 2" loading="lazy" decoding="async" draggable="false" hidden />
+                    <button class="timeline-gallery__arrow timeline-gallery__arrow--prev" type="button" data-gallery-prev aria-label="이전 사진">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg>
+                    </button>
+                    <button class="timeline-gallery__arrow timeline-gallery__arrow--next" type="button" data-gallery-next aria-label="다음 사진">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+                    </button>
+                    <span class="timeline-gallery__counter" data-gallery-counter role="status" aria-live="polite" aria-atomic="true">1 / 2</span>
+                  </div>
+                  <div class="timeline-gallery__dots" data-gallery-dots role="group" aria-label="사진 선택">
+                    <button class="timeline-gallery__dot" type="button" data-gallery-index="0" aria-label="1번째 사진 보기" aria-current="true"><span aria-hidden="true"></span></button>
+                    <button class="timeline-gallery__dot" type="button" data-gallery-index="1" aria-label="2번째 사진 보기" tabindex="-1"><span aria-hidden="true"></span></button>
+                  </div>
+                </div>
+              </div>
             </div>
-            <span class="timeline-index">02 / Director's Award</span>
-            <img class="timeline-image" src="img/24nura.png" alt="2024 NURA 전국대학교 로켓발사대회에 참가한 ALTIS 구성원" loading="lazy" />
+          </article>
+
+          <article class="timeline-item timeline-item-group" id="history-2024">
+            <div class="timeline-year">2024</div>
+            <div class="timeline-records">
+              <div class="timeline-record">
+                <div class="timeline-copy">
+                  <span class="timeline-record-kind">대회 수상</span>
+                  <h3 id="nura-2024-title">NURA 전국대학교 로켓발사대회<br />한국항공우주연구원 원장상</h3>
+                  <p>NURA 전국대학교 로켓발사대회에서 한국항공우주연구원 원장상을 받았습니다.</p>
+                </div>
+                <div class="timeline-gallery" data-photo-gallery role="region" aria-roledescription="사진 갤러리" aria-labelledby="nura-2024-title" tabindex="0">
+                  <div class="timeline-gallery__frame" data-gallery-frame>
+                    <img class="timeline-gallery__image" data-gallery-image src="img/24nura.png" alt="2024 NURA 전국대학교 로켓발사대회에 참가한 ALTIS 구성원" data-alt-en="ALTIS members at the 2024 NURA National University Rocket Launch Competition" loading="lazy" decoding="async" draggable="false" />
+                    <img class="timeline-gallery__image" data-gallery-image src="img/24nura_2.png" alt="2024 NURA 로켓발사대회에서 발사를 준비하는 ALTIS 구성원" data-alt-en="ALTIS members prepare for launch at the 2024 NURA competition" loading="lazy" decoding="async" draggable="false" hidden />
+                    <button class="timeline-gallery__arrow timeline-gallery__arrow--prev" type="button" data-gallery-prev aria-label="이전 사진">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg>
+                    </button>
+                    <button class="timeline-gallery__arrow timeline-gallery__arrow--next" type="button" data-gallery-next aria-label="다음 사진">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+                    </button>
+                    <span class="timeline-gallery__counter" data-gallery-counter role="status" aria-live="polite" aria-atomic="true">1 / 2</span>
+                  </div>
+                  <div class="timeline-gallery__dots" data-gallery-dots role="group" aria-label="사진 선택">
+                    <button class="timeline-gallery__dot" type="button" data-gallery-index="0" aria-label="1번째 사진 보기" aria-current="true"><span aria-hidden="true"></span></button>
+                    <button class="timeline-gallery__dot" type="button" data-gallery-index="1" aria-label="2번째 사진 보기" tabindex="-1"><span aria-hidden="true"></span></button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </article>
 
           <article class="timeline-item">
             <div class="timeline-year">2025</div>
             <div class="timeline-copy">
               <h3>NURA 로켓학술대회 현장</h3>
-              <p>프로젝트 결과와 기술 경험을 공유하며 다음 발사를 위한 설계와 시험 기록을 이어갔습니다.</p>
+              <p>NURA 로켓학술대회에서 ALTIS의 프로젝트를 발표하고 다른 대학 팀과 이야기를 나눴습니다.</p>
             </div>
-            <span class="timeline-index">03 / Field Record</span>
+            <span class="timeline-index">학술대회</span>
           </article>
 
-          <article class="timeline-item">
+          <article class="timeline-item timeline-item-group" id="history-2026">
             <div class="timeline-year">2026</div>
-            <div class="timeline-copy">
-              <h3>CSA 동아리 평가 A등급</h3>
-              <p>경상국립대학교 CSA 동아리 평가에서 A등급을 받았습니다.</p>
+            <div class="timeline-records">
+              <section class="timeline-record timeline-record--text" aria-labelledby="csa-2026-title">
+                <div class="timeline-copy">
+                  <span class="timeline-record-kind">교내 평가</span>
+                  <h3 id="csa-2026-title">CSA 동아리 평가 A등급</h3>
+                  <p>경상국립대학교 CSA 동아리 평가에서 A등급을 받았습니다.</p>
+                </div>
+              </section>
+              <section class="timeline-record" id="nura-2026" aria-labelledby="nura-2026-title">
+                <div class="timeline-copy">
+                  <span class="timeline-record-kind">학술대회 수상</span>
+                  <h3 id="nura-2026-title">NURA 전국대학생로켓학술대회<br />장려상 수상</h3>
+                  <p>NURA 전국대학생로켓학술대회에서 장려상을 수상했습니다.</p>
+                </div>
+                <div class="timeline-gallery" data-photo-gallery role="region" aria-roledescription="사진 갤러리" aria-labelledby="nura-2026-title" tabindex="0">
+                  <div class="timeline-gallery__frame" data-gallery-frame>
+                    <img class="timeline-gallery__image" data-gallery-image src="img/26nura.png" alt="2026 NURA 전국대학생로켓학술대회에서 프로젝트를 설명하는 ALTIS 구성원" data-alt-en="An ALTIS member explains the project at the 2026 NURA Rocket Symposium" loading="lazy" decoding="async" draggable="false" />
+                    <img class="timeline-gallery__image" data-gallery-image src="img/26nura_2.png" alt="학술대회에서 발표하는 ALTIS 구성원" data-alt-en="An ALTIS member presents at the symposium" loading="lazy" decoding="async" draggable="false" hidden />
+                    <img class="timeline-gallery__image" data-gallery-image src="img/26nura_4.png" alt="전시 기체를 설명하는 ALTIS 구성원들" data-alt-en="ALTIS members discuss the rocket on display" loading="lazy" decoding="async" draggable="false" hidden />
+                    <button class="timeline-gallery__arrow timeline-gallery__arrow--prev" type="button" data-gallery-prev aria-label="이전 사진">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg>
+                    </button>
+                    <button class="timeline-gallery__arrow timeline-gallery__arrow--next" type="button" data-gallery-next aria-label="다음 사진">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+                    </button>
+                    <span class="timeline-gallery__counter" data-gallery-counter role="status" aria-live="polite" aria-atomic="true">1 / 3</span>
+                  </div>
+                  <div class="timeline-gallery__dots" data-gallery-dots role="group" aria-label="사진 선택">
+                    <button class="timeline-gallery__dot" type="button" data-gallery-index="0" aria-label="1번째 사진 보기" aria-current="true"><span aria-hidden="true"></span></button>
+                    <button class="timeline-gallery__dot" type="button" data-gallery-index="1" aria-label="2번째 사진 보기" tabindex="-1"><span aria-hidden="true"></span></button>
+                    <button class="timeline-gallery__dot" type="button" data-gallery-index="2" aria-label="3번째 사진 보기" tabindex="-1"><span aria-hidden="true"></span></button>
+                  </div>
+                </div>
+              </section>
+              <section class="timeline-record timeline-record--text" aria-labelledby="sponsorship-2026-title">
+                <div class="timeline-copy">
+                  <span class="timeline-record-kind">파트너십</span>
+                  <h3 id="sponsorship-2026-title">스폰서십 체결</h3>
+                  <p>INNOSPACE, JLCPCB, EasyEDA, Ansys와 스폰서십을 체결했습니다.</p>
+                </div>
+              </section>
             </div>
-            <span class="timeline-index">04 / Next Flight</span>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="outreach-section" aria-labelledby="bootcamp-title">
-      <div class="shell">
-        <div class="outreach-card">
-          <span class="outreach-label">Outreach / Bootcamp</span>
-          <div class="outreach-copy">
-            <h2 id="bootcamp-title">항공우주 부트캠프</h2>
-            <p>ALTIS는 고등학생들과 함께 항공우주 분야를 알아가는 교육 활동도 진행합니다. 수업을 통해 로켓의 기본 원리와 구조를 배우고, 참가 학생들이 직접 모델 로켓을 제작해 실제 발사까지 경험할 수 있도록 부트캠프를 운영합니다. 설계와 제작, 발사로 이어지는 과정을 통해 항공우주공학을 더 가까이 알리는 활동입니다.</p>
-            <div class="outreach-gallery">
-              <img src="img/bootcamp-class-mosaic.png" alt="고등학생들이 모델 로켓을 제작하는 ALTIS 항공우주 부트캠프 수업" loading="lazy" />
-              <img src="img/bootcamp-build-mosaic.png" alt="모델 로켓과 낙하산을 조립하는 항공우주 부트캠프 참가 학생들" loading="lazy" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
 
   <footer class="site-footer">
@@ -386,14 +626,15 @@
       <div class="site-footer-divider"></div>
       <div class="site-footer-grid">
         <div>
-          <p>Address: 진주대로 501 | Founded Date: March 2021</p>
+          <p>Address: 진주대로 501 | Founded Date: 2019</p>
           <p>CONTACT | email : ybb1833@naver.com / instagram : @ altis_official</p>
         </div>
-        <p class="site-footer-copy">© 2021-2026 ALTIS. All rights reserved.</p>
+        <p class="site-footer-copy">© 2019-2026 ALTIS. All rights reserved.</p>
       </div>
     </div>
   </footer>
-  <script src="common-i18n.js"></script>
-  <script src="common-layout.js?v=20260909"></script>
+  <script src="common-i18n.js?v=20261025-default-en1"></script>
+  <script src="common-layout.js?v=20261025-vehicles1"></script>
+  <script src="timeline-gallery.js?v=20261024-nura1"></script>
 </body>
 </html>

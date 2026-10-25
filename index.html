@@ -699,20 +699,6 @@
       46%, 100% { opacity: 0; }
     }
 
-    .hero-tagline {
-      font-family: "Pretendard", "Noto Sans KR", sans-serif;
-      margin: -12px 0 12px;
-      color: #dfe6f2;
-      font-size: 15px;
-      font-weight: 100;
-      letter-spacing: 0.12em;
-      text-shadow: 0 6px 18px rgba(0, 0, 0, 0.42);
-    }
-
-    .hero-tagline-accent {
-      font-weight: 500;
-    }
-
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
@@ -1609,6 +1595,55 @@
       gap: 20px;
     }
 
+    #media .media-card[hidden] { display: none !important; }
+
+    .media-carousel { position: relative; }
+    .media-viewport { overflow: hidden; }
+
+    .media-pagination {
+      position: absolute;
+      inset: 0 -56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    .media-pagination[hidden] { display: none; }
+
+    .media-pagination button {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 50%;
+      background: rgba(8, 10, 12, 0.85);
+      color: var(--cloud);
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    .media-pagination button:disabled { opacity: 0.3; cursor: default; }
+    .media-pagination button:not(:disabled):hover { background: #24282b; }
+    .media-pagination button:focus-visible { outline: 2px solid var(--cloud); outline-offset: 4px; }
+    .media-pagination svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .media-pagination__label,
+    .media-pagination__status {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 1320px) {
+      .media-pagination { inset-inline: 10px; }
+    }
+
     .media-card {
       border-radius: 16px;
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -2064,95 +2099,6 @@
       46%, 100% { opacity: 0; }
     }
 
-    .about-gallery-head {
-      margin-top: 52px;
-      display: grid;
-      gap: 10px;
-    }
-
-    .about-gallery-head span {
-      font-size: 11px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--haze);
-    }
-
-    .about-gallery-head h3 {
-      margin: 0;
-      font-size: clamp(20px, 2.4vw, 28px);
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-    }
-
-    .gallery-hint {
-      display: none;
-      margin-top: 6px;
-      font-size: 11px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--glow);
-    }
-
-    .about-gallery {
-      margin-top: 20px;
-      display: flex;
-      gap: 16px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scroll-padding: 16px;
-      padding-bottom: 10px;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .about-photo {
-      position: relative;
-      border-radius: 10px;
-      overflow: hidden;
-      min-height: 200px;
-      flex: 0 0 min(64vw, 340px);
-      scroll-snap-align: center;
-      box-shadow: 0 18px 40px rgba(4, 6, 10, 0.4);
-    }
-
-    .about-photo.wide {
-      min-height: 200px;
-      flex: 0 0 min(64vw, 340px);
-    }
-
-    .about-photo.tall {
-      min-height: 200px;
-      flex: 0 0 min(64vw, 340px);
-    }
-
-    .about-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      filter: saturate(0.95) contrast(1.05);
-    }
-
-    .about-photo::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(5, 7, 9, 0) 40%, rgba(5, 7, 9, 0.35) 100%);
-      opacity: 0.9;
-      pointer-events: none;
-    }
-
-    .about-gallery::-webkit-scrollbar {
-      height: 6px;
-    }
-
-    .about-gallery::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .about-gallery::-webkit-scrollbar-thumb {
-      background: rgba(255, 120, 78, 0.45);
-      border-radius: 999px;
-    }
 
     .flash-panel {
       margin-top: 28px;
@@ -2362,7 +2308,7 @@
     }
 
     .partner-logos {
-      --partner-columns: 3;
+      --partner-columns: 4;
       margin-top: 28px;
       display: grid;
       grid-template-columns: repeat(var(--partner-columns), minmax(0, 1fr));
@@ -2432,6 +2378,11 @@
 
     .partner-logo img.logo-innospace {
       max-height: 124px;
+    }
+
+    .partner-logo img.logo-ansys {
+      max-height: 64px;
+      max-width: 210px;
     }
 
     .partner-logo-featured {
@@ -2949,37 +2900,6 @@
         grid-template-columns: 1fr;
       }
 
-      .about-gallery {
-        display: flex;
-        gap: 16px;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        scroll-padding: 16px;
-        padding-bottom: 12px;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .about-photo,
-      .about-photo.wide,
-      .about-photo.tall {
-        grid-column: span 1;
-        min-height: 240px;
-        flex: 0 0 82%;
-        scroll-snap-align: center;
-      }
-
-      .about-gallery::-webkit-scrollbar {
-        height: 6px;
-      }
-
-      .about-gallery::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.05);
-      }
-
-      .about-gallery::-webkit-scrollbar-thumb {
-        background: rgba(255, 120, 78, 0.45);
-        border-radius: 999px;
-      }
 
       .partner-logo {
         flex: 0 0 auto;
@@ -3009,6 +2929,12 @@
 
       .partner-logo img.logo-easyeda {
         width: 216px;
+        max-width: none;
+        max-height: none;
+      }
+
+      .partner-logo img.logo-ansys {
+        width: 200px;
         max-width: none;
         max-height: none;
       }
@@ -3215,8 +3141,6 @@
 
     .about-hero-grid,
     .about-footer,
-    .about-gallery,
-    .about-photo,
     .partner-logos,
     .partner-logo {
       background: transparent;
@@ -3247,7 +3171,7 @@
       border-bottom-color: rgba(255, 255, 255, 0.45);
     }
 
-    .partner-logo img { filter: saturate(0) brightness(1.4); opacity: 0.92; }
+    .partner-logo img { filter: none; opacity: 1; }
     .partner-logo:hover img { filter: none; opacity: 1; }
 
     @media (max-width: 900px) {
@@ -3340,18 +3264,19 @@
     }
 
     .lang-toggle.nav-lang-toggle .lang-option + .lang-option::before {
-      opacity: 1;
+      content: none;
     }
   </style>
   <link rel="stylesheet" href="common-layout.css?v=20260909" />
   <link rel="stylesheet" href="mobile-overrides.css?v=20260807" />
-  <link rel="stylesheet" href="design-system.css?v=20260908" />
+  <link rel="stylesheet" href="design-system.css?v=20261025-partner-cta2" />
+  <link rel="stylesheet" href="vehicles.css?v=20261025-community-spacing2" />
 </head>
 <body class="page-home">
   <section id="coming-soon-page" class="coming-soon" aria-live="polite">
     <div class="coming-soon-video-bg" aria-hidden="true">
       <iframe
-        src="https://www.youtube.com/embed/UE8PCtKHmc8?autoplay=1&mute=1&controls=0&loop=1&playlist=UE8PCtKHmc8&modestbranding=1&rel=0&playsinline=1"
+        data-src="https://www.youtube.com/embed/UE8PCtKHmc8?autoplay=1&mute=1&controls=0&loop=1&playlist=UE8PCtKHmc8&modestbranding=1&rel=0&playsinline=1"
         title="ALTIS coming soon background video"
         allow="autoplay; encrypted-media; picture-in-picture"
         referrerpolicy="strict-origin-when-cross-origin"
@@ -3360,7 +3285,7 @@
     </div>
     <div class="coming-soon-card">
       <h1 class="coming-soon-title">COMING SOON</h1>
-      <p class="coming-soon-desc">새로운 페이지를 준비하고 있습니다. 곧 공개됩니다.</p>
+      <p class="coming-soon-desc" data-i18n="comingSoonDescription">새로운 페이지를 준비하고 있습니다. 곧 공개됩니다.</p>
       <img class="coming-soon-logo-bottom" src="img/altis_logo.png" alt="ALTIS logo" />
       <p class="coming-soon-logo-caption">luce in altis</p>
     </div>
@@ -3386,17 +3311,28 @@
       <nav id="primary-nav">
         <a href="index.html#about">About</a>
         <a href="team.html">Leadership</a>
-        <a href="history.html">What We Do</a>
-        <div class="nav-tech-dropdown">
-          <a href="index.html#tech" class="nav-tech-link">Tech</a>
-          <ul class="nav-tech-dropdown-menu" aria-label="기술 분야 메뉴">
-            <li><a href="tech/avionics.html">AVIONICS</a></li>
-            <li><a href="tech/ejection system.html">EJECTION SYSTEM</a></li>
-            <li><a href="tech/motor.html">MOTOR</a></li>
-            <li><a href="tech/structure.html">STRUCTURE</a></li>
+        <a href="history.html">History</a>
+                <div class="nav-tech-dropdown">
+          <a href="#" class="nav-tech-link">Tech</a>
+          <ul class="nav-tech-dropdown-menu" aria-label="Technology menu">
+            <li><a href="tech/avionics.html">Avionics</a></li>
+            <li><a href="tech/motor.html">Propulsion</a></li>
+            <li><a href="tech/ejection system.html">Mission</a></li>
+            <li><a href="tech/structure.html">Airframe</a></li>
           </ul>
         </div>
-        <a href="index.html#media">Media</a>
+                <div class="nav-tech-dropdown nav-vehicle-dropdown">
+          <a href="vehicles.html" class="nav-tech-link nav-vehicle-link">Vehicle</a>
+          <ul class="nav-tech-dropdown-menu" aria-label="Vehicle menu">
+            <li><a href="vehicles.html#frontier-i">Frontier-I</a></li>
+            <li><a href="vehicles.html#frontier-ii">Frontier-II</a></li>
+            <li><a href="vehicles.html#frontier-iii">Frontier-III</a></li>
+            <li><a href="vehicles.html#frontier-iv">Frontier-IV</a></li>
+            <li><a href="pioneer.html">Pioneer-I</a></li>
+            <li><a href="vehicles.html#araea-i">Araea-I</a></li>
+          </ul>
+        </div>
+<a href="index.html#media">Media</a>
         <a href="join.html">Join</a>
         <a href="sponsors.html">Sponsors</a>
         <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">Instagram</a>
@@ -3427,13 +3363,12 @@
   </header>
   <section class="hero" id="home">
     <div class="hero-video-bg" aria-hidden="true">
-      <video autoplay muted loop playsinline preload="auto">
-        <source src="vid/sponsors_land_vid.mp4" type="video/mp4">
+      <video id="hero-background-video" autoplay muted loop playsinline preload="none">
+        <source data-src="vid/sponsors_land_vid.mp4" type="video/mp4">
       </video>
     </div>
     <div class="hero-inner">
       <div>
-        <p class="hero-tagline" data-i18n-html="heroTagline">경상국립대학교 항공우주공학부 로켓동아리 <span class="hero-tagline-accent">ALTIS</span></p>
         <h1 data-i18n-html="heroTitle">개척의 하늘에서 피운 꿈,<br>우주로 번지다</h1>
         <div class="hero-actions">
           <a class="btn primary" href="sponsors.html" data-i18n="heroCtaSupport">Support for ALTIS</a>
@@ -3447,7 +3382,6 @@
     <div class="section-head">
       <p class="kicker">Current Partners</p>
       <h2 data-i18n="partnerTitle">비상을 함께한 분들</h2>
-      <a class="partner-invite-link" href="sponsors.html">다음 발사를 함께 만들고 싶으신가요? 파트너로 참여해 주세요.</a>
     </div>
     <div class="container">
       <div class="partner-logos reveal-slide" style="--delay: 0ms;" aria-label="Partner logos">
@@ -3474,6 +3408,13 @@
                 <p>Cloud EDA / PCB Design</p>
               </div>
             </a>
+            <a class="partner-logo" href="https://www.ansys.com/" target="_blank" rel="noopener noreferrer" aria-label="Ansys">
+              <img class="logo-ansys" src="img/ANSYS_logo_darkbg.png" alt="Ansys logo" loading="lazy" />
+              <div class="partner-desc">
+                <h5>Ansys</h5>
+                <p>Engineering Simulation</p>
+              </div>
+            </a>
           </div>
           <div class="partner-logo-set" aria-hidden="true">
             <a class="partner-logo" href="https://jlcpcb.com/" target="_blank" rel="noopener noreferrer" aria-label="JLCPCB" tabindex="-1">
@@ -3497,45 +3438,68 @@
                 <p>Cloud EDA / PCB Design</p>
               </div>
             </a>
+            <a class="partner-logo" href="https://www.ansys.com/" target="_blank" rel="noopener noreferrer" aria-label="Ansys" tabindex="-1">
+              <img class="logo-ansys" src="img/ANSYS_logo_darkbg.png" alt="" loading="lazy" />
+              <div class="partner-desc">
+                <h5>Ansys</h5>
+                <p>Engineering Simulation</p>
+              </div>
+            </a>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section about" id="about">
-    <div class="section-head">
-    </div>
-    <div class="container">
-      <div class="about-footer reveal-slide" style="--delay: 180ms;">
-        <span class="about-footer-kicker" data-i18n="coreKicker">Core Value</span>
-        <h3 class="about-footer-title" data-i18n="coreTitle">Design · Build · Launch</h3>
-        <p data-i18n="coreBody1">
-          모든 프로젝트는 이론 검토에 그치지 않고 실제 하드웨어 제작과 반복적인 시험 과정을 통해 검증됩니다.
-          설계–제작–시험의 반복 과정을 통해 발생하는 문제를 분석하고 개선하는 것이 ALTIS 프로젝트의 핵심 가치입니다.
-        </p>
-        <p data-i18n="coreBody2">
-          ALTIS는 단순한 동아리 활동을 넘어 대학 수준에서 수행 가능한 항공우주 공학 프로젝트의 한계를 확장하고,
-          학생들이 실제 엔지니어링 환경과 유사한 경험을 쌓을 수 있는 팀을 지향합니다.
-        </p>
-      </div>
 
-      <div class="about-layout">
-        <div class="about-video reveal-slide" style="--delay: 0ms;">
-          <iframe
+
+  <section class="section home-sponsorship" id="sponsorship" aria-labelledby="sponsorship-heading">
+    <div class="container">
+      <div class="home-sponsorship__copy reveal-slide">
+        <div class="home-sponsorship__text">
+          <h2 id="sponsorship-heading" data-i18n="sponsorshipSummaryTitle">다음 발사를 함께 만들고 싶으신가요?</h2>
+        </div>
+        <a class="home-sponsorship__link" id="sponsorship-link" href="sponsors.html"><span data-i18n="sponsorshipSummaryLink">파트너로 참여하기</span><span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section about" id="about">
+    <article class="about-core" id="design-build-launch" aria-labelledby="core-title">
+      <div class="about-core__media" aria-hidden="true">
+          <video
             id="altisVideo"
-            src="https://www.youtube.com/embed/oeK6ZHVvSsA?autoplay=1&mute=1&controls=0&loop=1&playlist=oeK6ZHVvSsA&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&disablekb=1&fs=0&iv_load_policy=3&showinfo=0"
-            title="ALTIS Design Build Launch video"
-            allow="autoplay; encrypted-media; picture-in-picture"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-          ></iframe>
-          <button class="mute-btn" type="button" data-target="altisVideo">Muted</button>
+            tabindex="-1"
+            autoplay muted loop playsinline preload="metadata"
+          >
+            <source src="vid/altis_vid1.mp4" type="video/mp4" />
+          </video>
+      </div>
+      <div class="container about-core__inner">
+        <div class="about-core__content reveal-slide">
+          <span class="about-core__label" data-i18n="coreKicker">Core Value</span>
+          <h2 class="about-core__title" id="core-title" data-i18n="coreTitle">Design · Build · Launch</h2>
+          <p data-i18n="coreBody1">모든 프로젝트는 이론 검토에 그치지 않고 실제 하드웨어 제작과 반복적인 시험 과정을 통해 검증됩니다. 설계–제작–시험의 반복 과정을 통해 발생하는 문제를 분석하고 개선하는 것이 ALTIS 프로젝트의 핵심 가치입니다.</p>
+          <p data-i18n="coreBody2">ALTIS는 단순한 동아리 활동을 넘어 대학 수준에서 수행 가능한 항공우주 공학 프로젝트의 한계를 확장하고, 학생들이 실제 엔지니어링 환경과 유사한 경험을 쌓을 수 있는 팀을 지향합니다.</p>
         </div>
       </div>
+      <button class="mute-btn about-core__mute" type="button" data-target="altisVideo">Muted</button>
+    </article>
 
-      <div class="about-intro">
-        <div class="about-intro-copy">
+  <section class="section home-history" id="history-highlights" aria-labelledby="history-highlights-title">
+    <div class="container home-history__flow">
+      <div class="home-history__copy home-history__panel reveal-slide">
+        <span class="home-history__label">History</span>
+        <h2 id="history-highlights-title" data-i18n="historySummaryTitle">2019년 창립</h2>
+        <p data-i18n="historySummaryBody">ALTIS는 2019년 창립해 로켓을 직접 설계하고 제작해 왔습니다. 발사시험과 대회 참가를 통해 쌓아온 기록을 소개합니다.</p>
+        <a class="home-history__link" href="history.html"><span data-i18n="historySummaryLink">자세히 보기</span><span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+    <div class="container">
+      <div class="about-intro" id="tech">
+        <div class="about-intro-copy reveal-slide intro-reveal-copy">
           <span class="about-kicker" data-i18n="aboutKicker">Luce in ALTIS</span>
           <h3 data-i18n="aboutTitle">높은 곳에서 빛나라</h3>
           <p data-i18n="aboutBody1">
@@ -3549,74 +3513,196 @@
             지상 및 발사 시험까지 전 과정을 수행합니다.
           </p>
         </div>
-        <figure class="about-intro-visual" aria-label="Luce in ALTIS visual">
+        <figure class="about-intro-visual reveal-slide intro-reveal-photo" aria-label="Luce in ALTIS visual">
           <img src="img/luce.png" alt="ALTIS 현장 항공 촬영 이미지" loading="lazy" />
         </figure>
       </div>
-    </div>
-  </section>
 
-  <section class="section tech" id="tech">
-    <div class="section-head"></div>
+    </div>
+
     <div class="container">
-      <div class="about-team-block reveal-slide" style="--delay: 120ms;" id="team">
-        <div class="about-team-head">
-          <span data-i18n="teamKicker">Team Structure</span>
-          <h3 data-i18n="teamTitle">ALTIS 팀 구성</h3>
-          <p data-i18n="teamIntro">추진·미션·동체·전자 팀이 유기적으로 협업하며 설계부터 시험까지의 전 과정을 수행합니다.</p>
+      <article class="about-community" id="community-service" aria-labelledby="community-title">
+        <div class="about-community__header">
+          <div class="about-community__copy reveal-slide community-reveal-copy">
+            <h3 id="community-title" data-i18n="communityTitle">지역사회 봉사</h3>
+            <h4 id="bootcamp-title" data-i18n="bootcampTitle">항공우주 부트캠프</h4>
+            <p data-i18n="bootcampBody">ALTIS는 2024년부터 항공우주 부트캠프를 통해 고등학생 대상 교육봉사를 이어오고 있습니다. 팀원들이 로켓의 원리와 구조를 설명하고, 학생들의 모델 로켓 제작과 발사 활동을 돕습니다.</p>
+          </div>
         </div>
-        <div class="about-team-grid" aria-label="ALTIS 팀 구성">
-          <article class="about-team-card">
-            <span>Propulsion</span>
-            <strong data-i18n="teamPropulsionTitle">추진팀</strong>
-            <p data-i18n="teamPropulsionBody">고체 로켓 모터 설계·제작, 추력 계측 및 추진 시스템 검증을 담당합니다.</p>
-          </article>
-          <article class="about-team-card">
-            <span>Mission</span>
-            <strong data-i18n="teamMissionTitle">미션팀</strong>
-            <p data-i18n="teamMissionBody">비행 시퀀스·시험 계획 수립과 임무 운영 시나리오를 설계합니다.</p>
-          </article>
-          <article class="about-team-card">
-            <span>Airframe</span>
-            <strong data-i18n="teamAirframeTitle">동체팀</strong>
-            <p data-i18n="teamAirframeBody">구조 설계, 하우징 제작, 조립 공정 등 발사체 구조물을 책임집니다.</p>
-          </article>
-          <article class="about-team-card">
-            <span>avionics</span>
-            <strong data-i18n="teamAvionicsTitle">전자팀</strong>
-            <p data-i18n="teamAvionicsBody">DAQ, 센서 인터페이스, 점화 제어, 통신 모듈 등 전자부 시스템을 개발합니다.</p>
-          </article>
+        <div class="about-community__gallery">
+          <img class="reveal-slide community-reveal-photo" src="img/bootcamp-class-mosaic.png" alt="고등학생들이 모델 로켓을 제작하는 ALTIS 항공우주 부트캠프 수업" loading="lazy" />
+          <img class="reveal-slide community-reveal-photo" src="img/bootcamp-build-mosaic.png" alt="모델 로켓과 낙하산을 조립하는 항공우주 부트캠프 참가 학생들" loading="lazy" />
         </div>
+      </article>
+
+    </div>
+
+    <div class="page-pioneer pioneer-project" id="pioneer-project">
+<article class="about-technology pioneer-hero" id="two-stage-technology" aria-labelledby="two-stage-title">
+      <div class="pioneer-launch-video" aria-hidden="true">
+        <video data-focus-video muted playsinline preload="metadata" width="2560" height="1440" tabindex="-1">
+          <source src="vid/p1_launchVid.mov" type="video/mp4" />
+        </video>
+      </div>
+      <div class="container pioneer-hero__inner">
+        <div class="about-technology__content reveal-slide">
+          <span class="about-technology__label" data-i18n="twoStageLabel">우리의 기술</span>
+          <h2 id="two-stage-title" data-i18n="twoStageTitle">PIONEER-I</h2>
+          <p class="about-technology__subtitle" data-i18n="twoStageSubtitle">기계식 2단 분리 로켓</p>
+          <p data-i18n="twoStageBody">PIONEER-I는 기계식 단분리와 2단 내부 점화, 각 단의 독립 회수를 적용한 2단 고체로켓입니다. 단분리부터 점화·회수까지 이어지는 과정을 직접 설계하고, 지상 시험과 발사시험으로 확인했습니다.</p>
+        </div>
+
+      </div>
+    </article>
+    <div class="container">
+      <div class="pioneer-flow" data-pioneer-flow>
+        <section class="pioneer-conops pioneer-flow__panel" id="pioneer-conops" aria-labelledby="conops-title">
+          <div class="pioneer-conops__heading">
+            <span class="pioneer-conops__label">MISSION PROFILE</span>
+            <h2 id="conops-title">PIONEER-I CONOPS</h2>
+            <p data-i18n="pioneerDetail1">기계식 단분리와 내부 점화, 단별 독립 회수로 이어지는 PIONEER-I의 운용 개념입니다.</p>
+          </div>
+          <figure class="pioneer-conops__figure">
+            <div class="pioneer-conops__viewport" tabindex="0" role="region" aria-label="PIONEER-I 비행 시퀀스 도식">
+              <img src="img/pioneer-conops.svg" width="1440" height="700" alt="발사 준비, 1단 점화와 연소 종료, 기계식 단분리, 1단 낙하산 회수, 2단 점화와 연소 종료, 최고점 도달, 2단 낙하산 회수와 데이터 회수로 이어지는 PIONEER-I 운용 개념도" loading="lazy" />
+            </div>
+            <figcaption data-i18n="pioneerDetail2">Figure 26 CONOPS · PIONEER-I 비행 시퀀스 개념도</figcaption>
+          </figure>
+        </section>
+
+        <section class="pioneer-overview pioneer-flow__panel" id="pioneer-overview" aria-labelledby="overview-title">
+          <div class="pioneer-model-visual pioneer-inline-model" data-pioneer-model data-model-src="3d/p1_assembly.3mf">
+            <img class="pioneer-teaser__poster" src="img/pioneer-i-assembly.png" alt="PIONEER-I 로켓 조립 모델" loading="lazy" />
+          </div>
+          <div class="pioneer-overview__copy">
+            <span class="pioneer-overview__label">PIONEER-I / OVERVIEW</span>
+            <h2 id="overview-title" data-i18n="pioneerDetail3">설계 개요</h2>
+            <p data-i18n="pioneerDetail4">CFRP 동체와 핀으로 구조 질량을 줄이고, 각 단에 추진·전자·회수장치를 독립적으로 배치했습니다. 서보모터로 결합을 해제한 뒤 홀 센서로 분리 상태를 확인합니다.</p>
+            <dl class="pioneer-overview__specs">
+              <div><dt data-i18n="pioneerDetail5">1단 동체 길이</dt><dd>883 <span>mm</span></dd></div>
+              <div><dt data-i18n="pioneerDetail6">2단 동체 길이</dt><dd>780 <span>mm</span></dd></div>
+              <div><dt data-i18n="pioneerDetail7">동체 내경</dt><dd>98 <span>mm</span></dd></div>
+              <div><dt data-i18n="pioneerDetail8">동체·핀 재질</dt><dd>CFRP</dd></div>
+            </dl>
+          </div>
+        </section>
+
       </div>
 
-        <div class="about-gallery-head reveal-slide" style="--delay: 160ms;">
-        <span data-i18n="galleryKicker">Field Log</span>
-        <h3 data-i18n="galleryTitle">현장 기록</h3>
-        <span class="gallery-hint" data-i18n="galleryHint">Swipe →</span>
-      </div>
-        <div class="about-gallery reveal-slide" style="--delay: 220ms;" aria-label="ALTIS field activity photos">
-        <figure class="about-photo">
-          <img src="img/altis_fam_img.png" alt="회의를 하고있는 팀원들a" loading="lazy" />
-        </figure>
-        <figure class="about-photo">
-          <img src="img/IMG_3960.JPG" alt="비행 장비 점검을 진행하는 팀원들" loading="lazy" />
-        </figure>
-        <figure class="about-photo">
-          <img src="img/IMG_3957.JPG" alt="점화선 연결을 준비하는 작업 장면" loading="lazy" />
-        </figure>
-        <figure class="about-photo">
-          <img src="img/altis_work_img.png" alt="발사장 현장에서 논의하는 ALTIS 팀" loading="lazy" />
-        </figure>
-        <figure class="about-photo">
-          <img src="img/IMG_3962.JPG" alt="안전 장비를 갖춘 단체 활동 사진" loading="lazy" />
-        </figure>
-        <figure class="about-photo">
-          <img src="img/IMG_4002_2.jpeg" alt="2025 NURA 전국대학교 로켓학술대회 현장" loading="lazy" />
-        </figure>
+      <div class="tech-scroll" data-tech-scroll>
+        <div class="tech-scroll__viewport">
+          <section class="about-technology-topic" id="pioneer-propulsion" aria-labelledby="pioneer-propulsion-title">
+            <h2 id="pioneer-propulsion-title" data-i18n="twoStagePropulsionTitle">추진 시스템</h2>
+            <div class="pioneer-propulsion-layout">
+            <div class="about-technology-topic__copy">
+              <p data-i18n="twoStagePropulsionBody">OpenMotor로 1·2단 모터의 내탄도 성능을 해석하고, 지상 연소시험에서 추력·연소 시간·연소실 압력을 계측했습니다. 실측 추력 곡선과 총 충격량을 해석값과 비교해 추진 성능을 평가했습니다.</p>
+              <p data-i18n="twoStagePropulsionResult">지상 시험 최대 압력은 1단 1.73 MPa, 2단 1.89 MPa로 설계 제한 2.0 MPa 이내였습니다. 총 충격량은 해석값 대비 각각 90.8%, 95.5%로 측정됐습니다.</p>
+              <a class="about-technology-topic__link" href="tech/motor.html"><span data-i18n="twoStageMotorLink">추진 기술</span><span aria-hidden="true"> ↗</span></a>
+            </div>
+            <video class="pioneer-propulsion-video" data-section-video muted playsinline preload="metadata" aria-label="추진 시스템 지상 연소시험 영상">
+              <source src="vid/tms_vid.mov" />
+            </video>
+            </div>
+          </section>
+
+          <section class="about-technology-topic" id="pioneer-avionics" aria-labelledby="pioneer-avionics-title">
+            <h2 id="pioneer-avionics-title" data-i18n="twoStageAvionicsTitle">에비오닉스</h2>
+            <div class="about-avionics-layout">
+              <div class="about-technology-topic__copy">
+                <p data-i18n="twoStageAvionicsBody">IMU의 수직 가속도와 기압계 고도를 1차원 칼만필터로 융합해 고도와 수직 속도를 추정합니다. ESP32-S3와 FreeRTOS 기반 듀얼코어 구조에서 센서 수집·상태 추정과 비행 시퀀스·로그 저장 태스크를 분리했습니다. 유한 상태 기계(FSM)로 비행 단계를 판단하고 점화·사출 출력을 제어합니다.</p>
+                <p data-i18n="twoStageAvionicsResult">1단은 데이터 저장과 FLASH6 지상국 통신을, 2단은 자율 비행 시퀀스를 담당합니다. 100 m 거리에서 60초간 수행한 지상 통신 시험에서는 평균 수신 주파수 49.68 Hz, 패킷 손실률 0%를 기록했습니다.</p>
+                <a class="about-technology-topic__link" href="tech/avionics.html"><span data-i18n="twoStageAvionicsLink">에비오닉스 기술</span><span aria-hidden="true"> ↗</span></a>
+              </div>
+              <div class="avionics-deck" data-stacked-gallery role="region" aria-labelledby="pioneer-avionics-title">
+                <button class="avionics-deck__stage" type="button" data-stack-turn aria-label="다음 사진 보기">
+                  <span class="avionics-deck__card is-front" data-stack-card>
+                    <img src="img/Altis%20Intellignet3.png" alt="ALTIS Intelligent 3 비행 전자장치 보드" data-alt-en="ALTIS Intelligent 3 avionics board" loading="lazy" decoding="async" draggable="false" />
+                  </span>
+                  <span class="avionics-deck__card" data-stack-card aria-hidden="true">
+                    <img src="img/pcb_land.png" alt="ALTIS 비행 전자장치 PCB 설계" data-alt-en="ALTIS avionics PCB design" loading="lazy" decoding="async" draggable="false" />
+                  </span>
+                  <span class="avionics-deck__card" data-stack-card aria-hidden="true" hidden>
+                    <img class="avionics-deck__screen" src="img/flash6_use_img.png" alt="FLASH6 지상국의 비행 상태 표시 화면" data-alt-en="FLASH6 ground station flight-status display" loading="lazy" decoding="async" draggable="false" />
+                  </span>
+                </button>
+                <div class="avionics-deck__footer">
+                  <div class="avionics-deck__controls">
+                    <span class="avionics-deck__counter" data-stack-counter role="status" aria-live="polite" aria-atomic="true">1 / 3</span>
+                    <button type="button" data-stack-prev aria-label="이전 사진">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg>
+                    </button>
+                    <button type="button" data-stack-next aria-label="다음 사진">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="about-technology-topic" id="pioneer-separation" aria-labelledby="pioneer-separation-title">
+            <h2 id="pioneer-separation-title" data-i18n="twoStageSeparationTitle">기계식 단분리/사출</h2>
+            <div class="pioneer-separation-layout">
+            <div class="about-technology-topic__copy">
+              <p data-i18n="twoStageSeparationBody">상·하단 커플러가 결합 상태에서 추력과 축·횡방향 하중을 지지하고, 서보모터 구동으로 구속을 해제하는 기계식 단분리 구조입니다. 홀 센서와 자석의 상대 위치 변화로 분리 완료를 검출하며, 분리 확인 신호를 2단 점화 허가 조건과 연동했습니다.</p>
+              <p data-i18n="twoStageSeparationResult">분리가 확인되지 않으면 점화를 차단하고 회수 모드로 전환하는 Fail-safe를 적용했습니다. 1단은 단분리 후, 2단은 최고점 판단 후 낙하산을 전개하도록 설계했으며, CFRP 동체에 장착한 상태에서 분리와 사출 작동을 확인했습니다.</p>
+              <a class="about-technology-topic__link" href="tech/ejection%20system.html#mission-details"><span data-i18n="twoStageSeparationLink">단분리·사출 기술</span><span aria-hidden="true"> ↗</span></a>
+            </div>
+            <div class="pioneer-model-visual pioneer-separation-model" data-pioneer-model data-model-kind="separation" data-model-src="3d/S.S.3mf">
+            </div>
+            </div>
+          </section>
+
+          <section class="about-technology-topic" id="pioneer-airframe" aria-labelledby="pioneer-airframe-title">
+            <h2 id="pioneer-airframe-title" data-i18n="twoStageAirframeTitle">동체</h2>
+            <div class="pioneer-airframe-layout">
+              <div class="about-technology-topic__copy">
+                <p data-i18n="twoStageAirframeBody">PIONEER-I의 동체와 핀은 CFRP로 제작했습니다. 동체 내경은 98 mm이며, 1단 동체 길이는 883 mm, 2단은 780 mm입니다. 복합재 구조로 기체의 질량과 강성을 함께 고려했습니다.</p>
+                <p data-i18n="twoStageAirframeDetail">추진부·에비오닉스·단분리 및 회수 장치의 배치에 맞춰 내부 체결 구조를 설계했습니다. 동체와 핀의 결합, 장치 간 간섭을 확인하고 각 단을 조립해 발사시험 기체에 통합했습니다.</p>
+                <a class="about-technology-topic__link" href="tech/structure.html"><span data-i18n="twoStageAirframeLink">동체 기술</span><span aria-hidden="true"> ↗</span></a>
+              </div>
+              <div class="avionics-deck pioneer-airframe-gallery" data-stacked-gallery role="region" aria-labelledby="pioneer-airframe-title">
+                <button class="avionics-deck__stage" type="button" data-stack-turn aria-label="다음 사진 보기">
+                  <span class="avionics-deck__card is-front" data-stack-card>
+                    <img class="avionics-deck__screen" src="img/air2.png" alt="로켓 동체와 핀의 구조 해석 결과" data-alt-en="Structural analysis of the rocket airframe and fins" loading="lazy" decoding="async" draggable="false" />
+                  </span>
+                  <span class="avionics-deck__card" data-stack-card aria-hidden="true">
+                    <img class="avionics-deck__screen" src="img/air3.png" alt="CFRP 시편의 하중·변위 및 변형률 시험 결과" data-alt-en="CFRP specimen load, displacement, and strain test results" loading="lazy" decoding="async" draggable="false" />
+                  </span>
+                </button>
+                <div class="avionics-deck__footer">
+                  <div class="avionics-deck__controls">
+                    <span class="avionics-deck__counter" data-stack-counter role="status" aria-live="polite" aria-atomic="true">1 / 2</span>
+                    <button type="button" data-stack-prev aria-label="이전 사진">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg>
+                    </button>
+                    <button type="button" data-stack-next aria-label="다음 사진">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="about-technology-topic" id="pioneer-testing" aria-labelledby="pioneer-testing-title">
+            <h2 id="pioneer-testing-title" data-i18n="twoStageTestingTitle">지상 시험</h2>
+            <div class="about-technology-topic__copy">
+              <p data-i18n="twoStageTestingBody">단품 기능시험에서 에비오닉스 연동·동체 통합시험으로 검증 범위를 확장했습니다. OpenRocket의 시간·고도·속도 데이터를 입력한 비행 시퀀스 모사시험으로 단분리·점화·사출 명령의 출력 순서와 상태 전이를 확인했습니다.</p>
+              <p data-i18n="twoStageTestingResult">발사시험의 최고 고도는 133.349 m로, OpenRocket 예측값 555.573 m와 차이를 보였습니다. 비행 데이터에서 단분리 후 점화 지연에 따른 자세 변화를 분석하고, 그 결과를 반영해 점화 시퀀스를 수정했습니다.</p>
+              <a class="about-technology-topic__link" href="tech/motor.html#static-fire-test"><span data-i18n="twoStageTestingLink">지상 시험</span><span aria-hidden="true"> ↗</span></a>
+            </div>
+          </section>
+
+        </div>
       </div>
 
     </div>
+    </div>
+
+
   </section>
+
 
   <section class="section" id="media">
     <div class="section-head">
@@ -3624,52 +3710,84 @@
       <p data-i18n="mediaIntro">ALTIS가 출연한 영상을 통해 팀의 현장과 프로젝트를 확인해보세요.</p>
     </div>
     <div class="container">
-      <div class="media-grid">
-        <article class="media-card">
-          <iframe
-            class="media-embed"
-            src="https://www.youtube.com/embed/Xlze3r7W0lI?rel=0"
-            title="ALTIS YouTube feature video 1"
-            loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-          ></iframe>
-          <div class="media-body">
-            <h3 data-i18n="mediaVideo1Title">ALTIS Feature Clip</h3>
-            <p data-i18n="mediaVideo1Body">동아리 활동과 발사 준비 과정이 담긴 영상입니다.</p>
-            <a
-              class="media-link"
-              href="https://www.youtube.com/watch?v=Xlze3r7W0lI&list=PLYDLT0pX4QAt_VWugM982FUfK2oKjuW6q&index=13"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-i18n="mediaWatch"
-            >Watch on YouTube</a>
-          </div>
-        </article>
+      <div class="media-carousel">
+        <div class="media-viewport">
+          <div class="media-grid" id="media-videos">
+            <article class="media-card">
+              <iframe
+                class="media-embed"
+                src="https://www.youtube.com/embed/Xlze3r7W0lI?rel=0"
+                title="ALTIS YouTube feature video 1"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              ></iframe>
+              <div class="media-body">
+                <h3 data-i18n="mediaVideo1Title">작은 교실, 큰 우주ㅣ영남 라디오스타</h3>
+                <p data-i18n="mediaVideo1Body">동아리 활동과 발사 준비 과정이 담긴 영상입니다.</p>
+                <a
+                  class="media-link"
+                  href="https://www.youtube.com/watch?v=Xlze3r7W0lI&list=PLYDLT0pX4QAt_VWugM982FUfK2oKjuW6q&index=13"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-i18n="mediaWatch"
+                >Watch on YouTube</a>
+              </div>
+            </article>
 
-        <article class="media-card">
-          <iframe
-            class="media-embed"
-            src="https://www.youtube.com/embed/wM69CWHXe7I?rel=0"
-            title="ALTIS YouTube feature video 2"
-            loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-          ></iframe>
-          <div class="media-body">
-            <h3 data-i18n="mediaVideo2Title">ALTIS Interview & Highlight</h3>
-            <p data-i18n="mediaVideo2Body">팀 소개와 프로젝트 핵심 장면을 확인할 수 있습니다.</p>
-            <a
-              class="media-link"
-              href="https://www.youtube.com/watch?v=wM69CWHXe7I"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-i18n="mediaWatch"
-            >Watch on YouTube</a>
+            <article class="media-card">
+              <iframe
+                class="media-embed"
+                src="https://www.youtube.com/embed/wM69CWHXe7I?rel=0"
+                title="ALTIS YouTube feature video 2"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              ></iframe>
+              <div class="media-body">
+                <h3 data-i18n="mediaVideo2Title">로켓도 직접 만드는 학과가 있다?!│우문현답 EP.1</h3>
+                <p data-i18n="mediaVideo2Body">팀 소개와 프로젝트 핵심 장면을 확인할 수 있습니다.</p>
+                <a
+                  class="media-link"
+                  href="https://www.youtube.com/watch?v=wM69CWHXe7I"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-i18n="mediaWatch"
+                >Watch on YouTube</a>
+              </div>
+            </article>
+
+            <article class="media-card" hidden>
+              <iframe
+                class="media-embed"
+                data-src="https://www.youtube.com/embed/XiPknb7p4iE?rel=0&amp;start=290"
+                title="뉴 스페이스 시대의 우주항공산업 | YTN 사이언스"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              ></iframe>
+              <div class="media-body">
+                <h3 data-i18n="mediaVideo3Title">뉴 스페이스 시대의 우주항공산업 | YTN 사이언스</h3>
+                <p data-i18n="mediaVideo3Body">#황금나침반 #YTN사이언스 #뉴스페이스 #우주항공</p>
+                <a class="media-link" href="https://www.youtube.com/watch?v=XiPknb7p4iE&amp;t=290s" target="_blank" rel="noopener noreferrer" data-i18n="mediaWatch">유튜브에서 보기</a>
+              </div>
+            </article>
           </div>
-        </article>
+        </div>
+        <div class="media-pagination">
+          <button type="button" data-media-prev aria-controls="media-videos" disabled>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg>
+            <span class="media-pagination__label" data-i18n="mediaPrevious">이전</span>
+          </button>
+          <span class="media-pagination__status" data-media-status role="status" aria-live="polite" aria-atomic="true">1 / 2</span>
+          <button type="button" data-media-next aria-controls="media-videos">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+            <span class="media-pagination__label" data-i18n="mediaNext">다음</span>
+          </button>
+        </div>
       </div>
     </div>
   </section>
@@ -3678,10 +3796,10 @@
       <div class="site-footer-divider"></div>
       <div class="site-footer-grid">
         <div class="site-footer-col site-footer-contact">
-          <p data-i18n="footerAddress">Address: 진주대로 501 | Founded Date: March 2021</p>
+          <p data-i18n="footerAddress">Address: 진주대로 501 | Founded Date: 2019</p>
           <p>CONTACT | email : ybb1833@naver.com / instagram : @ altis_official</p>
         </div>
-        <p class="site-footer-copy">© 2021-2026 ALTIS. All rights reserved.</p>
+        <p class="site-footer-copy">© 2019-2026 ALTIS. All rights reserved.</p>
       </div>
     </div>
   </footer>
@@ -3696,10 +3814,12 @@
     }
   </script>
   <script type="module">
-    import * as THREE from "three";
-    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-    import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
-    import { ThreeMFLoader } from "three/addons/loaders/3MFLoader.js";
+    window.addEventListener("load", async () => {
+      try {
+        const THREE = await import("three");
+        const { OrbitControls } = await import("three/addons/controls/OrbitControls.js");
+        const { RoomEnvironment } = await import("three/addons/environments/RoomEnvironment.js");
+        const { ThreeMFLoader } = await import("three/addons/loaders/3MFLoader.js");
 
     const SHOW_COMING_SOON = 0; // COMING_SOON 0: off, 1: on
     const siteContent = document.getElementById("site-content");
@@ -3707,6 +3827,10 @@
     const isComingSoon = SHOW_COMING_SOON === 1;
     if (siteContent) siteContent.style.display = isComingSoon ? "none" : "";
     if (comingSoonPage) comingSoonPage.style.display = isComingSoon ? "flex" : "none";
+    if (isComingSoon && comingSoonPage) {
+      const comingSoonVideo = comingSoonPage.querySelector("iframe[data-src]");
+      if (comingSoonVideo) comingSoonVideo.src = comingSoonVideo.dataset.src;
+    }
     if (!isComingSoon) {
       const SHOW_INNOSPACE_LOGO = 1; // INNOSPACE_LOGO 0: hide, 1: show
       const innospacePartnerLogos = document.querySelectorAll("[data-partner='innospace']");
@@ -3749,8 +3873,8 @@
       const motorModelTitle = document.getElementById("motor-model-title");
       const motorSwitchBtn = document.getElementById("motor-switch-btn");
       const motorModelConfigs = [
-        { path: "3d/1st_motor_3d.3mf", title: "Pioneer1 1st motor" },
-        { path: "3d/2st_motor_3d.3mf", title: "Pioneer1 2st motor" }
+        { path: "tech/3d/1st_motor_3d.3mf", title: "Pioneer1 1st motor" },
+        { path: "tech/3d/2st_motor_3d.3mf", title: "Pioneer1 2st motor" }
       ];
       const homeCameraPosition = new THREE.Vector3();
       const homeTarget = new THREE.Vector3();
@@ -4034,7 +4158,7 @@
       };
 
       recoveryLoader.load(
-        "3d/sachul_assembly.3mf",
+        "tech/3d/sachul_assembly.3mf",
         (group) => {
           const box = new THREE.Box3().setFromObject(group);
           const size = box.getSize(new THREE.Vector3());
@@ -4129,6 +4253,17 @@
       tickRecovery();
     }
     }
+      } catch (error) {
+        console.error("3D assets failed to initialize", error);
+        document.querySelectorAll("#motor-3d-stage, #recovery-3d-stage").forEach((stage) => {
+          if (stage.querySelector(".motor-3d-fallback")) return;
+          const fallback = document.createElement("div");
+          fallback.className = "motor-3d-fallback";
+          fallback.textContent = "3D model load failed";
+          stage.appendChild(fallback);
+        });
+      }
+    }, { once: true });
   </script>
   <script>
     (() => {
@@ -4141,28 +4276,74 @@
           navTech: "Tech",
           navMedia: "Media",
           navJoin: "Join",
-          navsponsors: "sponsors",
-          footerAddress: "Address: 진주대로 501 | Founded Date: March 2021",
+          navsponsors: "Sponsors",
+          footerAddress: "Address: 진주대로 501 | Founded Date: 2019",
           langToggle: "<span class=\"lang-option lang-kr\">KR</span> / <span class=\"lang-option lang-en\">EN</span>",
+          comingSoonDescription: "새로운 페이지를 준비하고 있습니다. 곧 공개됩니다.",
           recruitmentNotice: "ALTIS 신입생 모집 중",
           recruitmentAction: "지원 안내 보기 ↗",
           heroTitle: "개척의 하늘에서 피운 꿈,<br>우주로 번지다",
-          heroTagline: "경상국립대학교 로켓동아리 ALTIS",
-          heroCtaSupport: "Support for ALTIS",
+          heroCtaSupport: "Support ALTIS",
           heroCtaMedia: "YouTube 영상 보기",
           heroCtaAbout: "About ALTIS",
           aboutKicker: "Luce in ALTIS",
           aboutTitle: "높은 곳에서 빛나라",
           aboutBody1:
-            "높은 곳에서 빛나기 위해, ALTIS는 경상국립대학교 우주항공대학 항공우주공학부 학생들이 직접 로켓을 설계·제작·시험하는 동아리입니다.우리는 스스로 배우고 만들며, 로켓 시스템 전반의 이해와 기술 역량을 차근히 쌓아갑니다.",
+            "높은 곳에서 빛나기 위해, ALTIS는 경상국립대학교 우주항공대학 항공우주공학부 학생들이 직접 로켓을 설계·제작·시험하는 동아리입니다. 우리는 스스로 배우고 만들며, 로켓 시스템 전반의 이해와 기술 역량을 차근히 쌓아갑니다.",
           aboutBody2:
             "그 빛을 실제로 쏘아 올리기 위해 고체 로켓 모터 설계·제작부터 추력·압력 계측, 전자부(에비오닉스)와 구조 설계, 지상 및 발사 시험까지 전 과정을 수행합니다.",
+          twoStageLabel: "우리의 기술",
+          twoStageTitle: "PIONEER-I",
+          twoStageSubtitle: "기계식 2단 분리 로켓",
+          twoStageBody: "PIONEER-I는 기계식 단분리와 2단 내부 점화, 각 단의 독립 회수를 적용한 2단 고체로켓입니다. 단분리부터 점화·회수까지 이어지는 과정을 직접 설계하고, 지상 시험과 발사시험으로 확인했습니다.",
+          pioneerDetail1: "기계식 단분리와 내부 점화, 단별 독립 회수로 이어지는 PIONEER-I의 운용 개념입니다.",
+          pioneerDetail2: "Figure 26 CONOPS · PIONEER-I 비행 시퀀스 개념도",
+          pioneerDetail3: "설계 개요",
+          pioneerDetail4: "CFRP 동체와 핀으로 구조 질량을 줄이고, 각 단에 추진·전자·회수장치를 독립적으로 배치했습니다. 서보모터로 결합을 해제한 뒤 홀 센서로 분리 상태를 확인합니다.",
+          pioneerDetail5: "1단 동체 길이",
+          pioneerDetail6: "2단 동체 길이",
+          pioneerDetail7: "동체 내경",
+          pioneerDetail8: "동체·핀 재질",
+          twoStagePropulsionTitle: "추진 시스템",
+          twoStagePropulsionBody: "OpenMotor로 1·2단 모터의 내탄도 성능을 해석하고, 지상 연소시험에서 추력·연소 시간·연소실 압력을 계측했습니다. 실측 추력 곡선과 총 충격량을 해석값과 비교해 추진 성능을 평가했습니다.",
+          twoStagePropulsionResult: "지상 시험 최대 압력은 1단 1.73 MPa, 2단 1.89 MPa로 설계 제한 2.0 MPa 이내였습니다. 총 충격량은 해석값 대비 각각 90.8%, 95.5%로 측정됐습니다.",
+          twoStageMotorLink: "추진 기술",
+          twoStageAvionicsTitle: "에비오닉스",
+          twoStageAvionicsBody: "IMU의 수직 가속도와 기압계 고도를 1차원 칼만필터로 융합해 고도와 수직 속도를 추정합니다. ESP32-S3와 FreeRTOS 기반 듀얼코어 구조에서 센서 수집·상태 추정과 비행 시퀀스·로그 저장 태스크를 분리했습니다. 유한 상태 기계(FSM)로 비행 단계를 판단하고 점화·사출 출력을 제어합니다.",
+          twoStageAvionicsResult: "1단은 데이터 저장과 FLASH6 지상국 통신을, 2단은 자율 비행 시퀀스를 담당합니다. 100 m 거리에서 60초간 수행한 지상 통신 시험에서는 평균 수신 주파수 49.68 Hz, 패킷 손실률 0%를 기록했습니다.",
+          twoStageAvionicsLink: "에비오닉스 기술",
+          twoStageSeparationTitle: "기계식 단분리/사출",
+          twoStageSeparationBody: "상·하단 커플러가 결합 상태에서 추력과 축·횡방향 하중을 지지하고, 서보모터 구동으로 구속을 해제하는 기계식 단분리 구조입니다. 홀 센서와 자석의 상대 위치 변화로 분리 완료를 검출하며, 분리 확인 신호를 2단 점화 허가 조건과 연동했습니다.",
+          twoStageSeparationResult: "분리가 확인되지 않으면 점화를 차단하고 회수 모드로 전환하는 Fail-safe를 적용했습니다. 1단은 단분리 후, 2단은 최고점 판단 후 낙하산을 전개하도록 설계했으며, CFRP 동체에 장착한 상태에서 분리와 사출 작동을 확인했습니다.",
+          twoStageSeparationLink: "단분리·사출 기술",
+          twoStageAirframeTitle: "동체",
+          twoStageAirframeBody: "PIONEER-I의 동체와 핀은 CFRP로 제작했습니다. 동체 내경은 98 mm이며, 1단 동체 길이는 883 mm, 2단은 780 mm입니다. 복합재 구조로 기체의 질량과 강성을 함께 고려했습니다.",
+          twoStageAirframeDetail: "추진부·에비오닉스·단분리 및 회수 장치의 배치에 맞춰 내부 체결 구조를 설계했습니다. 동체와 핀의 결합, 장치 간 간섭을 확인하고 각 단을 조립해 발사시험 기체에 통합했습니다.",
+          twoStageAirframeLink: "동체 기술",
+          twoStageTestingTitle: "지상 시험",
+          twoStageTestingBody: "단품 기능시험에서 에비오닉스 연동·동체 통합시험으로 검증 범위를 확장했습니다. OpenRocket의 시간·고도·속도 데이터를 입력한 비행 시퀀스 모사시험으로 단분리·점화·사출 명령의 출력 순서와 상태 전이를 확인했습니다.",
+          twoStageTestingResult: "발사시험의 최고 고도는 133.349 m로, OpenRocket 예측값 555.573 m와 차이를 보였습니다. 비행 데이터에서 단분리 후 점화 지연에 따른 자세 변화를 분석하고, 그 결과를 반영해 점화 시퀀스를 수정했습니다.",
+          twoStageTestingLink: "지상 시험",
+          pioneerTeaserBody: "기계식 단분리와 2단 내부 점화, 각 단의 독립 회수를 적용한 ALTIS의 2단 고체로켓입니다.",
+          pioneerTeaserLink: "자세히 보기",
+          communityTitle: "지역사회 봉사",
+          bootcampTitle: "항공우주 부트캠프",
+          bootcampBody: "ALTIS는 2024년부터 항공우주 부트캠프를 통해 고등학생 대상 교육봉사를 이어오고 있습니다. 팀원들이 로켓의 원리와 구조를 설명하고, 학생들의 모델 로켓 제작과 발사 활동을 돕습니다.",
+          sponsorshipSummaryTitle: "다음 발사를 함께 만들고 싶으신가요?",
+          sponsorshipSummaryLink: "파트너로 참여하기",
+          historySummaryTitle: "2019년 창립",
+          historySummaryBody: "ALTIS는 2019년 창립해 로켓을 직접 설계하고 제작해 왔습니다. 발사시험과 대회 참가를 통해 쌓아온 기록을 소개합니다.",
+          historySummaryLink: "자세히 보기",
+          historySummaryAward1Brief: "NURA 로켓발사대회 금상",
+          historySummaryAward1: "금상",
+          historySummaryAward2: "한국항공우주연구원 원장상",
+          historySummaryEvent: "NURA 전국대학교 로켓발사대회",
           coreKicker: "Core Value",
           coreTitle: "Design · Build · Launch",
           coreBody1:
-            "ALTIS 에서 모든 프로젝트는 이론 검토에 그치지 않고 실제 하드웨어 제작과 반복적인 시험 과정을 통해 검증됩니다.",
+            "모든 프로젝트는 이론 검토에 그치지 않고 실제 하드웨어 제작과 반복적인 시험 과정을 통해 검증됩니다. 설계–제작–시험의 반복 과정을 통해 발생하는 문제를 분석하고 개선하는 것이 ALTIS 프로젝트의 핵심 가치입니다.",
           coreBody2:
-            "ALTIS는 단순한 동아리 활동을 넘어 대학 수준에서 수행 가능한 항공우주 공학 프로젝트의 한계를 확장하고,학생들이 실제 엔지니어링 환경과 유사한 경험을 쌓을 수 있는 팀을 지향합니다.",
+            "ALTIS는 단순한 동아리 활동을 넘어 대학 수준에서 수행 가능한 항공우주 공학 프로젝트의 한계를 확장하고, 학생들이 실제 엔지니어링 환경과 유사한 경험을 쌓을 수 있는 팀을 지향합니다.",
           techMotorBody:
             "이번 모터는 2 MPa의 비교적 낮은 압력을 기준으로 안전을 우선해 설계한 고체 모터입니다. 실제 제작과 시험을 염두에 두고 구조를 단순화했으며, 안정적인 점화와 추력 확보를 목표로 반복 시험에 적합한 형상으로 개발했습니다.",
           techAvionicsBody:
@@ -4190,15 +4371,16 @@
           teamAvionicsTitle: "전자팀",
           teamAvionicsBody:
             "DAQ, 센서 인터페이스, 점화 제어, 통신 모듈 등 전자부 시스템을 개발합니다.",
-          galleryKicker: "Field Log",
-          galleryTitle: "현장 기록",
-          galleryHint: "스와이프 →",
           mediaTitle: "YouTube Feature",
           mediaIntro: "ALTIS가 출연한 유튜브 영상을 통해 팀 활동과 프로젝트를 확인해보세요.",
           mediaVideo1Title: "작은 교실, 큰 우주ㅣ영남 라디오스타",
           mediaVideo1Body: "#영남라디오스타 #kbs #경남 #우주",
           mediaVideo2Title: "로켓도 직접 만드는 학과가 있다?!│우문현답 EP.1",
           mediaVideo2Body: "#우주항공청 #KASA #경상대 #항공우주 ",
+          mediaVideo3Title: "뉴 스페이스 시대의 우주항공산업 | YTN 사이언스",
+          mediaVideo3Body: "#황금나침반 #YTN사이언스 #뉴스페이스 #우주항공",
+          mediaPrevious: "이전",
+          mediaNext: "다음",
           mediaWatch: "유튜브에서 보기",
           partnerTitle: "비상을 함께한 분들",
           partnerEmptyTitle: "아직 스폰서가 없습니다",
@@ -4212,28 +4394,74 @@
           navTech: "Tech",
           navMedia: "Media",
           navJoin: "Join",
-          navsponsors: "sponsors",
-          footerAddress: "Address: 501 Jinju-daero, Jinju | Founded: March 2021",
+          navsponsors: "Sponsors",
+          footerAddress: "Address: 501 Jinju-daero, Jinju | Founded: 2019",
           langToggle: "<span class=\"lang-option lang-kr\">KR</span> / <span class=\"lang-option lang-en\">EN</span>",
+          comingSoonDescription: "A new page is on its way. Coming soon.",
           recruitmentNotice: "ALTIS New Member Recruitment Now Open",
           recruitmentAction: "View Application ↗",
-          heroTitle: "Our Dream<br />Toward the Cosmos",
-          heroTagline: "LUCE IN <span class=\"hero-tagline-accent\">ALTIS</span>",
-          heroCtaSupport: "Support for ALTIS",
+          heroTitle: "Dreams Take Flight,<br />Reaching for Space",
+          heroCtaSupport: "Support ALTIS",
           heroCtaMedia: "YouTube Feature",
           heroCtaAbout: "About ALTIS",
           aboutKicker: "Luce in ALTIS",
           aboutTitle: "Shine Higher",
           aboutBody1:
-            "To shine at higher altitudes, ALTIS is a club where aerospace engineering students at Gyeongsang National University design, build, and test rockets themselves. We learn by doing, steadily building understanding and technical skill across the entire rocket system.",
+            "Guided by our motto, “Shine Higher,” ALTIS brings together aerospace engineering students at Gyeongsang National University to design, build, and test rockets. Through hands-on work, we build the knowledge and skills needed to develop complete rocket systems.",
           aboutBody2:
-            "To launch that light into the sky, we cover the full process—from solid motor design and fabrication to thrust and pressure measurement, avionics and structural design, and ground and launch testing.",
+            "We work through every stage of development, from solid rocket motor design and fabrication to thrust and pressure measurement, avionics, structural design, and ground and flight testing.",
+          twoStageLabel: "Our Technology",
+          twoStageTitle: "PIONEER-I",
+          twoStageSubtitle: "Mechanically Separated Two-Stage Rocket",
+          twoStageBody: "PIONEER-I is a two-stage solid rocket with mechanical stage separation, onboard second-stage ignition, and independent recovery for each stage. We designed the separation, ignition, and recovery sequence and evaluated it through ground and flight tests.",
+          pioneerDetail1: "PIONEER-I’s mission concept links mechanical stage separation, onboard ignition, and independent recovery of both stages.",
+          pioneerDetail2: "Figure 26 CONOPS · PIONEER-I nominal mission sequence",
+          pioneerDetail3: "Design Overview",
+          pioneerDetail4: "The CFRP airframe and fins reduce structural mass, with propulsion, avionics, and recovery systems arranged independently in each stage. Servo-driven couplers release the stages, and a Hall sensor confirms separation.",
+          pioneerDetail5: "Stage 1 airframe length",
+          pioneerDetail6: "Stage 2 airframe length",
+          pioneerDetail7: "Airframe inner diameter",
+          pioneerDetail8: "Airframe and fin material",
+          twoStagePropulsionTitle: "Propulsion",
+          twoStagePropulsionBody: "We modeled the internal ballistics of both motors in OpenMotor and measured thrust, burn time, and chamber pressure during ground firing tests. Measured thrust curves and total impulse were compared with predictions to assess propulsion performance.",
+          twoStagePropulsionResult: "Peak chamber pressures measured in ground tests were 1.73 MPa for stage 1 and 1.89 MPa for stage 2, both below the 2.0 MPa design limit. Measured total impulse reached 90.8% and 95.5% of the respective predictions.",
+          twoStageMotorLink: "Propulsion",
+          twoStageAvionicsTitle: "Avionics",
+          twoStageAvionicsBody: "A one-dimensional Kalman filter fuses vertical IMU acceleration with barometric altitude to estimate altitude and vertical velocity. On an ESP32-S3 running FreeRTOS, sensor acquisition and state estimation are separated from flight sequencing and logging across two cores. A finite-state machine determines flight phase and controls ignition and deployment outputs.",
+          twoStageAvionicsResult: "First-stage avionics handle logging and communication with the FLASH6 ground station; second-stage avionics execute the autonomous flight sequence. A 60-second ground link test at 100 m recorded an average reception rate of 49.68 Hz with 0% packet loss.",
+          twoStageAvionicsLink: "Avionics",
+          twoStageSeparationTitle: "Mechanical Separation / Ejection",
+          twoStageSeparationBody: "Mating couplers carry thrust and axial and lateral loads while the stages are joined; a servo-driven mechanism releases the restraint. A Hall sensor detects separation through the changing position of a magnet, and separation confirmation is linked to second-stage ignition authorization.",
+          twoStageSeparationResult: "A fail-safe blocks ignition and switches to recovery mode if separation is not confirmed. The recovery design deploys the first-stage parachute after separation and the second-stage parachute after apogee detection. Separation and ejection were tested with the devices installed in the CFRP airframe.",
+          twoStageSeparationLink: "Separation & Ejection",
+          twoStageAirframeTitle: "Airframe",
+          twoStageAirframeBody: "PIONEER-I uses CFRP body tubes and fins. The airframe has a 98 mm inner diameter, with body lengths of 883 mm for stage 1 and 780 mm for stage 2. The composite structure balances vehicle mass and stiffness.",
+          twoStageAirframeDetail: "Internal mounts accommodate the propulsion, avionics, separation, and recovery systems. Airframe-to-fin joints and component clearances were checked before both stages were assembled into the flight-test vehicle.",
+          twoStageAirframeLink: "Airframe Technology",
+          twoStageTestingTitle: "Ground Testing",
+          twoStageTestingBody: "Verification progressed from component tests to avionics integration and assembled-airframe tests. Simulated flight sequences using OpenRocket time, altitude, and velocity data checked state transitions and the order of separation, ignition, and deployment commands.",
+          twoStageTestingResult: "Flight testing recorded an apogee of 133.349 m, compared with the OpenRocket prediction of 555.573 m. Flight-data analysis identified attitude changes associated with the delay between separation and ignition, and informed revisions to the ignition sequence.",
+          twoStageTestingLink: "Ground Testing",
+          pioneerTeaserBody: "ALTIS’s two-stage solid rocket combines mechanical stage separation, onboard second-stage ignition, and independent recovery for each stage.",
+          pioneerTeaserLink: "View project",
+          communityTitle: "Community Service",
+          bootcampTitle: "Aerospace Bootcamp",
+          bootcampBody: "Since 2024, ALTIS has volunteered to teach high school students through the Aerospace Bootcamp. Team members explain how rockets work and help students build and launch model rockets.",
+          sponsorshipSummaryTitle: "Want to help build our next launch?",
+          sponsorshipSummaryLink: "Become a Partner",
+          historySummaryTitle: "Founded in 2019",
+          historySummaryBody: "Founded in 2019, ALTIS designs and builds its own rockets. Explore our record of flight tests and competitions.",
+          historySummaryLink: "View History",
+          historySummaryAward1Brief: "NURA Rocket Launch Competition · Gold Award",
+          historySummaryAward1: "Gold Award",
+          historySummaryAward2: "Korea Aerospace Research Institute President’s Award",
+          historySummaryEvent: "NURA National University Rocket Launch Competition",
           coreKicker: "Core Value",
-          coreTitle: "Design · Build · Test",
+          coreTitle: "Design · Build · Launch",
           coreBody1:
-            "Every project goes beyond theory and is validated through real hardware builds and repeated tests. Analyzing issues and improving through the design–build–test cycle is the core value of ALTIS projects.",
+            "We put theory into practice by building hardware and testing it repeatedly. Each design–build–test cycle helps us identify problems and improve our designs.",
           coreBody2:
-            "ALTIS goes beyond a typical club, expanding the boundaries of university-level aerospace projects and providing students with experience similar to real engineering environments.",
+            "ALTIS aims to push the scope of student aerospace projects and give members practical experience in an engineering team.",
           techMotorBody:
             "This motor is a solid motor designed with safety as the priority, based on a relatively low pressure of 2 MPa. We simplified the structure for practical fabrication and testing, and developed a geometry suited for repeated tests to ensure reliable ignition and thrust.",
           techAvionicsBody:
@@ -4258,20 +4486,21 @@
           teamAirframeTitle: "Airframe Team",
           teamAirframeBody:
             "Handles structural design, housing fabrication, and assembly processes for the airframe.",
-          teamAvionicsTitle: "avionics Team",
+          teamAvionicsTitle: "Avionics Team",
           teamAvionicsBody:
             "Develops avionics systems including DAQ, sensor interfaces, ignition control, and communications modules.",
-          galleryKicker: "Field Log",
-          galleryTitle: "Field Log",
-          galleryHint: "Swipe →",
           mediaTitle: "YouTube Feature",
           mediaIntro: "Watch the YouTube videos featuring ALTIS and our project activities.",
-          mediaVideo1Title: "ALTIS Feature Video 1",
-          mediaVideo1Body: "A highlight clip of our team activity and launch preparation process.",
-          mediaVideo2Title: "ALTIS Feature Video 2",
-          mediaVideo2Body: "An interview-style highlight with team introduction and project scenes.",
+          mediaVideo1Title: "Small Classroom, Big Universe | Yeongnam Radio Star",
+          mediaVideo1Body: "#YeongnamRadioStar #KBS #Gyeongnam #Space",
+          mediaVideo2Title: "A Department That Builds Rockets?! | Q&A EP.1",
+          mediaVideo2Body: "#KoreaAeroSpaceAdministration #KASA #GNU #Aerospace",
+          mediaVideo3Title: "Aerospace in the New Space Era | YTN Science",
+          mediaVideo3Body: "#GoldenCompass #YTNScience #NewSpace #Aerospace",
+          mediaPrevious: "Previous",
+          mediaNext: "Next",
           mediaWatch: "Watch on YouTube",
-          partnerTitle: "Current Partners",
+          partnerTitle: "Partners Behind Our Flight",
           partnerEmptyTitle: "No sponsors yet",
           partnerEmptyBody: "ALTIS warmly welcomes your interest and support.",
           partnerEmptyLink: "Learn more",
@@ -4281,23 +4510,6 @@
       const textNodes = document.querySelectorAll("[data-i18n]");
       const htmlNodes = document.querySelectorAll("[data-i18n-html]");
       const heroTitleNode = document.querySelector(".hero h1[data-i18n-html='heroTitle']");
-      let heroTypingTimer = null;
-      let heroFadeTimer = null;
-      let heroRotateTimer = null;
-      let heroRotateIndex = 0;
-      const HERO_ROTATE_INTERVAL_MS = 10000;
-      const HERO_MOBILE_ROTATE_INTERVAL_MS = 6200;
-      const HERO_MOBILE_FADE_DELAY_MS = 320;
-      const heroMobileMql = window.matchMedia("(max-width: 900px)");
-      const heroRotateMentSetKo = [
-        "작은 실험실의 불꽃, 큰 하늘의 궤적으로",
-        "캠퍼스에서 점화한 꿈, 하늘을 넘어 우주로",
-        "대학생의 손끝에서, 우주가 시작된다",
-        "우리가 만든 로켓, 우리가 여는 우주",
-        "개척의 하늘에서 피운 꿈, 우주로 번지다",
-      ];
-
-      const isMobileHero = () => heroMobileMql.matches;
       const getHeroTitleText = (html) => String(html)
         .replace(/<br\s*\/?>/gi, "\n")
         .replace(/,\s*/g, ",\n")
@@ -4312,93 +4524,6 @@
           if (index > 0) heroTitleNode.appendChild(document.createElement("br"));
           heroTitleNode.append(line);
         });
-      };
-
-      const setHeroTitleSoft = (html) => {
-        if (!heroTitleNode) return;
-        if (heroTypingTimer) {
-          window.clearTimeout(heroTypingTimer);
-          heroTypingTimer = null;
-        }
-        if (heroFadeTimer) {
-          window.clearTimeout(heroFadeTimer);
-          heroFadeTimer = null;
-        }
-
-        heroTitleNode.classList.remove("is-typing");
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !heroTitleNode.textContent.trim()) {
-          heroTitleNode.classList.remove("is-soft-changing");
-          renderHeroTitle(html);
-          return;
-        }
-
-        heroTitleNode.classList.add("is-soft-changing");
-        heroFadeTimer = window.setTimeout(() => {
-          renderHeroTitle(html);
-          heroTitleNode.classList.remove("is-soft-changing");
-          heroFadeTimer = null;
-        }, HERO_MOBILE_FADE_DELAY_MS);
-      };
-
-      const typeHeroTitle = (html) => {
-        if (!heroTitleNode) return;
-        if (heroTypingTimer) {
-          window.clearTimeout(heroTypingTimer);
-          heroTypingTimer = null;
-        }
-        if (isMobileHero()) {
-          setHeroTitleSoft(html);
-          return;
-        }
-        if (heroFadeTimer) {
-          window.clearTimeout(heroFadeTimer);
-          heroFadeTimer = null;
-        }
-        heroTitleNode.classList.remove("is-soft-changing");
-
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-          heroTitleNode.classList.remove("is-typing");
-          renderHeroTitle(html);
-          return;
-        }
-
-        const source = getHeroTitleText(html);
-        heroTitleNode.textContent = "";
-        heroTitleNode.classList.add("is-typing");
-
-        let index = 0;
-        const step = () => {
-          if (index >= source.length) {
-            heroTitleNode.classList.remove("is-typing");
-            return;
-          }
-
-          const ch = source[index++];
-          if (ch === "\n") {
-            heroTitleNode.appendChild(document.createElement("br"));
-          } else {
-            heroTitleNode.append(ch);
-          }
-          heroTypingTimer = window.setTimeout(step, 72);
-        };
-
-        step();
-      };
-
-      const startHeroRotation = (lang) => {
-        if (heroRotateTimer) {
-          window.clearInterval(heroRotateTimer);
-          heroRotateTimer = null;
-        }
-
-        if (lang !== "ko" || !heroRotateMentSetKo.length) return;
-
-        heroRotateIndex = 0;
-        typeHeroTitle(heroRotateMentSetKo[heroRotateIndex]);
-        heroRotateTimer = window.setInterval(() => {
-          heroRotateIndex = (heroRotateIndex + 1) % heroRotateMentSetKo.length;
-          typeHeroTitle(heroRotateMentSetKo[heroRotateIndex]);
-        }, isMobileHero() ? HERO_MOBILE_ROTATE_INTERVAL_MS : HERO_ROTATE_INTERVAL_MS);
       };
 
       const normalizeLang = (lang) => (lang === "en" ? "en" : "ko");
@@ -4422,15 +4547,12 @@
             el.innerHTML = map[key];
           }
         });
-
-        if (next !== "ko" && map.heroTitle !== undefined) {
-          typeHeroTitle(map.heroTitle);
-        }
-        startHeroRotation(next);
+        if (map.heroTitle !== undefined) renderHeroTitle(map.heroTitle);
 
         const toggle = document.querySelector(".lang-toggle");
         if (toggle) {
           toggle.setAttribute("aria-pressed", String(next === "en"));
+          toggle.setAttribute("aria-label", next === "en" ? "한국어로 전환" : "Switch to English");
           const activeClass = "is-active";
           const krLabel = toggle.querySelector(".lang-kr");
           const enLabel = toggle.querySelector(".lang-en");
@@ -4443,7 +4565,7 @@
       };
 
       const storedLang = localStorage.getItem(STORAGE_KEY);
-      const initialLang = storedLang ? normalizeLang(storedLang) : normalizeLang(document.documentElement.lang);
+      const initialLang = storedLang === "ko" ? "ko" : "en";
       applyLang(initialLang);
 
       const toggle = document.querySelector(".lang-toggle");
@@ -4778,6 +4900,30 @@
     })();
 
   </script>
-  <script src="common-layout.js?v=20260909"></script>
+  <script>
+    // Do not let the large hero video hold the document in a perpetual loading state.
+    const startHeroVideo = () => {
+      const video = document.getElementById("hero-background-video");
+      const source = video?.querySelector("source[data-src]");
+      if (!video || !source) return;
+
+      source.src = source.dataset.src;
+      video.load();
+      video.play().catch(() => {});
+    };
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", startHeroVideo, { once: true });
+    } else {
+      startHeroVideo();
+    }
+  </script>
+  <script type="module" src="pioneer-model.js?v=20261025-separation-gray3"></script>
+  <script src="stacked-gallery.js?v=20261025-3"></script>
+  <script src="focus-video.js?v=20261025-1"></script>
+  <script src="pioneer-flow.js?v=20261025-1"></script>
+  <script src="tech-scroll.js?v=20261025-five-sections1"></script>
+  <script src="media-pagination.js?v=20261025-2"></script>
+  <script src="common-i18n.js?v=20261025-default-en1"></script>
+  <script src="common-layout.js?v=20261025-vehicles1"></script>
 </body>
 </html>

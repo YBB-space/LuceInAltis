@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="700" viewBox="0 0 1440 700" role="img" aria-labelledby="title desc">
+  <title id="title">PIONEER-I concept of operations</title>
+  <desc id="desc">Nominal mission sequence from Figure 26 and Table 27 of the ALTIS report. Arming, first-stage ignition and ascent, first-stage burnout, mechanical stage separation, independent first-stage parachute recovery, second-stage ignition, second-stage burnout, apogee, second-stage parachute deployment, and touchdown with data recovery.</desc>
+  <defs>
+    <style>
+      .trajectory{fill:none;stroke:#9ca4aa;stroke-width:1.15}
+      .descent{fill:none;stroke:#78828a;stroke-width:1.05;stroke-dasharray:6 8}
+      .leader{fill:none;stroke:#7e878f;stroke-width:1;stroke-dasharray:3 4}
+      .label{fill:#e7e9e9;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:600;letter-spacing:.4px}
+      .note{fill:#8e989f;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:1.1px}
+      .number{fill:#88939b;font-family:monospace;font-size:10px;letter-spacing:1px}
+      .vehicle{fill:#0b0d0d;stroke:#c2c8cb;stroke-width:1;stroke-linejoin:round;stroke-linecap:round}
+      .detail{fill:none;stroke:#69747c;stroke-width:.8}
+      .ground{fill:none;stroke:#5e6870;stroke-width:.8;stroke-dasharray:1 4}
+    </style>
+    <g id="rocket" class="vehicle">
+      <path d="M0-34 4-24V27H-4V-24Z"/>
+      <path d="M-4-3-12 7-4 4M4-3 12 7 4 4M-4 17-12 28-4 25M4 17 12 28 4 25"/>
+      <path d="M-4 1H4M-4-23H4" class="detail"/>
+    </g>
+    <g id="upper" class="vehicle">
+      <path d="M0-25 4-15V17H-4V-15Z"/>
+      <path d="M-4 5-11 18-4 15M4 5 11 18 4 15"/>
+      <path d="M-4-14H4" class="detail"/>
+    </g>
+    <g id="booster" class="vehicle">
+      <path d="M-4-18H4V19H-4Z"/>
+      <path d="M-4 7-12 20-4 17M4 7 12 20 4 17"/>
+      <path d="M-4-14H4" class="detail"/>
+    </g>
+    <g id="plume" fill="#d8dddf">
+      <path d="M-2 0Q-4 8 0 17 4 8 2 0Z"/>
+    </g>
+    <g id="canopy" fill="#0b0d0d" stroke="#b0b9be" stroke-width=".9">
+      <path d="M-25 0Q-22-25 0-26 22-25 25 0Q13-6 0 0-13-6-25 0Z"/>
+      <path d="M0-26Q-11-18-13-3M0-26Q11-18 13-3M0-26V-1" fill="none" stroke="#69747c"/>
+      <path d="M-25 0-6 35M25 0 6 35M-13-3 0 35M13-3 0 35" fill="none"/>
+    </g>
+    <g id="booster-chute">
+      <use href="#canopy"/>
+      <use href="#booster" transform="translate(0 55) scale(.8)"/>
+    </g>
+    <g id="upper-chute">
+      <use href="#canopy"/>
+      <g class="vehicle">
+        <path d="M-4 35H4V75H-4Z"/>
+        <path d="M-4 62-11 76-4 72M4 62 11 76 4 72"/>
+        <path d="M0 23-23 43" fill="none"/>
+        <path d="m-23 38-8 13 13-5Z"/>
+      </g>
+    </g>
+  </defs>
+
+  <!-- Two independently recovered stages share the initial ascent. -->
+  <path class="trajectory" d="M110 566C127 483 213 412 318 351S493 247 622 207S858 98 1056 106S1233 152 1272 235"/>
+  <path class="descent" d="M448 280C490 300 524 329 542 357C565 409 586 485 590 585"/>
+  <path class="descent" d="M1272 306C1291 368 1304 447 1307 540"/>
+
+  <!-- Launch preparation and first-stage ascent. -->
+  <g transform="translate(110 558)">
+    <path class="detail" d="M-18-37V49H-28V-37ZM-27-31H-18M-27-19H-18M-27-7H-18M-27 5H-18M-27 17H-18M-27 29H-18"/>
+    <use href="#rocket"/>
+    <use href="#plume" transform="translate(0 29) scale(.7)"/>
+    <ellipse class="ground" cx="-6" cy="51" rx="37" ry="6"/>
+  </g>
+  <path class="leader" d="M130 567H167"/>
+  <text x="177" y="562" class="label">FIRST-STAGE IGNITION</text>
+  <text x="177" y="580" class="number">01</text>
+  <text x="78" y="652" class="note">00 / ARMING</text>
+
+  <use href="#rocket" transform="translate(309 358) rotate(48) scale(.75)"/>
+  <path class="leader" d="M84 278H234L292 336"/>
+  <text x="84" y="268" class="label">FIRST-STAGE BURNOUT</text>
+  <text x="84" y="296" class="number">02 / COASTING</text>
+
+  <!-- Mechanical separation: the upper stage continues; the booster recovers. -->
+  <use href="#upper" transform="translate(466 261) rotate(57) scale(.82)"/>
+  <use href="#booster" transform="translate(430 289) rotate(57) scale(.8)"/>
+  <path class="leader" d="M351 166H410L449 238"/>
+  <text x="351" y="155" class="label">MECHANICAL STAGE SEPARATION</text>
+  <text x="351" y="184" class="number">03 / HALL SENSOR CONFIRMATION</text>
+
+  <use href="#booster-chute" transform="translate(542 357) scale(.85)"/>
+  <path class="leader" d="M565 386 609 422H791"/>
+  <text x="620" y="412" class="label">FIRST-STAGE RECOVERY</text>
+  <text x="620" y="440" class="number">04 / PARACHUTE DEPLOYMENT</text>
+  <use href="#booster" transform="translate(590 604) scale(.6)"/>
+  <ellipse class="ground" cx="590" cy="625" rx="35" ry="5"/>
+  <text x="641" y="624" class="note">STAGE 1 TOUCHDOWN</text>
+
+  <!-- Internally ignited second stage, coasting ascent, then apogee. -->
+  <g transform="translate(671 186) rotate(66) scale(.85)">
+    <use href="#upper"/>
+    <use href="#plume" transform="translate(0 20)"/>
+  </g>
+  <path class="leader" d="M682 211 720 264H947"/>
+  <text x="729" y="254" class="label">SECOND-STAGE IGNITION</text>
+  <text x="729" y="282" class="number">05</text>
+
+  <use href="#upper" transform="translate(888 117) rotate(79) scale(.85)"/>
+  <path class="leader" d="M735 55H849L876 97"/>
+  <text x="735" y="44" class="label">SECOND-STAGE BURNOUT</text>
+  <text x="735" y="73" class="number">06 / COASTING ASCENT</text>
+
+  <use href="#upper" transform="translate(1059 107) rotate(91) scale(.85)"/>
+  <path class="leader" d="M1060 86V58H1157"/>
+  <text x="1084" y="47" class="label">APOGEE</text>
+  <text x="1084" y="77" class="number">07</text>
+
+  <!-- Second-stage parachute recovery; this mission does not enter orbit. -->
+  <use href="#upper-chute" transform="translate(1272 246) scale(.85)"/>
+  <path class="leader" d="M1252 300 1190 365H966"/>
+  <text x="966" y="355" class="label">SECOND-STAGE RECOVERY</text>
+  <text x="966" y="384" class="number">08 / PARACHUTE DEPLOYMENT</text>
+
+  <use href="#upper-chute" transform="translate(1307 554) scale(.85)"/>
+  <ellipse class="ground" cx="1307" cy="626" rx="39" ry="6"/>
+  <path class="leader" d="M1286 611 1238 643H999"/>
+  <text x="999" y="631" class="label">TOUCHDOWN &amp; DATA RECOVERY</text>
+  <text x="999" y="660" class="number">09</text>
+</svg>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ALTIS EJECTION SYSTEM - Coming Soon</title>
+  <title>ALTIS Mission</title>
   <link rel="icon" href="../img/altis_logo.png" type="image/png" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;600&family=Sora:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
@@ -120,6 +120,50 @@
       backdrop-filter: blur(3px);
       -webkit-backdrop-filter: blur(3px);
     }
+
+    .card {
+      justify-items: start;
+      align-content: center;
+      text-align: left;
+      padding-inline: max(24px, calc((100vw - 1120px) / 2));
+    }
+
+    .card > * { max-width: 720px; }
+    .card .logo { display: none; }
+    .eyebrow {
+      color: rgba(243, 246, 251, .7);
+      font: 500 12px/1.4 "IBM Plex Mono", monospace;
+      letter-spacing: .16em;
+    }
+    h1 {
+      font-size: clamp(36px, 6vw, 72px);
+      line-height: 1.08;
+      letter-spacing: -.04em;
+    }
+    .summary { max-width: 640px; font-size: clamp(15px, 2vw, 18px); }
+    .focus-list {
+      width: min(100%, 900px);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 32px;
+      margin-top: 30px;
+      border-top: 1px solid var(--line);
+    }
+    .focus-item { padding: 20px 0; border-bottom: 1px solid var(--line); }
+    .focus-item span {
+      display: block;
+      margin-bottom: 8px;
+      color: rgba(243, 246, 251, .64);
+      font: 500 11px/1.4 "IBM Plex Mono", monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .focus-item p { font-size: 15px; }
+    .home { margin-top: 12px; }
+    @media (max-width: 600px) {
+      .card { padding-inline: 22px; }
+      .focus-list { grid-template-columns: 1fr; gap: 0; }
+    }
   </style>
   <link rel="stylesheet" href="../common-layout.css?v=20260909" />
   <link rel="stylesheet" href="../mobile-overrides.css?v=20260807" />
@@ -170,7 +214,8 @@
       flex: 0 0 auto !important;
     }
   </style>
-  <link rel="stylesheet" href="../design-system.css?v=20260908" />
+  <link rel="stylesheet" href="./tech-landing-overrides.css?v=20261024-reference1" />
+  <link rel="stylesheet" href="../design-system.css?v=20261024-nav1" />
 </head>
 <body class="altis-coming-page page-ejection">
   <header>
@@ -183,17 +228,28 @@
       <nav id="primary-nav">
         <a href="../index.html#about">About</a>
         <a href="../team.html">Leadership</a>
-        <a href="../history.html">What We Do</a>
+        <a href="../history.html">History</a>
         <div class="nav-tech-dropdown">
-          <a href="../index.html#tech" class="nav-tech-link">Tech</a>
-          <ul class="nav-tech-dropdown-menu" aria-label="기술 분야 메뉴">
-            <li><a href="../tech/avionics.html">AVIONICS</a></li>
-            <li><a href="../tech/ejection system.html">EJECTION SYSTEM</a></li>
-            <li><a href="../tech/motor.html">MOTOR</a></li>
-            <li><a href="../tech/structure.html">STRUCTURE</a></li>
+          <a href="#" class="nav-tech-link">Tech</a>
+          <ul class="nav-tech-dropdown-menu" aria-label="Technology menu">
+            <li><a href="../tech/avionics.html">Avionics</a></li>
+            <li><a href="../tech/motor.html">Propulsion</a></li>
+            <li><a href="../tech/ejection system.html">Mission</a></li>
+            <li><a href="../tech/structure.html">Airframe</a></li>
           </ul>
         </div>
-        <a href="../index.html#media">Media</a>
+                <div class="nav-tech-dropdown nav-vehicle-dropdown">
+          <a href="../vehicles.html" class="nav-tech-link nav-vehicle-link">Vehicle</a>
+          <ul class="nav-tech-dropdown-menu" aria-label="Vehicle menu">
+            <li><a href="../vehicles.html#frontier-i">Frontier-I</a></li>
+            <li><a href="../vehicles.html#frontier-ii">Frontier-II</a></li>
+            <li><a href="../vehicles.html#frontier-iii">Frontier-III</a></li>
+            <li><a href="../vehicles.html#frontier-iv">Frontier-IV</a></li>
+            <li><a href="../pioneer.html">Pioneer-I</a></li>
+            <li><a href="../vehicles.html#araea-i">Araea-I</a></li>
+          </ul>
+        </div>
+<a href="../index.html#media">Media</a>
         <a href="../join.html">Join</a>
         <a href="../sponsors.html">Sponsors</a>
         <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">Instagram</a>
@@ -219,31 +275,45 @@
       </div>
     </div>
   </header>
-  <div class="bg-video" aria-hidden="true">
-    <video autoplay muted loop playsinline preload="auto">
-      <source src="../vid/sponsors_land_vid.mp4" type="video/mp4" />
-    </video>
-  </div>
-
-  <main class="card" aria-live="polite">
-    <img class="logo" src="../img/altis_logo.png" alt="ALTIS logo" />
-    <h1>Coming Soon</h1>
-    <p>EJECTION SYSTEM 페이지를 준비 중입니다.<br />곧 업데이트됩니다.</p>
-    <a class="home" href="../index.html">Back to Home</a>
-  </main>
+  <main class="tech-hero" aria-labelledby="tech-title">
+      <div class="tech-hero__media">
+        <img src="../img/mission.png" alt="ALTIS 미션 시스템" loading="eager" fetchpriority="high" />
+      </div>
+      <div class="tech-hero__copy">
+        <p class="tech-hero__label">ALTIS MISSION TEAM</p>
+        <h1 class="tech-hero__title" id="tech-title">MISSION</h1>
+        <p class="tech-hero__description">비행 임무 장치와 회수 시스템을 설계하고 실제 작동을 시험합니다.</p>
+        <div class="tech-hero__actions">
+          <a class="tech-hero__button tech-hero__button--primary" href="#mission-details">Recovery</a>
+          <a class="tech-hero__button" href="#housing">Mission Hardware</a>
+        </div>
+      </div>
+    </main>
+  <section class="mission-details" id="mission-details" aria-label="Mission system details">
+    <div class="focus-list">
+      <div class="focus-item" id="housing">
+        <span>01 / Housing</span>
+        <p>분리부 하우징을 단순화해 사출 모듈을 구성합니다.</p>
+      </div>
+      <div class="focus-item">
+        <span>02 / Guide</span>
+        <p>가이드 구조를 통해 모듈의 조립과 점검을 쉽게 합니다.</p>
+      </div>
+    </div>
+  </section>
   <footer class="site-footer">
     <div class="site-footer-inner">
       <div class="site-footer-divider"></div>
       <div class="site-footer-grid">
         <div class="site-footer-col site-footer-contact">
-          <p>Address: 진주대로 501 | Founded Date: March 2021</p>
+          <p>Address: 진주대로 501 | Founded Date: 2019</p>
           <p>CONTACT | email : ybb1833@naver.com / instagram : @ altis_official</p>
         </div>
-        <p class="site-footer-copy">© 2021-2026 ALTIS. All rights reserved.</p>
+        <p class="site-footer-copy">© 2019-2026 ALTIS. All rights reserved.</p>
       </div>
     </div>
   </footer>
-  <script src="../common-i18n.js"></script>
-  <script src="../common-layout.js?v=20260909"></script>
+  <script src="../common-i18n.js?v=20261025-default-en1"></script>
+  <script src="../common-layout.js?v=20261025-vehicles1"></script>
 </body>
 </html>

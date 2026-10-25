@@ -1307,7 +1307,8 @@
   </style>
   <link rel="stylesheet" href="../common-layout.css?v=20260909" />
   <link rel="stylesheet" href="../mobile-overrides.css?v=20260807" />
-  <link rel="stylesheet" href="../design-system.css?v=20260908" />
+  <link rel="stylesheet" href="./tech-landing-overrides.css?v=20261024-reference1" />
+  <link rel="stylesheet" href="../design-system.css?v=20261024-nav1" />
   <link rel="stylesheet" href="./motor-additions.css?v=20260909" />
 </head>
 <body class="page-motor">
@@ -1321,17 +1322,28 @@
       <nav id="primary-nav">
         <a href="../index.html#about">About</a>
         <a href="../team.html">Leadership</a>
-        <a href="../history.html">What We Do</a>
+        <a href="../history.html">History</a>
         <div class="nav-tech-dropdown">
-          <a href="../index.html#tech" class="nav-tech-link">Tech</a>
-          <ul class="nav-tech-dropdown-menu" aria-label="기술 분야 메뉴">
-            <li><a href="../tech/avionics.html">AVIONICS</a></li>
-            <li><a href="../tech/ejection system.html">EJECTION SYSTEM</a></li>
-            <li><a href="../tech/motor.html">MOTOR</a></li>
-            <li><a href="../tech/structure.html">STRUCTURE</a></li>
+          <a href="#" class="nav-tech-link">Tech</a>
+          <ul class="nav-tech-dropdown-menu" aria-label="Technology menu">
+            <li><a href="../tech/avionics.html">Avionics</a></li>
+            <li><a href="../tech/motor.html">Propulsion</a></li>
+            <li><a href="../tech/ejection system.html">Mission</a></li>
+            <li><a href="../tech/structure.html">Airframe</a></li>
           </ul>
         </div>
-        <a href="../index.html#media">Media</a>
+                <div class="nav-tech-dropdown nav-vehicle-dropdown">
+          <a href="../vehicles.html" class="nav-tech-link nav-vehicle-link">Vehicle</a>
+          <ul class="nav-tech-dropdown-menu" aria-label="Vehicle menu">
+            <li><a href="../vehicles.html#frontier-i">Frontier-I</a></li>
+            <li><a href="../vehicles.html#frontier-ii">Frontier-II</a></li>
+            <li><a href="../vehicles.html#frontier-iii">Frontier-III</a></li>
+            <li><a href="../vehicles.html#frontier-iv">Frontier-IV</a></li>
+            <li><a href="../pioneer.html">Pioneer-I</a></li>
+            <li><a href="../vehicles.html#araea-i">Araea-I</a></li>
+          </ul>
+        </div>
+<a href="../index.html#media">Media</a>
         <a href="../join.html">Join</a>
         <a href="../sponsors.html">Sponsors</a>
         <a class="nav-instagram-link" href="https://www.instagram.com/altis_official/" target="_blank" rel="noopener">Instagram</a>
@@ -1358,32 +1370,20 @@
     </div>
   </header>
 
-  <main class="hero">
-    <div class="hero-video-bg" aria-hidden="true">
-      <iframe
-        id="hero-youtube-bg"
-        src="https://www.youtube-nocookie.com/embed/ioutfaKP2Rg?autoplay=1&mute=1&controls=0&loop=1&playlist=ioutfaKP2Rg&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&disablekb=1&fs=0&cc_load_policy=0&enablejsapi=1"
-        title="ALTIS motor background video"
-        allow="autoplay; encrypted-media; picture-in-picture"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      ></iframe>
-    </div>
-    <div class="hero-copy">
-      <div class="hero-content">
-        <p class="hero-kicker">ALTIS Propulsion Lab</p>
-        <h1>PROPULSION</h1>
-        <p class="hero-lead">
-          ALTIS는 고체 로켓 모터를 직접 설계·제작하고, 반복 시험으로 신뢰도를 쌓아갑니다.
-        </p>
-        <div class="hero-actions">
-          <a class="hero-btn primary" href="#motor-1st">1단 모터</a>
-          <a class="hero-btn" href="#motor-2st">2단 모터</a>
+  <main class="tech-hero" aria-labelledby="tech-title">
+      <div class="tech-hero__media">
+        <img src="../img/stg1_motor_tms.jpg" alt="ALTIS 고체 로켓 모터 지상 연소 시험" loading="eager" fetchpriority="high" />
+      </div>
+      <div class="tech-hero__copy">
+        <p class="tech-hero__label">ALTIS PROPULSION LAB</p>
+        <h1 class="tech-hero__title" id="tech-title">PROPULSION</h1>
+        <p class="tech-hero__description">고체 로켓 모터를 설계하고 제작합니다. 지상 연소 시험에서 추력과 연소 시간을 측정하고 설계를 고칩니다.</p>
+        <div class="tech-hero__actions">
+          <a class="tech-hero__button tech-hero__button--primary" href="#motor-1st">1단 모터</a>
+          <a class="tech-hero__button" href="#motor-2st">2단 모터</a>
         </div>
       </div>
-    </div>
-
-  </main>
+    </main>
 
   <section class="motor-content-section" id="propulsion-work">
     <div class="motor-content-shell">
@@ -1476,8 +1476,8 @@
         <div>
           <h2>연소 시험으로 확인합니다</h2>
           <p>
-            계산한 성능이 실제 모터에서도 나오는지 지상 연소 시험으로 확인합니다.
-            계측 결과와 시험 영상을 함께 보고 이상 연소나 부품 손상 여부를 점검합니다.
+            지상 연소 시험에서 계산한 성능이 나오는지 확인합니다.
+            추력 데이터를 살펴보고, 영상으로 연소 상태와 부품 손상 여부를 점검합니다.
           </p>
         </div>
       </div>
@@ -1569,10 +1569,10 @@
       <div class="site-footer-divider"></div>
       <div class="site-footer-grid">
         <div class="site-footer-col site-footer-contact">
-          <p>Address: 진주대로 501 | Founded Date: March 2021</p>
+          <p>Address: 진주대로 501 | Founded Date: 2019</p>
           <p>CONTACT | email : ybb1833@naver.com / instagram : @ altis_official</p>
         </div>
-        <p class="site-footer-copy">© 2021-2026 ALTIS. All rights reserved.</p>
+        <p class="site-footer-copy">© 2019-2026 ALTIS. All rights reserved.</p>
       </div>
     </div>
   </footer>
@@ -1999,26 +1999,9 @@
     }
   </script>
 
-  <script>
-    (() => {
-      const iframe = document.getElementById("hero-youtube-bg");
-      if (!iframe) return;
-      iframe.addEventListener("load", () => {
-        iframe.contentWindow?.postMessage('{"event":"listening","id":1,"channel":"widget"}', "*");
-        iframe.contentWindow?.postMessage('{"event":"command","func":"mute","args":""}', "*");
-        iframe.contentWindow?.postMessage('{"event":"command","func":"playVideo","args":""}', "*");
-      });
-      window.addEventListener("message", (event) => {
-        if (!event || !event.data || typeof event.data !== "string") return;
-        if (!event.origin.includes("youtube")) return;
-        iframe.contentWindow?.postMessage('{"event":"command","func":"mute","args":""}', "*");
-        iframe.contentWindow?.postMessage('{"event":"command","func":"playVideo","args":""}', "*");
-      });
-    })();
-  </script>
 
   
-  <script src="../common-i18n.js"></script>
-  <script src="../common-layout.js?v=20260909"></script>
+  <script src="../common-i18n.js?v=20261025-default-en1"></script>
+  <script src="../common-layout.js?v=20261025-vehicles1"></script>
 </body>
 </html>

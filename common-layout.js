@@ -2,14 +2,14 @@
   if (window.ALTIS_COMMON_LAYOUT_READY) return;
   window.ALTIS_COMMON_LAYOUT_READY = true;
 
-  // Change this to true when the individual Tech pages are ready to reopen.
-  const TECH_PAGES_ENABLED = false;
+  // Individual Tech pages are available through the navigation.
+  const TECH_PAGES_ENABLED = true;
 
   const initNav = () => {
     const nav = document.querySelector(".nav");
     const menuBtn = document.querySelector(".menu-toggle");
-    const techDropdown = nav?.querySelector(".nav-tech-dropdown");
-    const techLink = nav?.querySelector(".nav-tech-link");
+    const dropdowns = [...(nav?.querySelectorAll(".nav-tech-dropdown") || [])];
+    const triggers = dropdowns.map((dropdown) => dropdown.querySelector(".nav-tech-link")).filter(Boolean);
     if (!nav || !menuBtn) return;
 
     const mql = window.matchMedia("(max-width: 900px)");
@@ -18,13 +18,17 @@
     nav.querySelectorAll("nav a[href]").forEach((link) => {
       const target = new URL(link.href, window.location.href);
       if (decodeURIComponent(target.pathname) === currentPath && !target.hash) {
-        link.setAttribute("aria-current", "page");
-        if (link.closest(".nav-tech-dropdown-menu")) techLink?.classList.add("is-current");
+        if (link.classList.contains("nav-tech-link")) {
+          link.classList.add("is-current");
+        } else {
+          link.setAttribute("aria-current", "page");
+          link.closest(".nav-tech-dropdown")?.querySelector(".nav-tech-link")?.classList.add("is-current");
+        }
       }
     });
 
     if (!TECH_PAGES_ENABLED) {
-      nav.querySelectorAll(".nav-tech-dropdown-menu a[href]").forEach((link) => {
+      nav.querySelectorAll(".nav-tech-dropdown:not(.nav-vehicle-dropdown) .nav-tech-dropdown-menu a[href]").forEach((link) => {
         link.dataset.techHref = link.getAttribute("href");
         link.removeAttribute("href");
         link.setAttribute("aria-disabled", "true");
@@ -32,13 +36,14 @@
         link.classList.add("is-disabled");
       });
     }
-    if (techDropdown && techLink) {
-      const submenu = techDropdown.querySelector(".nav-tech-dropdown-menu");
-      if (submenu) {
-        submenu.id = "tech-nav-menu";
-        techLink.setAttribute("aria-controls", submenu.id);
-      }
-    }
+    dropdowns.forEach((dropdown, index) => {
+      const trigger = dropdown.querySelector(".nav-tech-link");
+      const submenu = dropdown.querySelector(".nav-tech-dropdown-menu");
+      if (!trigger || !submenu) return;
+      submenu.id = dropdown.classList.contains("nav-vehicle-dropdown") ? "vehicle-nav-menu" : `tech-nav-menu-${index}`;
+      trigger.setAttribute("aria-controls", submenu.id);
+      trigger.setAttribute("aria-haspopup", "true");
+    });
 
     const syncMenuButton = () => {
       if (mql.matches) {
@@ -56,16 +61,16 @@
 
     const closeMenu = () => {
       nav.classList.remove("is-open");
-      techDropdown?.classList.remove("is-open");
+      dropdowns.forEach((dropdown) => dropdown.classList.remove("is-open"));
       menuBtn.setAttribute("aria-expanded", "false");
-      if (mql.matches) techLink?.setAttribute("aria-expanded", "false");
+      if (mql.matches) triggers.forEach((trigger) => trigger.setAttribute("aria-expanded", "false"));
     };
 
     menuBtn.addEventListener("click", () => {
       const isOpen = nav.classList.toggle("is-open");
-      if (!isOpen) techDropdown?.classList.remove("is-open");
+      if (!isOpen) dropdowns.forEach((dropdown) => dropdown.classList.remove("is-open"));
       menuBtn.setAttribute("aria-expanded", String(isOpen));
-      if (!isOpen && mql.matches) techLink?.setAttribute("aria-expanded", "false");
+      if (!isOpen && mql.matches) triggers.forEach((trigger) => trigger.setAttribute("aria-expanded", "false"));
     });
 
     nav.querySelectorAll("nav a").forEach((link) => {
@@ -75,11 +80,20 @@
       });
     });
 
-    techLink?.addEventListener("click", (event) => {
-      if (!mql.matches) return;
-      event.preventDefault();
-      const isOpen = techDropdown?.classList.toggle("is-open");
-      techLink.setAttribute("aria-expanded", String(Boolean(isOpen)));
+    dropdowns.forEach((dropdown) => {
+      const trigger = dropdown.querySelector(".nav-tech-link");
+      trigger?.addEventListener("click", (event) => {
+        if (!mql.matches) {
+          if (trigger.getAttribute("href") === "#") event.preventDefault();
+          return;
+        }
+        event.preventDefault();
+        const isOpen = !dropdown.classList.contains("is-open");
+        dropdowns.forEach((item) => item.classList.remove("is-open"));
+        triggers.forEach((item) => item.setAttribute("aria-expanded", "false"));
+        dropdown.classList.toggle("is-open", isOpen);
+        trigger.setAttribute("aria-expanded", String(isOpen));
+      });
     });
 
     document.addEventListener("keydown", (event) => {
@@ -94,8 +108,8 @@
     const handleResize = () => {
       syncMenuButton();
       if (!mql.matches) closeMenu();
-      if (mql.matches) techLink?.setAttribute("aria-expanded", "false");
-      else techLink?.removeAttribute("aria-expanded");
+      if (mql.matches) triggers.forEach((trigger) => trigger.setAttribute("aria-expanded", "false"));
+      else triggers.forEach((trigger) => trigger.removeAttribute("aria-expanded"));
     };
 
     if (mql.addEventListener) {

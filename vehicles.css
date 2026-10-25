@@ -1,0 +1,92 @@
+body.page-pioneer, body.page-vehicles { margin: 0; overflow-x: clip; }
+.page-home .pioneer-project { margin-top: 0; padding-top: clamp(144px, 14vw, 216px); }
+.page-home .pioneer-project .pioneer-hero { border-top: 0; }
+.page-pioneer .site-footer { margin-top: var(--ds-section); }
+.vehicle-index { padding-top: var(--ds-section); padding-bottom: var(--ds-section); }
+.vehicle-index__heading { margin-bottom: 48px; }
+.vehicle-kicker { margin: 0 0 16px; color: var(--ds-muted); font: 400 12px/1.6 var(--font-mono); letter-spacing: .16em; }
+.vehicle-index h1 { margin: 0 0 20px; font-size: var(--ds-display); line-height: 1.12; }
+.vehicle-index__heading > p:last-child { margin: 0; color: var(--ds-body); }
+.vehicle-record { padding: 32px 0; border-top: 1px solid var(--ds-line); scroll-margin-top: 112px; }
+.vehicle-record h2 { margin: 0; font-size: var(--ds-title); line-height: 1.4; }
+.vehicle-record h2 a { display: flex; justify-content: space-between; text-decoration: none; }
+.vehicle-record h2 a:hover { color: var(--ds-accent); }
+.vehicle-record p { margin: 12px 0 0; color: var(--ds-body); font-size: 14px; }
+.vehicle-record:last-child { border-bottom: 1px solid var(--ds-line); }
+
+.pioneer-conops { margin-top: var(--ds-section); padding-top: 40px; }
+.pioneer-conops__label { color: var(--ds-muted); font: 400 11px/1.6 var(--font-mono); letter-spacing: .14em; }
+.pioneer-conops h2 { margin: 12px 0 16px; font-size: var(--ds-heading); line-height: 1.2; }
+.pioneer-conops__heading p { max-width: 640px; margin: 0; color: var(--ds-body); font-size: 15px; line-height: 1.85; word-break: keep-all; }
+.pioneer-conops__figure { margin: 32px 0 0; }
+.pioneer-conops__viewport { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; }
+.pioneer-conops__figure img { display: block; width: 100%; min-width: 960px; max-width: none; height: auto; }
+.pioneer-conops figcaption { margin-top: 16px; color: var(--ds-muted); font-size: 11px; line-height: 1.6; }
+
+.pioneer-overview { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); align-items: center; gap: 64px; margin-top: 32px; }
+.page-pioneer .pioneer-overview .pioneer-inline-model { width: 100%; height: clamp(440px, 62svh, 620px); margin: 0; }
+.pioneer-overview__label { color: var(--ds-muted); font: 400 11px/1.6 var(--font-mono); letter-spacing: .12em; }
+.pioneer-overview h2 { margin: 16px 0 20px; font-size: var(--ds-title); line-height: 1.3; }
+.pioneer-overview__copy > p { margin: 0; color: var(--ds-body); font-size: 15px; line-height: 1.85; word-break: keep-all; }
+.pioneer-overview__specs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 32px; margin: 28px 0 0; padding-top: 24px; border-top: 1px solid var(--ds-line-soft); }
+.pioneer-overview__specs dt { margin-bottom: 8px; color: var(--ds-muted); font-size: 12px; }
+.pioneer-overview__specs dd { margin: 0; color: var(--ds-text); font-size: 23px; line-height: 1.3; }
+.pioneer-overview__specs dd span { font-size: 13px; color: var(--ds-body); }
+@media (max-width: 760px) {
+  .pioneer-overview { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .page-pioneer .pioneer-overview .pioneer-inline-model { height: 400px; }
+}
+
+/* The mission and vehicle overview follow the page's natural scroll. */
+.pioneer-flow { margin-top: 32px; }
+.pioneer-flow > .pioneer-flow__panel {
+  min-height: calc(100svh - var(--flow-header-height, 80px));
+  margin: 0;
+  padding-block: 48px;
+}
+.pioneer-flow > .pioneer-conops { display: flex; flex-direction: column; justify-content: center; }
+.pioneer-flow.is-enhanced > .pioneer-flow__panel {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 220ms ease;
+}
+.pioneer-flow.is-enhanced > .pioneer-flow__panel > * {
+  transform: translateY(var(--flow-shift, 0px));
+  transition: transform 280ms ease-out;
+}
+.pioneer-flow.is-enhanced > .pioneer-flow__panel.is-flow-active {
+  opacity: var(--flow-opacity, 1);
+  visibility: visible;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pioneer-flow.is-enhanced > .pioneer-flow__panel,
+  .pioneer-flow.is-enhanced > .pioneer-flow__panel > * { transform: none; transition: none; }
+  .pioneer-flow.is-enhanced > .pioneer-flow__panel.is-flow-active { opacity: 1; }
+}
+
+.pioneer-propulsion-layout,
+.pioneer-separation-layout,
+.pioneer-airframe-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: start;
+  gap: 32px;
+  min-width: 0;
+}
+.pioneer-propulsion-video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; background: #0b0d0d; }
+.pioneer-separation-model { width: 100%; height: clamp(320px, 44svh, 440px); }
+.pioneer-airframe-photo { display: block; width: 100%; aspect-ratio: 4 / 3; height: auto; object-fit: contain; border-radius: 6px; }
+.page-pioneer .tech-scroll__progress { max-width: 100%; gap: 20px; }
+.page-pioneer .tech-scroll__progress button { display: flex; align-items: center; gap: 8px; width: auto; min-height: 36px; height: auto; padding: 8px 4px; line-height: 1.4; }
+.tech-scroll__title { font-family: var(--font-sans, sans-serif); font-size: 12px; word-break: keep-all; }
+@media (max-width: 1100px) {
+  .pioneer-propulsion-layout,
+  .pioneer-separation-layout,
+  .pioneer-airframe-layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .pioneer-propulsion-video { max-width: 640px; }
+}
+@media (max-width: 600px) {
+  .page-pioneer .tech-scroll__progress { left: 0; justify-content: space-between; gap: 8px; }
+  .page-pioneer .tech-scroll__progress button { flex-direction: column; gap: 4px; flex: 1; }
+  .tech-scroll__title { font-size: 10px; }
+}
