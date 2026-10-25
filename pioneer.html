@@ -82,8 +82,8 @@
   <main id="pioneer-content">
     <article class="about-technology pioneer-hero" id="two-stage-technology" aria-labelledby="two-stage-title">
       <div class="pioneer-launch-video" aria-hidden="true">
-        <video data-focus-video muted playsinline preload="metadata" width="2560" height="1440" tabindex="-1">
-          <source src="vid/p1_launchVid.mov" type="video/mp4" />
+        <video data-focus-video data-deferred-video muted playsinline preload="none" width="2560" height="1440" tabindex="-1">
+          <source data-src="vid/pioneer_launch_web.mp4" type="video/mp4" />
         </video>
       </div>
       <div class="container pioneer-hero__inner">
@@ -141,8 +141,8 @@
               <p data-i18n="twoStagePropulsionResult">지상 시험 최대 압력은 1단 1.73 MPa, 2단 1.89 MPa로 설계 제한 2.0 MPa 이내였습니다. 총 충격량은 해석값 대비 각각 90.8%, 95.5%로 측정됐습니다.</p>
               <a class="about-technology-topic__link" href="tech/motor.html"><span data-i18n="twoStageMotorLink">추진 기술</span><span aria-hidden="true"> ↗</span></a>
             </div>
-            <video class="pioneer-propulsion-video" data-section-video muted playsinline preload="metadata" aria-label="추진 시스템 지상 연소시험 영상">
-              <source src="vid/tms_vid.mov" />
+            <video class="pioneer-propulsion-video" data-section-video data-deferred-video muted playsinline preload="none" aria-label="추진 시스템 지상 연소시험 영상">
+              <source data-src="vid/tms_web.mp4" type="video/mp4" />
             </video>
             </div>
           </section>
@@ -257,6 +257,7 @@
   <script type="module" src="pioneer-model.js?v=20261025-separation-gray3"></script>
   <script src="scroll-reveal.js?v=20261025-1"></script>
   <script src="stacked-gallery.js?v=20261025-3"></script>
+  <script src="web-video.js?v=20261025-1"></script>
   <script src="focus-video.js?v=20261025-1"></script>
   <script src="pioneer-flow.js?v=20261025-1"></script>
   <script src="tech-scroll.js?v=20261025-five-sections1"></script>
